@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kundali – The Path of Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060414; --ink:#f4eeff; --muted:#b9acdb; --gold:#f2c66d; --gold-deep:#b8832c;
+  --violet:#8b5cf6; --card:rgba(18,10,42,.68); --line:rgba(242,198,109,.30); --err:#ff9a9a;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;min-height:100%}
+body[data-scene="cast"]{overflow:hidden}
+#cosmos{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+main{position:relative;z-index:1}
+
+/* ---------- Landing ---------- */
+#landing{min-height:100svh;display:grid;align-items:center;gap:2.2rem;padding:clamp(1.2rem,4vw,3rem);max-width:1180px;margin:0 auto;transition:opacity .9s ease,transform .9s ease}
+@media(min-width:900px){#landing{grid-template-columns:1.05fr .95fr;gap:4rem}}
+body[data-scene="cast"] #landing,body[data-scene="result"] #landing{opacity:0;transform:scale(.97);pointer-events:none}
+.title{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:clamp(3.4rem,12vw,7.4rem);letter-spacing:.06em;line-height:1;margin:0;
+  background:linear-gradient(180deg,#fff4cf 0%,#f2c66d 55%,#b8832c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(242,198,109,.38))}
+.sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(1.7rem,4.6vw,2.7rem);color:#eadfff;margin:.25em 0 0;letter-spacing:.05em}
+.lead{max-width:28rem;color:var(--muted);font-size:1.05rem;margin:1.4rem 0 0}
+.hero{text-align:center}
+@media(min-width:900px){.hero{text-align:left}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(1.1rem,3vw,1.7rem);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+form h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.7rem;margin:0 0 1rem;color:var(--gold)}
+label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:.85rem}
+input,select{display:block;width:100%;margin-top:.3rem;padding:.7rem .8rem;font:inherit;font-size:1rem;color:var(--ink);background:rgba(8,4,24,.7);border:1px solid rgba(185,172,219,.28);border-radius:10px;color-scheme:dark}
+input::placeholder{color:#7f72a6}
+input:focus-visible,select:focus-visible,button:focus-visible,.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.row3{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.row3 label:last-child{grid-column:1 / -1}
+.hint{font-size:.82rem;color:var(--muted);margin:-.2rem 0 1rem}
+.hint.ok{color:#9fe3b5}
+.err{color:var(--err);font-size:.9rem;min-height:1.2em;margin:.7rem 0 0}
+.cta{width:100%;padding:.95rem 1rem;font:600 1.05rem 'Inter',system-ui,sans-serif;color:#2a1700;background:linear-gradient(180deg,#ffe19a,#f2c66d 55%,#d9a54a);border:0;border-radius:12px;cursor:pointer;box-shadow:0 8px 28px rgba(242,198,109,.28);transition:transform .15s ease,box-shadow .15s ease}
+.cta:hover{transform:translateY(-1px);box-shadow:0 12px 34px rgba(242,198,109,.4)}
+.cta:active{transform:translateY(0)}
+
+/* ---------- Casting overlay ---------- */
+#cast{position:fixed;left:0;right:0;bottom:calc(9vh + env(safe-area-inset-bottom,0px));text-align:center;padding:0 1.2rem;opacity:0;pointer-events:none;transition:opacity .7s ease;z-index:2}
+body[data-scene="cast"] #cast{opacity:1}
+#cast-title{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:clamp(1.5rem,4.5vw,2.3rem);color:#f6e6bd;margin:0;text-shadow:0 0 24px rgba(242,198,109,.45);transition:opacity .4s ease}
+#cast-sub{margin:.3rem 0 0;color:var(--muted);font-size:.95rem}
+
+/* ---------- Result ---------- */
+#result{display:none;padding:clamp(1.2rem,4vw,3rem);max-width:1100px;margin:0 auto}
+.rhead{text-align:center;margin:1rem 0 1.8rem}
+.rhead .brand{font-family:'Cinzel',Georgia,serif;color:var(--gold);letter-spacing:.08em;font-size:1.05rem;margin:0}
+.rhead h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(2.2rem,7vw,3.6rem);line-height:1.1;margin:.2rem 0 .4rem}
+.rhead p.meta{color:var(--muted);margin:.15rem 0;font-size:.95rem}
+.rgrid{display:grid;gap:1.4rem;margin-bottom:1.4rem}
+@media(min-width:900px){.rgrid{grid-template-columns:1.1fr .9fr;align-items:start}}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:1rem;background:rgba(8,4,24,.55)}
+.tab{border:0;background:transparent;color:var(--muted);font:500 .9rem 'Inter',system-ui,sans-serif;padding:.45rem 1rem;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--gold);color:#2a1700}
+#chart{max-width:520px;margin:0 auto}
+#chart svg{width:100%;height:auto;display:block}
+.hl{fill:rgba(139,92,246,.09);stroke:var(--gold);stroke-width:1.6;stroke-linejoin:round}
+.hl.asc-cell{fill:rgba(242,198,109,.10)}
+.pl{fill:var(--ink);font:600 15px 'Inter',system-ui,sans-serif}
+.pl .asc{fill:var(--gold)}
+.sg{fill:#9d8fd0;font:500 12px 'Inter',system-ui,sans-serif}
+.ctr{fill:var(--gold);font:600 20px 'Cormorant Garamond',Georgia,serif}
+.ctr2{fill:var(--muted);font:500 12px 'Inter',system-ui,sans-serif}
+.hg{opacity:0;animation:hin .9s ease forwards}
+@keyframes hin{from{opacity:0}to{opacity:1}}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem 1.1rem;font-size:.82rem;color:var(--muted);margin:1rem 0 0}
+.lg{display:inline-flex;align-items:center;gap:.3rem}
+.ti{display:inline-block;vertical-align:middle;width:24px;margin-right:.5rem;line-height:0}
+.side{display:grid;gap:.9rem}
+.mini h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.35rem;color:var(--gold);margin:0}
+.mini .big{font-size:1.15rem;font-weight:600;margin:.1rem 0 .3rem}
+.mini p{margin:0;color:var(--muted);font-size:.95rem}
+.section{margin-bottom:1.4rem}
+.section h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.5rem;color:var(--gold);margin:0 0 .8rem}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
+th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid rgba(185,172,219,.16)}
+th{color:var(--muted);font-weight:500;font-size:.85rem}
+tr.now td{background:rgba(242,198,109,.12);color:#fff0c8}
+.note{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
+.again{display:block;margin:1.8rem auto 1rem;padding:.8rem 1.6rem;font:600 1rem 'Inter',system-ui,sans-serif;color:var(--gold);background:transparent;border:1px solid var(--gold);border-radius:999px;cursor:pointer}
+.again:hover{background:rgba(242,198,109,.12)}
+.rv{opacity:0;animation:hin 1s ease forwards}
+[hidden]{display:none!important}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1rem;margin-bottom:1rem}
+.ctrl .tabs{margin-bottom:0}
+.sw{display:inline-flex;align-items:center;gap:.6rem;background:transparent;border:0;color:var(--muted);font:500 .9rem 'Inter',system-ui,sans-serif;cursor:pointer;padding:.25rem 0}
+.sw .knob{position:relative;width:42px;height:24px;border-radius:999px;background:rgba(185,172,219,.25);border:1px solid var(--line);transition:background .2s}
+.sw .knob::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#e9ddff;transition:transform .2s,background .2s}
+.sw[aria-checked="true"] .knob{background:var(--gold)}
+.sw[aria-checked="true"] .knob::after{transform:translateX(18px);background:#2a1700}
+.sw:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.ghost{width:100%;margin:-.2rem 0 1rem;padding:.6rem .8rem;font:500 .92rem 'Inter',system-ui,sans-serif;color:var(--gold);background:rgba(242,198,109,.08);border:1px dashed var(--line);border-radius:10px;cursor:pointer}
+.ghost:hover{background:rgba(242,198,109,.15)}
+.ghost:disabled{opacity:.6;cursor:progress}
+.scr{animation:scrx linear infinite}
+@keyframes scrx{from{transform:translateX(0)}to{transform:translateX(var(--w))}}
+.pulse{animation:pulse 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{transform:scale(.9);opacity:.65}50%{transform:scale(1.12);opacity:1}}
+.spin{animation:spin 16s linear infinite;transform-box:fill-box;transform-origin:center}
+.spinr{animation:spin 22s linear infinite reverse;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bob{animation:bob 4.5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.8px)}}
+.rb{fill:var(--gold);font:700 8px 'Inter',system-ui,sans-serif}
+.still .hg{animation:none;opacity:1}
+@media(prefers-reduced-motion:reduce){.hg,.rv{animation:none;opacity:1}.cta{transition:none}.scr,.pulse,.spin,.spinr,.bob{animation:none}}
+</style>
+</head>
+<body data-scene="landing">
+<canvas id="cosmos" aria-hidden="true"></canvas>
+
+<main>
+  <section id="landing">
+    <div class="hero">
+      <h1 class="title">Kundali</h1>
+      <p class="sub">The Path of Life</p>
+      <p class="lead"></p>
+    </div>
+
+    <form id="kform" class="card" autocomplete="off" novalidate>
+      <h2>Your birth details</h2>
+      <label for="f-name">Full name
+        <input id="f-name" type="text" placeholder="e.g. Aarav Sharma" maxlength="60">
+      </label>
+      <div class="row">
+        <label for="f-date">Date of birth
+          <input id="f-date" type="date" min="1900-01-01">
+        </label>
+        <label for="f-time">Time of birth
+          <input id="f-time" type="time">
+        </label>
+      </div>
+      <label for="f-place">Place of birth
+        <input id="f-place" type="text" list="cities" placeholder="Start typing a city">
+      </label>
+      <datalist id="cities"></datalist>
+      <div class="row3">
+        <label for="f-lat">Latitude (+N / −S)
+          <input id="f-lat" type="number" step="any" inputmode="decimal" placeholder="28.6139">
+        </label>
+        <label for="f-lon">Longitude (+E / −W)
+          <input id="f-lon" type="number" step="any" inputmode="decimal" placeholder="77.2090">
+        </label>
+        <label for="f-tz">Time zone at birth
+          <select id="f-tz"></select>
+        </label>
+        <label for="f-off" id="off-wrap" hidden>UTC offset in hours (for example 5.5 or −3.5)
+          <input id="f-off" type="number" step="any" inputmode="decimal" placeholder="5.5">
+        </label>
+      </div>
+      <button type="button" class="ghost" id="ask-claude" hidden>Locate this place with Claude</button>
+      <p class="hint" id="place-hint"></p>
+      <p class="hint" id="tz-info"></p>
+      <button class="cta" type="submit">Reveal my Kundali</button>
+      <p class="err" id="ferr" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="cast" aria-live="polite">
+    <p id="cast-title"></p>
+    <p id="cast-sub"></p>
+  </div>
+
+  <section id="result" aria-label="Your Kundali">
+    <header class="rhead rv">
+      <p class="brand">Kundali · The Path of Life</p>
+      <h2 id="r-name"></h2>
+      <p class="meta" id="r-meta1"></p>
+      <p class="meta" id="r-meta2"></p>
+    </header>
+
+    <div class="rgrid">
+      <div class="card rv" style="animation-delay:.2s">
+        <div class="ctrl">
+          <div class="tabs" role="tablist" aria-label="Chart style">
+            <button class="tab" role="tab" id="tab-n" aria-selected="true">North Indian</button>
+            <button class="tab" role="tab" id="tab-s" aria-selected="false">South Indian</button>
+          </div>
+          <button type="button" class="sw" id="sw-names" role="switch" aria-checked="false"><span class="knob" aria-hidden="true"></span><span>Show planet names</span></button>
+        </div>
+        <div id="chart"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="side" id="side"></div>
+    </div>
+
+    <div class="card section rv" style="animation-delay:.4s">
+      <h3>Planetary positions</h3>
+      <div class="scroll"><table id="ptable"></table></div>
+      <p class="note" id="ayan-note"></p>
+    </div>
+
+    <div class="card section rv" style="animation-delay:.5s">
+      <h3>Vimshottari Mahadasha</h3>
+      <div class="scroll"><table id="dtable"></table></div>
+      <p class="note">Planetary periods counted from the Moon's nakshatra at birth. The highlighted row is the period running today.</p>
+    </div>
+
+    <p class="note" style="text-align:center;max-width:46rem;margin:0 auto">
+      Positions are computed in your browser with a compact astronomical model (sidereal zodiac, Lahiri ayanāṁśa, whole-sign houses, mean lunar node). They are accurate to a small fraction of a degree for most uses, but for professional or ritual decisions, confirm with a full ephemeris and a qualified astrologer. The readings here are brief traditional descriptions, offered for reflection.
+    </p>
+    <button class="again" id="again" type="button">Create another Kundali</button>
+  </section>
+</main>
+
+<script>
+(function(){
+'use strict';
+const TAU=Math.PI*2, rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI, n360=x=>((x%360)+360)%360, clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const $=id=>document.getElementById(id);
+const RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= DATA ================= */
+const SIGNS=[
+ ['Mesha','Aries','\u2648\uFE0E'],['Vrishabha','Taurus','\u2649\uFE0E'],['Mithuna','Gemini','\u264A\uFE0E'],
+ ['Karka','Cancer','\u264B\uFE0E'],['Simha','Leo','\u264C\uFE0E'],['Kanya','Virgo','\u264D\uFE0E'],
+ ['Tula','Libra','\u264E\uFE0E'],['Vrishchika','Scorpio','\u264F\uFE0E'],['Dhanu','Sagittarius','\u2650\uFE0E'],
+ ['Makara','Capricorn','\u2651\uFE0E'],['Kumbha','Aquarius','\u2652\uFE0E'],['Meena','Pisces','\u2653\uFE0E']
+];
+const BLURB=[
+ 'Bold, energetic and pioneering. You act first and inspire others to follow.',
+ 'Steady, sensual and loyal. You build security patiently and treasure comfort and beauty.',
+ 'Curious, witty and adaptable. Your mind is always weaving ideas and connections.',
+ 'Nurturing, intuitive and protective. Feelings run deep and home is your anchor.',
+ 'Radiant, generous and proud. You lead with heart and love creative expression.',
+ 'Analytical, practical and service-minded. You refine details and seek meaningful order.',
+ 'Graceful, fair-minded and relational. You look for harmony, beauty and balance.',
+ 'Intense, perceptive and resilient. You transform through depth, passion and focus.',
+ 'Optimistic, philosophical and free-spirited. You chase truth, travel and wisdom.',
+ 'Disciplined, ambitious and patient. You climb steadily toward lasting achievement.',
+ 'Original, humane and independent. You think ahead of your time.',
+ 'Compassionate, imaginative and spiritual. You sense what lies beneath the surface.'
+];
+const NAKS=['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+const DL=['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+const DY=[7,20,6,10,7,18,16,19,17];
+
+/* name, abbreviation, orbit fraction (landing animation), size factor, colours */
+const P=[
+ {k:'Sun',     s:'Surya',   ab:'Su',fr:.30,f:1.5,col:'#ffb703',hi:'#fff3b0',glow:'rgba(255,190,60,.55)'},
+ {k:'Moon',    s:'Chandra', ab:'Mo',fr:.60,f:1.1,col:'#cfd8e8',hi:'#ffffff',glow:'rgba(200,220,255,.45)'},
+ {k:'Mars',    s:'Mangal',  ab:'Ma',fr:.70,f:1.0,col:'#d9452b',hi:'#ff9a7a',glow:'rgba(255,90,60,.5)'},
+ {k:'Mercury', s:'Budha',   ab:'Me',fr:.40,f:.85,col:'#5fbf8f',hi:'#c9ffe4',glow:'rgba(110,230,170,.45)'},
+ {k:'Jupiter', s:'Guru',    ab:'Ju',fr:.80,f:1.7,col:'#e0a24f',hi:'#ffe2a8',glow:'rgba(255,190,100,.5)'},
+ {k:'Venus',   s:'Shukra',  ab:'Ve',fr:.50,f:1.2,col:'#f4a6c8',hi:'#fff0f7',glow:'rgba(255,170,215,.5)'},
+ {k:'Saturn',  s:'Shani',   ab:'Sa',fr:.90,f:1.4,col:'#c8a86a',hi:'#f3e2b3',glow:'rgba(230,200,130,.45)',ring:true},
+ {k:'Rahu',    s:'Rahu',    ab:'Ra',fr:1.0,f:1.1,col:'#2a1a4d',hi:'#7a5cc8',glow:'rgba(150,100,255,.55)'},
+ {k:'Ketu',    s:'Ketu',    ab:'Ke',fr:1.0,f:1.1,col:'#2a1a4d',hi:'#7a5cc8',glow:'rgba(150,100,255,.55)'}
+];
+const PH=[.5,5.3,1.2,2.1,3.3,4.0,.2,2.6,2.6+Math.PI];
+
+const CITY_TXT=`@India|Asia/Kolkata
+Delhi,28.61,77.21
+New Delhi,28.61,77.21
+Mumbai,19.08,72.88
+Kolkata,22.57,88.36
+Chennai,13.08,80.27
+Bengaluru,12.97,77.59
+Hyderabad,17.39,78.49
+Ahmedabad,23.02,72.57
+Pune,18.52,73.86
+Jaipur,26.91,75.79
+Lucknow,26.85,80.95
+Kanpur,26.45,80.33
+Nagpur,21.15,79.09
+Indore,22.72,75.86
+Bhopal,23.26,77.41
+Patna,25.59,85.14
+Vadodara,22.31,73.18
+Ghaziabad,28.67,77.45
+Noida,28.54,77.39
+Gurugram,28.46,77.03
+Faridabad,28.41,77.32
+Ludhiana,30.90,75.86
+Agra,27.18,78.01
+Varanasi,25.32,82.97
+Surat,21.17,72.83
+Chandigarh,30.73,76.78
+Amritsar,31.63,74.87
+Dehradun,30.32,78.03
+Haridwar,29.95,78.16
+Rishikesh,30.09,78.27
+Ranchi,23.34,85.31
+Raipur,21.25,81.63
+Bhubaneswar,20.30,85.82
+Guwahati,26.14,91.74
+Srinagar,34.08,74.80
+Jammu,32.73,74.86
+Shimla,31.10,77.17
+Thiruvananthapuram,8.52,76.94
+Kochi,9.93,76.27
+Coimbatore,11.02,76.96
+Madurai,9.93,78.12
+Visakhapatnam,17.69,83.22
+Vijayawada,16.51,80.65
+Mysuru,12.30,76.64
+Mangaluru,12.91,74.86
+Panaji (Goa),15.49,73.83
+Jodhpur,26.24,73.02
+Udaipur,24.59,73.71
+Meerut,28.98,77.71
+Prayagraj,25.44,81.85
+Gorakhpur,26.76,83.37
+Mathura,27.49,77.67
+Vrindavan,27.58,77.70
+Ayodhya,26.79,82.20
+Ujjain,23.18,75.79
+Nashik,20.00,73.79
+Thane,19.22,72.98
+Navi Mumbai,19.03,73.03
+Kalyan,19.24,73.13
+Kolhapur,16.70,74.24
+Solapur,17.66,75.91
+Aurangabad,19.88,75.34
+Amravati,20.93,77.75
+Nanded,19.16,77.32
+Jabalpur,23.18,79.99
+Gwalior,26.22,78.18
+Jhansi,25.45,78.57
+Sagar,23.84,78.74
+Rewa,24.53,81.30
+Ratlam,23.33,75.04
+Bareilly,28.35,79.42
+Moradabad,28.84,78.78
+Aligarh,27.88,78.08
+Saharanpur,29.97,77.55
+Jalandhar,31.33,75.58
+Patiala,30.34,76.39
+Bathinda,30.21,74.95
+Panipat,29.39,76.97
+Rohtak,28.89,76.61
+Hisar,29.15,75.72
+Karnal,29.69,76.99
+Ambala,30.38,76.78
+Kota,25.21,75.86
+Ajmer,26.45,74.64
+Pushkar,26.49,74.55
+Bikaner,28.02,73.31
+Gaya,24.80,85.00
+Muzaffarpur,26.12,85.39
+Bhagalpur,25.24,86.97
+Darbhanga,26.15,85.90
+Jamshedpur,22.80,86.20
+Dhanbad,23.80,86.43
+Bokaro,23.67,86.15
+Siliguri,26.73,88.40
+Howrah,22.59,88.26
+Durgapur,23.55,87.32
+Cuttack,20.46,85.88
+Puri,19.81,85.83
+Rourkela,22.26,84.85
+Bhilai,21.21,81.38
+Bilaspur,22.08,82.14
+Imphal,24.82,93.94
+Shillong,25.57,91.88
+Agartala,23.83,91.28
+Aizawl,23.73,92.72
+Kohima,25.67,94.11
+Itanagar,27.08,93.61
+Gangtok,27.34,88.61
+Port Blair,11.62,92.73
+Puducherry,11.93,79.83
+Salem,11.66,78.15
+Tiruchirappalli,10.79,78.69
+Tirunelveli,8.73,77.70
+Vellore,12.92,79.13
+Thanjavur,10.79,79.14
+Tirupati,13.63,79.42
+Warangal,17.97,79.59
+Guntur,16.31,80.44
+Nellore,14.44,79.99
+Kozhikode,11.26,75.78
+Thrissur,10.53,76.21
+Kannur,11.87,75.37
+Hubballi,15.36,75.12
+Belagavi,15.85,74.50
+Kalaburagi,17.33,76.83
+Davanagere,14.47,75.92
+Rajkot,22.30,70.80
+Bhavnagar,21.76,72.15
+Jamnagar,22.47,70.07
+Junagadh,21.52,70.46
+Gandhinagar,23.22,72.65
+Leh,34.15,77.58
+Haldwani,29.22,79.51
+@Nepal
+Kathmandu,27.72,85.32,Asia/Kathmandu
+Pokhara,28.21,83.99,Asia/Kathmandu
+@Bangladesh|Asia/Dhaka
+Dhaka,23.81,90.41
+Chittagong,22.36,91.78
+@Pakistan|Asia/Karachi
+Karachi,24.86,67.01
+Lahore,31.55,74.34
+Islamabad,33.68,73.05
+Rawalpindi,33.60,73.04
+Peshawar,34.01,71.58
+Faisalabad,31.42,73.08
+@Sri Lanka|Asia/Colombo
+Colombo,6.93,79.86
+Kandy,7.29,80.64
+@Maldives
+Male,4.18,73.51,Indian/Maldives
+@Bhutan
+Thimphu,27.47,89.64,Asia/Thimphu
+@Afghanistan
+Kabul,34.53,69.17,Asia/Kabul
+@Iran
+Tehran,35.69,51.39,Asia/Tehran
+@Iraq
+Baghdad,33.31,44.36,Asia/Baghdad
+@Saudi Arabia|Asia/Riyadh
+Riyadh,24.71,46.68
+Jeddah,21.49,39.19
+Mecca,21.39,39.86
+Medina,24.47,39.61
+@UAE|Asia/Dubai
+Dubai,25.20,55.27
+Abu Dhabi,24.45,54.38
+Sharjah,25.35,55.42
+@Qatar
+Doha,25.29,51.53,Asia/Qatar
+@Kuwait
+Kuwait City,29.38,47.99,Asia/Kuwait
+@Bahrain
+Manama,26.23,50.59,Asia/Bahrain
+@Oman
+Muscat,23.59,58.41,Asia/Muscat
+@Yemen
+Sanaa,15.37,44.19,Asia/Aden
+@Jordan
+Amman,31.95,35.93,Asia/Amman
+@Lebanon
+Beirut,33.89,35.50,Asia/Beirut
+@Syria
+Damascus,33.51,36.28,Asia/Damascus
+@Israel|Asia/Jerusalem
+Jerusalem,31.77,35.22
+Tel Aviv,32.09,34.78
+@Turkey|Europe/Istanbul
+Istanbul,41.01,28.98
+Ankara,39.93,32.86
+@Azerbaijan
+Baku,40.41,49.87,Asia/Baku
+@Georgia
+Tbilisi,41.72,44.79,Asia/Tbilisi
+@Armenia
+Yerevan,40.18,44.51,Asia/Yerevan
+@Uzbekistan
+Tashkent,41.30,69.24,Asia/Tashkent
+@Kazakhstan|Asia/Almaty
+Almaty,43.24,76.89
+Astana,51.17,71.45
+@Thailand|Asia/Bangkok
+Bangkok,13.76,100.50
+Chiang Mai,18.79,98.98
+@Vietnam|Asia/Ho_Chi_Minh
+Hanoi,21.03,105.85
+Ho Chi Minh City,10.82,106.63
+@Cambodia
+Phnom Penh,11.56,104.93,Asia/Phnom_Penh
+@Laos
+Vientiane,17.97,102.63,Asia/Vientiane
+@Myanmar
+Yangon,16.84,96.17,Asia/Yangon
+@Malaysia|Asia/Kuala_Lumpur
+Kuala Lumpur,3.14,101.69
+Penang (George Town),5.41,100.33
+@Singapore
+Singapore,1.35,103.82,Asia/Singapore
+@Indonesia
+Jakarta,-6.21,106.85,Asia/Jakarta
+Surabaya,-7.25,112.75,Asia/Jakarta
+Bandung,-6.92,107.61,Asia/Jakarta
+Denpasar (Bali),-8.65,115.22,Asia/Makassar
+@Philippines|Asia/Manila
+Manila,14.60,120.98
+Cebu City,10.32,123.89
+@Hong Kong
+Hong Kong,22.32,114.17,Asia/Hong_Kong
+@Macau
+Macau,22.20,113.55,Asia/Macau
+@Taiwan
+Taipei,25.03,121.57,Asia/Taipei
+@China|Asia/Shanghai
+Beijing,39.90,116.41
+Shanghai,31.23,121.47
+Guangzhou,23.13,113.26
+Shenzhen,22.54,114.06
+Chengdu,30.57,104.07
+Wuhan,30.59,114.31
+Xi'an,34.34,108.94
+Chongqing,29.56,106.55
+Tianjin,39.34,117.36
+Hangzhou,30.27,120.16
+Nanjing,32.06,118.80
+@South Korea|Asia/Seoul
+Seoul,37.57,126.98
+Busan,35.18,129.08
+@North Korea
+Pyongyang,39.04,125.76,Asia/Pyongyang
+@Japan|Asia/Tokyo
+Tokyo,35.68,139.65
+Osaka,34.69,135.50
+Kyoto,35.01,135.77
+Nagoya,35.18,136.91
+Sapporo,43.06,141.35
+Fukuoka,33.59,130.40
+@Mongolia
+Ulaanbaatar,47.89,106.91,Asia/Ulaanbaatar
+@Russia
+Moscow,55.76,37.62,Europe/Moscow
+Saint Petersburg,59.93,30.34,Europe/Moscow
+Yekaterinburg,56.84,60.65,Asia/Yekaterinburg
+Novosibirsk,55.03,82.92,Asia/Novosibirsk
+Vladivostok,43.12,131.89,Asia/Vladivostok
+@UK|Europe/London
+London,51.51,-0.13
+Manchester,53.48,-2.24
+Birmingham,52.49,-1.89
+Leicester,52.64,-1.13
+Leeds,53.80,-1.55
+Liverpool,53.41,-2.98
+Edinburgh,55.95,-3.19
+Glasgow,55.86,-4.25
+Cardiff,51.48,-3.18
+Belfast,54.60,-5.93
+@Ireland
+Dublin,53.35,-6.26,Europe/Dublin
+@France|Europe/Paris
+Paris,48.86,2.35
+Marseille,43.30,5.37
+Lyon,45.76,4.84
+@Belgium
+Brussels,50.85,4.35,Europe/Brussels
+@Netherlands|Europe/Amsterdam
+Amsterdam,52.37,4.90
+Rotterdam,51.92,4.48
+@Germany|Europe/Berlin
+Berlin,52.52,13.41
+Munich,48.14,11.58
+Frankfurt,50.11,8.68
+Hamburg,53.55,9.99
+Cologne,50.94,6.96
+@Switzerland|Europe/Zurich
+Zurich,47.38,8.54
+Geneva,46.20,6.14
+@Austria
+Vienna,48.21,16.37,Europe/Vienna
+@Czechia
+Prague,50.08,14.44,Europe/Prague
+@Poland|Europe/Warsaw
+Warsaw,52.23,21.01
+Krakow,50.06,19.94
+@Hungary
+Budapest,47.50,19.04,Europe/Budapest
+@Romania
+Bucharest,44.43,26.10,Europe/Bucharest
+@Bulgaria
+Sofia,42.70,23.32,Europe/Sofia
+@Greece
+Athens,37.98,23.73,Europe/Athens
+@Serbia
+Belgrade,44.79,20.45,Europe/Belgrade
+@Croatia
+Zagreb,45.81,15.98,Europe/Zagreb
+@Bosnia
+Sarajevo,43.86,18.41,Europe/Sarajevo
+@North Macedonia
+Skopje,41.99,21.43,Europe/Skopje
+@Albania
+Tirana,41.33,19.82,Europe/Tirane
+@Italy|Europe/Rome
+Rome,41.90,12.50
+Milan,45.46,9.19
+Naples,40.85,14.27
+@Spain|Europe/Madrid
+Madrid,40.42,-3.70
+Barcelona,41.39,2.17
+Valencia,39.47,-0.38
+Seville,37.39,-5.98
+@Portugal|Europe/Lisbon
+Lisbon,38.72,-9.14
+Porto,41.15,-8.61
+@Malta
+Valletta,35.90,14.51,Europe/Malta
+@Luxembourg
+Luxembourg,49.61,6.13,Europe/Luxembourg
+@Denmark
+Copenhagen,55.68,12.57,Europe/Copenhagen
+@Sweden
+Stockholm,59.33,18.07,Europe/Stockholm
+@Norway
+Oslo,59.91,10.75,Europe/Oslo
+@Finland
+Helsinki,60.17,24.94,Europe/Helsinki
+@Iceland
+Reykjavik,64.15,-21.94,Atlantic/Reykjavik
+@Ukraine
+Kyiv,50.45,30.52,Europe/Kyiv
+@Belarus
+Minsk,53.90,27.57,Europe/Minsk
+@Latvia
+Riga,56.95,24.11,Europe/Riga
+@Lithuania
+Vilnius,54.69,25.28,Europe/Vilnius
+@Estonia
+Tallinn,59.44,24.75,Europe/Tallinn
+@Moldova
+Chisinau,47.01,28.86,Europe/Chisinau
+@Cyprus
+Nicosia,35.19,33.38,Asia/Nicosia
+@Egypt|Africa/Cairo
+Cairo,30.04,31.24
+Alexandria,31.20,29.92
+@Nigeria|Africa/Lagos
+Lagos,6.52,3.38
+Abuja,9.08,7.40
+Kano,12.00,8.52
+@Ghana
+Accra,5.60,-0.19,Africa/Accra
+@Ivory Coast
+Abidjan,5.36,-4.01,Africa/Abidjan
+@Senegal
+Dakar,14.72,-17.47,Africa/Dakar
+@Kenya|Africa/Nairobi
+Nairobi,-1.29,36.82
+Mombasa,-4.04,39.67
+@Ethiopia
+Addis Ababa,9.03,38.74,Africa/Addis_Ababa
+@Tanzania
+Dar es Salaam,-6.79,39.21,Africa/Dar_es_Salaam
+@Uganda
+Kampala,0.35,32.58,Africa/Kampala
+@Rwanda
+Kigali,-1.95,30.06,Africa/Kigali
+@South Africa|Africa/Johannesburg
+Johannesburg,-26.20,28.05
+Cape Town,-33.92,18.42
+Durban,-29.86,31.02
+Pretoria,-25.75,28.19
+@Zimbabwe
+Harare,-17.83,31.05,Africa/Harare
+@Zambia
+Lusaka,-15.39,28.32,Africa/Lusaka
+@Mozambique
+Maputo,-25.97,32.57,Africa/Maputo
+@Angola
+Luanda,-8.84,13.23,Africa/Luanda
+@DR Congo
+Kinshasa,-4.44,15.27,Africa/Kinshasa
+@Morocco|Africa/Casablanca
+Casablanca,33.57,-7.59
+Rabat,34.02,-6.84
+@Algeria
+Algiers,36.75,3.06,Africa/Algiers
+@Tunisia
+Tunis,36.81,10.18,Africa/Tunis
+@Libya
+Tripoli,32.89,13.19,Africa/Tripoli
+@Sudan
+Khartoum,15.50,32.56,Africa/Khartoum
+@Mauritius
+Port Louis,-20.16,57.50,Indian/Mauritius
+@Madagascar
+Antananarivo,-18.88,47.51,Indian/Antananarivo
+@Namibia
+Windhoek,-22.56,17.08,Africa/Windhoek
+@Botswana
+Gaborone,-24.65,25.91,Africa/Gaborone
+@USA
+New York,40.71,-74.01,America/New_York
+Los Angeles,34.05,-118.24,America/Los_Angeles
+Chicago,41.88,-87.63,America/Chicago
+Houston,29.76,-95.37,America/Chicago
+Dallas,32.78,-96.80,America/Chicago
+Austin,30.27,-97.74,America/Chicago
+San Antonio,29.42,-98.49,America/Chicago
+Phoenix,33.45,-112.07,America/Phoenix
+Philadelphia,39.95,-75.17,America/New_York
+San Diego,32.72,-117.16,America/Los_Angeles
+San Jose,37.34,-121.89,America/Los_Angeles
+San Francisco,37.77,-122.42,America/Los_Angeles
+Sunnyvale,37.37,-122.04,America/Los_Angeles
+Fremont,37.55,-121.99,America/Los_Angeles
+Seattle,47.61,-122.33,America/Los_Angeles
+Portland,45.52,-122.68,America/Los_Angeles
+Las Vegas,36.17,-115.14,America/Los_Angeles
+Denver,39.74,-104.99,America/Denver
+Salt Lake City,40.76,-111.89,America/Denver
+Boston,42.36,-71.06,America/New_York
+Washington DC,38.91,-77.04,America/New_York
+Baltimore,39.29,-76.61,America/New_York
+Atlanta,33.75,-84.39,America/New_York
+Miami,25.76,-80.19,America/New_York
+Orlando,28.54,-81.38,America/New_York
+Tampa,27.95,-82.46,America/New_York
+Charlotte,35.23,-80.84,America/New_York
+Pittsburgh,40.44,-80.00,America/New_York
+Cleveland,41.50,-81.69,America/New_York
+Columbus,39.96,-83.00,America/New_York
+Detroit,42.33,-83.05,America/Detroit
+Indianapolis,39.77,-86.16,America/Indiana/Indianapolis
+Cincinnati,39.10,-84.51,America/New_York
+Jersey City,40.73,-74.04,America/New_York
+Edison (New Jersey),40.52,-74.41,America/New_York
+Minneapolis,44.98,-93.27,America/Chicago
+St. Louis,38.63,-90.20,America/Chicago
+Kansas City,39.10,-94.58,America/Chicago
+Nashville,36.16,-86.78,America/Chicago
+New Orleans,29.95,-90.07,America/Chicago
+Honolulu,21.31,-157.86,Pacific/Honolulu
+Anchorage,61.22,-149.90,America/Anchorage
+@Canada
+Toronto,43.65,-79.38,America/Toronto
+Mississauga,43.59,-79.64,America/Toronto
+Brampton,43.73,-79.76,America/Toronto
+Ottawa,45.42,-75.70,America/Toronto
+Montreal,45.50,-73.57,America/Toronto
+Vancouver,49.28,-123.12,America/Vancouver
+Calgary,51.05,-114.07,America/Edmonton
+Edmonton,53.55,-113.49,America/Edmonton
+Winnipeg,49.90,-97.14,America/Winnipeg
+Halifax,44.65,-63.57,America/Halifax
+@Mexico
+Mexico City,19.43,-99.13,America/Mexico_City
+Guadalajara,20.66,-103.35,America/Mexico_City
+Monterrey,25.69,-100.32,America/Monterrey
+Cancun,21.16,-86.85,America/Cancun
+@Cuba
+Havana,23.11,-82.37,America/Havana
+@Jamaica
+Kingston,17.99,-76.79,America/Jamaica
+@Dominican Republic
+Santo Domingo,18.49,-69.93,America/Santo_Domingo
+@Puerto Rico
+San Juan,18.47,-66.11,America/Puerto_Rico
+@Trinidad
+Port of Spain,10.65,-61.51,America/Port_of_Spain
+@Guatemala
+Guatemala City,14.63,-90.51,America/Guatemala
+@Costa Rica
+San Jose (Costa Rica),9.93,-84.08,America/Costa_Rica
+@Panama
+Panama City,8.98,-79.52,America/Panama
+@Haiti
+Port-au-Prince,18.59,-72.31,America/Port-au-Prince
+@Guyana
+Georgetown,6.80,-58.16,America/Guyana
+@Suriname
+Paramaribo,5.85,-55.20,America/Paramaribo
+@Brazil
+Sao Paulo,-23.55,-46.63,America/Sao_Paulo
+Rio de Janeiro,-22.91,-43.17,America/Sao_Paulo
+Brasilia,-15.79,-47.88,America/Sao_Paulo
+Belo Horizonte,-19.92,-43.94,America/Sao_Paulo
+Curitiba,-25.43,-49.27,America/Sao_Paulo
+Porto Alegre,-30.03,-51.23,America/Sao_Paulo
+Salvador,-12.97,-38.51,America/Bahia
+Fortaleza,-3.73,-38.53,America/Fortaleza
+Recife,-8.05,-34.88,America/Recife
+Manaus,-3.12,-60.02,America/Manaus
+@Argentina
+Buenos Aires,-34.60,-58.38,America/Argentina/Buenos_Aires
+Cordoba,-31.42,-64.18,America/Argentina/Cordoba
+@Chile
+Santiago,-33.45,-70.67,America/Santiago
+@Peru
+Lima,-12.05,-77.04,America/Lima
+@Colombia|America/Bogota
+Bogota,4.71,-74.07
+Medellin,6.24,-75.58
+@Ecuador|America/Guayaquil
+Quito,-0.18,-78.47
+Guayaquil,-2.17,-79.92
+@Venezuela
+Caracas,10.48,-66.90,America/Caracas
+@Bolivia
+La Paz,-16.50,-68.15,America/La_Paz
+@Paraguay
+Asuncion,-25.26,-57.58,America/Asuncion
+@Uruguay
+Montevideo,-34.90,-56.16,America/Montevideo
+@Australia
+Sydney,-33.87,151.21,Australia/Sydney
+Canberra,-35.28,149.13,Australia/Sydney
+Melbourne,-37.81,144.96,Australia/Melbourne
+Brisbane,-27.47,153.03,Australia/Brisbane
+Gold Coast,-28.02,153.40,Australia/Brisbane
+Perth,-31.95,115.86,Australia/Perth
+Adelaide,-34.93,138.60,Australia/Adelaide
+Darwin,-12.46,130.84,Australia/Darwin
+Hobart,-42.88,147.33,Australia/Hobart
+@New Zealand|Pacific/Auckland
+Auckland,-36.85,174.76
+Wellington,-41.29,174.78
+Christchurch,-43.53,172.64
+@Fiji
+Suva,-18.14,178.44,Pacific/Fiji
+@Papua New Guinea
+Port Moresby,-9.44,147.18,Pacific/Port_Moresby
+@New Caledonia
+Noumea,-22.27,166.46,Pacific/Noumea
+@French Polynesia
+Papeete,-17.54,-149.57,Pacific/Tahiti`;
+
+/* ================= ASTRONOMY ================= */
+function kepler(Mdeg,e){
+  const M=rad(n360(Mdeg)); let E=M+e*Math.sin(M)*(1+e*Math.cos(M));
+  for(let i=0;i<14;i++){const dE=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E)); E-=dE; if(Math.abs(dE)<1e-10)break;}
+  return E;
+}
+function helio(el){
+  const E=kepler(el.M,el.e);
+  const xv=el.a*(Math.cos(E)-el.e), yv=el.a*Math.sqrt(1-el.e*el.e)*Math.sin(E);
+  const v=Math.atan2(yv,xv), r=Math.hypot(xv,yv), N=rad(el.N), i=rad(el.i), vw=v+rad(el.w);
+  return {x:r*(Math.cos(N)*Math.cos(vw)-Math.sin(N)*Math.sin(vw)*Math.cos(i)),
+          y:r*(Math.sin(N)*Math.cos(vw)+Math.cos(N)*Math.sin(vw)*Math.cos(i))};
+}
+function sunPos(d){
+  const w=282.9404+4.70935e-5*d, e=0.016709-1.151e-9*d, M=n360(356.0470+0.9856002585*d);
+  const E=kepler(M,e), xv=Math.cos(E)-e, yv=Math.sqrt(1-e*e)*Math.sin(E);
+  const r=Math.hypot(xv,yv), lon=n360(deg(Math.atan2(yv,xv))+w);
+  return {lon,M,w,xs:r*Math.cos(rad(lon)),ys:r*Math.sin(rad(lon))};
+}
+function moonLon(d,sun){
+  const N=125.1228-0.0529538083*d, w=318.0634+0.1643573223*d, M=n360(115.3654+13.0649929509*d);
+  const h=helio({N:N,i:5.1454,w:w,a:60.2666,e:0.054900,M:M});
+  let lon=deg(Math.atan2(h.y,h.x));
+  const Ms=sun.M, Mm=M, Ls=sun.w+sun.M, Lm=N+w+M, D=Lm-Ls, F=Lm-N, s=x=>Math.sin(rad(x));
+  lon+= -1.274*s(Mm-2*D)+0.658*s(2*D)-0.186*s(Ms)-0.059*s(2*Mm-2*D)-0.057*s(Mm-2*D+Ms)+0.053*s(Mm+2*D)
+        +0.046*s(2*D-Ms)+0.041*s(Mm-Ms)-0.035*s(D)-0.031*s(Mm+Ms)-0.015*s(2*F-2*D)+0.011*s(Mm-4*D);
+  return n360(lon);
+}
+const TBL={
+ Mercury:[48.3313,3.24587e-5,7.0047,5.00e-8,29.1241,1.01444e-5,0.387098,0.205635,5.59e-10,168.6562,4.0923344368],
+ Venus:  [76.6799,2.46590e-5,3.3946,2.75e-8,54.8910,1.38374e-5,0.723330,0.006773,-1.302e-9,48.0052,1.6021302244],
+ Mars:   [49.5574,2.11081e-5,1.8497,-1.78e-8,286.5016,2.92961e-5,1.523688,0.093405,2.516e-9,18.6021,0.5240207766],
+ Jupiter:[100.4542,2.76854e-5,1.3030,-1.557e-7,273.8777,1.64505e-5,5.20256,0.048498,4.469e-9,19.8950,0.0830853001],
+ Saturn: [113.6634,2.38980e-5,2.4886,-1.081e-7,339.3939,2.97661e-5,9.55475,0.055546,-9.499e-9,316.9670,0.0334442282]
+};
+function planetTrop(k,d){
+  const sun=sunPos(d), t=TBL[k];
+  const h=helio({N:t[0]+t[1]*d,i:t[2]+t[3]*d,w:t[4]+t[5]*d,a:t[6],e:t[7]+t[8]*d,M:t[9]+t[10]*d});
+  let lon=deg(Math.atan2(h.y+sun.ys,h.x+sun.xs));
+  if(k==='Jupiter'||k==='Saturn'){
+    const Mj=rad(19.8950+0.0830853001*d), Ms=rad(316.9670+0.0334442282*d), sn=Math.sin, cs=Math.cos;
+    if(k==='Jupiter') lon+= -0.332*sn(2*Mj-5*Ms-rad(67.6))-0.056*sn(2*Mj-2*Ms+rad(21))+0.042*sn(3*Mj-5*Ms+rad(21))
+                            -0.036*sn(Mj-2*Ms)+0.022*cs(Mj-Ms)+0.023*sn(2*Mj-3*Ms+rad(52))-0.016*sn(Mj-5*Ms-rad(69));
+    else lon+= 0.812*sn(2*Mj-5*Ms-rad(67.6))-0.229*cs(2*Mj-4*Ms-rad(2))+0.119*sn(Mj-2*Ms-rad(3))
+              +0.046*sn(2*Mj-6*Ms-rad(69))+0.014*sn(Mj-3*Ms+rad(32));
+  }
+  return n360(lon);
+}
+function computeChart(inp){
+  const utMs=Date.UTC(inp.y,inp.mo-1,inp.d,inp.hh,inp.mm)-inp.tz*3600000;
+  const jd=utMs/86400000+2440587.5, d=jd-2451543.5, T=(jd-2451545)/36525;
+  const ayan=23.8531+0.013969*((jd-2451545)/365.25);
+  const sun=sunPos(d), trop={};
+  trop.Sun=sun.lon; trop.Moon=moonLon(d,sun);
+  ['Mercury','Venus','Mars','Jupiter','Saturn'].forEach(k=>trop[k]=planetTrop(k,d));
+  trop.Rahu=n360(125.1228-0.0529538083*d); trop.Ketu=n360(trop.Rahu+180);
+  const retro=k=>{
+    if(k==='Rahu'||k==='Ketu')return true;
+    if(k==='Sun'||k==='Moon')return false;
+    return (((planetTrop(k,d+0.5)-planetTrop(k,d-0.5)+540)%360)-180)<0;
+  };
+  /* ascendant */
+  const gmst=280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T;
+  const th=rad(n360(gmst+inp.lon)), eps=rad(23.4392911-0.0130042*T), phi=rad(inp.lat);
+  const ascTrop=n360(deg(Math.atan2(Math.cos(th),-(Math.sin(th)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps)))));
+  const asc=n360(ascTrop-ayan), ascSign=Math.floor(asc/30);
+  const planets=P.map(p=>{
+    const lon=n360(trop[p.k]-ayan), sign=Math.floor(lon/30), nIdx=Math.floor(lon/(360/27));
+    return {k:p.k,s:p.s,ab:p.ab,lon:lon,sign:sign,deg:lon%30,nak:NAKS[nIdx],pada:Math.floor((lon%(360/27))/(360/108))+1,
+            house:((sign-ascSign+12)%12)+1,retro:retro(p.k)};
+  });
+  return {inp:inp,ayan:ayan,asc:asc,ascSign:ascSign,ascDeg:asc%30,planets:planets,utMs:utMs};
+}
+function dasha(moonLonSid,birthMs){
+  const span=360/27, idx=Math.floor(moonLonSid/span), frac=(moonLonSid%span)/span, YR=365.2425*86400000;
+  let li=idx%9, start=birthMs, out=[], end=start+DY[li]*(1-frac)*YR;
+  out.push({lord:DL[li],start:start,end:end,first:true}); start=end;
+  for(let n=1;n<9;n++){li=(li+1)%9; end=start+DY[li]*YR; out.push({lord:DL[li],start:start,end:end}); start=end;}
+  return out;
+}
+
+/* ================= FORM ================= */
+function parseCities(t){
+  const out=[]; let cc='',tz='';
+  t.split('\n').forEach(l=>{
+    l=l.trim(); if(!l)return;
+    if(l[0]==='@'){const p=l.slice(1).split('|');cc=p[0];tz=p[1]||'';return;}
+    const p=l.split(','); out.push([p[0],cc,+p[1],+p[2],p[3]||tz]);
+  });
+  return out;
+}
+const CITIES=parseCities(CITY_TXT);
+const tzSel=$('f-tz'), dl=$('cities');
+CITIES.forEach(c=>{const o=document.createElement('option'); o.value=c[0]+', '+c[1]; dl.appendChild(o);});
+let zones=[]; try{zones=Intl.supportedValuesOf('timeZone').slice();}catch(e){}
+CITIES.forEach(c=>{if(zones.indexOf(c[4])<0)zones.push(c[4]);});
+zones.sort();
+tzSel.innerHTML='<option value="__manual">Custom UTC offset\u2026</option>'+zones.map(z=>'<option value="'+z+'">'+z.replace(/_/g,' ')+'</option>').join('');
+tzSel.value='Asia/Kolkata';
+function ensureOpt(z){
+  if(!z)return;
+  for(let i=0;i<tzSel.options.length;i++)if(tzSel.options[i].value===z)return;
+  const o=document.createElement('option'); o.value=z; o.textContent=z.replace(/_/g,' '); tzSel.appendChild(o);
+}
+const fmtTz=t=>{const s=t<0?'\u2212':'+',tm=Math.round(Math.abs(t)*60);return 'UTC'+s+Math.floor(tm/60)+':'+String(tm%60).padStart(2,'0');};
+
+/* time zone offset on the actual birth date (daylight saving and history included) */
+const dtfs={}, ZALIAS={'Europe/Kyiv':'Europe/Kiev'};
+function mkDtf(z){return new Intl.DateTimeFormat('en-US',{timeZone:z,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'});}
+function dtf(z){
+  if(dtfs[z]===undefined){
+    try{dtfs[z]=mkDtf(z);}catch(e){try{dtfs[z]=ZALIAS[z]?mkDtf(ZALIAS[z]):null;}catch(e2){dtfs[z]=null;}}
+  }
+  return dtfs[z];
+}
+function zoneOffset(z,utcMs){
+  const f=dtf(z); if(!f)return null;
+  const t=Math.floor(utcMs/1000)*1000, p={};
+  f.formatToParts(new Date(t)).forEach(x=>{if(x.type!=='literal')p[x.type]=+x.value;});
+  return (Date.UTC(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second)-t)/3600000;
+}
+function resolveOffset(z,y,mo,d,hh,mm){
+  const local=Date.UTC(y,mo-1,d,hh,mm), o1=zoneOffset(z,local);
+  if(o1===null)return null;
+  const o2=zoneOffset(z,local-o1*3600000);
+  return o2===null?o1:o2;
+}
+function currentOffset(){
+  const z=tzSel.value;
+  if(z==='__manual'){const v=parseFloat($('f-off').value);return isNaN(v)||v<-14||v>14?null:{off:v};}
+  const date=$('f-date').value, time=$('f-time').value; if(!date||!time)return null;
+  const a=date.split('-').map(Number), b=time.split(':').map(Number);
+  const off=resolveOffset(z,a[0],a[1],a[2],b[0],b[1]);
+  return off===null?null:{off:off};
+}
+function refreshTz(){
+  $('off-wrap').hidden=tzSel.value!=='__manual';
+  const r=currentOffset(), el=$('tz-info');
+  el.textContent=r?('Offset used for this birth: '+fmtTz(r.off)+(tzSel.value!=='__manual'?' (daylight saving and historical changes applied automatically)':'')):'';
+}
+['f-date','f-time','f-off'].forEach(id=>$(id).addEventListener('input',refreshTz));
+tzSel.addEventListener('change',refreshTz);
+$('f-date').max=new Date().toISOString().slice(0,10);
+
+/* places */
+const DEFAULT_HINT='Search over 400 cities worldwide. For any other place, enter its latitude and longitude (right-click the spot in a map app and copy the coordinates), or let Claude look it up.';
+function setHint(t,ok){const h=$('place-hint');h.textContent=t;h.classList.toggle('ok',!!ok);}
+function findCity(q){
+  q=q.trim().toLowerCase(); if(!q)return null;
+  return CITIES.find(c=>(c[0]+', '+c[1]).toLowerCase()===q)||CITIES.find(c=>c[0].toLowerCase()===q)||(q.length>=3?CITIES.find(c=>c[0].toLowerCase().startsWith(q)):null);
+}
+function nearest(lat,lon){
+  let best=null,bd=1e9;
+  CITIES.forEach(c=>{
+    const a=Math.sin(rad(c[2]-lat)/2)**2+Math.cos(rad(lat))*Math.cos(rad(c[2]))*Math.sin(rad(c[3]-lon)/2)**2;
+    const dd=2*Math.asin(Math.sqrt(a))*6371; if(dd<bd){bd=dd;best=c;}
+  });
+  return best;
+}
+let SAMPLE=null, matched=false;
+function updateAsk(){
+  const b=$('ask-claude'); if(!b)return;
+  b.hidden=!(SAMPLE&&!matched&&$('f-place').value.trim().length>=2);
+}
+function onPlace(){
+  const c=findCity($('f-place').value);
+  if(c){
+    matched=true; $('f-lat').value=c[2]; $('f-lon').value=c[3]; ensureOpt(c[4]); tzSel.value=c[4];
+    setHint('Coordinates and time zone filled for '+c[0]+', '+c[1]+'.',true);
+  }else{matched=false; setHint(DEFAULT_HINT,false);}
+  refreshTz(); updateAsk();
+}
+$('f-place').addEventListener('input',onPlace);
+$('f-place').addEventListener('change',onPlace);
+function onCoords(){
+  matched=false;
+  const a=$('f-lat').value, b=$('f-lon').value, lat=parseFloat(a), lon=parseFloat(b);
+  if(a!==''&&b!==''&&lat>=-90&&lat<=90&&lon>=-180&&lon<=180){
+    const n=nearest(lat,lon); ensureOpt(n[4]); tzSel.value=n[4];
+    setHint('Time zone suggested from the nearest listed city ('+n[0]+'). Please check it, or choose a custom UTC offset.',false);
+  }
+  refreshTz(); updateAsk();
+}
+$('f-lat').addEventListener('input',onCoords);
+$('f-lon').addEventListener('input',onCoords);
+
+/* optional: ask Claude to locate any place on Earth (only if the viewer's runtime offers it) */
+if(window.claude&&typeof window.claude.use==='function'){
+  window.claude.use('sample').then(s=>{if(s){SAMPLE=s;updateAsk();}}).catch(()=>{});
+}
+$('ask-claude').addEventListener('click',async()=>{
+  const place=$('f-place').value.trim(), btn=$('ask-claude'); if(!place||!SAMPLE)return;
+  btn.disabled=true; btn.textContent='Locating\u2026';
+  try{
+    const q='Locate this place of birth: '+JSON.stringify(place)+'. Reply with ONLY a JSON object and nothing else: {"found":true or false,"name":"place name","region":"state or province","country":"country","lat":decimal degrees with north positive,"lon":decimal degrees with east positive,"tz":"IANA time zone id for this place, for example Asia/Kolkata"}. Choose the best-known, most populous match and give at least 2 decimal places. If you are not confident that this place exists, set found to false.';
+    const r=await SAMPLE.json(q,{modelTier:'quick'});
+    const lat=+r.lat, lon=+r.lon;
+    if(!r||!r.found||!(lat>=-90&&lat<=90)||!(lon>=-180&&lon<=180)||isNaN(lat)||isNaN(lon)){setHint('Claude could not find that place. Add the state or country, or enter coordinates yourself.',false);}
+    else{
+      $('f-lat').value=lat.toFixed(4); $('f-lon').value=lon.toFixed(4); matched=true;
+      if(r.tz&&dtf(r.tz)){ensureOpt(r.tz);tzSel.value=r.tz;}else{const n=nearest(lat,lon);ensureOpt(n[4]);tzSel.value=n[4];}
+      setHint('Claude placed it at '+[r.name,r.region,r.country].filter(Boolean).join(', ')+' ('+lat.toFixed(2)+', '+lon.toFixed(2)+'). Please check that this is right.',true);
+    }
+  }catch(e){
+    const code=e&&e.code;
+    setHint(code==='not_granted'?'Permission to ask Claude was not given. Enter the coordinates manually instead.':(code==='rate_limited'?'Too many lookups. Wait a moment, or enter coordinates manually.':'The lookup did not work this time. Enter the coordinates manually.'),false);
+  }
+  btn.disabled=false; btn.textContent='Locate this place with Claude'; refreshTz(); updateAsk();
+});
+
+function readForm(){
+  const err=$('ferr'); err.textContent='';
+  const name=$('f-name').value.trim(), date=$('f-date').value, time=$('f-time').value;
+  const lat=parseFloat($('f-lat').value), lon=parseFloat($('f-lon').value);
+  if(!name){err.textContent='Enter your name.';$('f-name').focus();return null;}
+  if(!date){err.textContent='Enter your date of birth.';$('f-date').focus();return null;}
+  if(!time){err.textContent='Enter your time of birth.';$('f-time').focus();return null;}
+  if(!(lat>=-90&&lat<=90)||!(lon>=-180&&lon<=180)||$('f-lat').value===''||$('f-lon').value===''){err.textContent='Choose a city from the list, or enter a valid latitude and longitude.';$('f-place').focus();return null;}
+  const a=date.split('-').map(Number), b=time.split(':').map(Number);
+  if(a[0]<1900||a[0]>2100){err.textContent='Birth year must be between 1900 and 2100.';return null;}
+  const r=currentOffset();
+  if(!r){err.textContent=tzSel.value==='__manual'?'Enter the UTC offset in hours, for example 5.5.':'That time zone is not available in this browser. Choose a custom UTC offset.';return null;}
+  return {name:name,y:a[0],mo:a[1],d:a[2],hh:b[0],mm:b[1],lat:lat,lon:lon,tz:r.off,tzName:tzSel.value==='__manual'?'':tzSel.value,place:$('f-place').value.trim()};
+}
+
+/* ================= PLANET SPRITES (animated SVG) ================= */
+let uidN=0;
+const f2=x=>Math.round(x*100)/100;
+function sprite(k,r){
+  const u='sp'+(uidN++), w=f2(2*r);
+  const el=(x,y,rx,ry,fill,op)=>'<ellipse cx="'+f2(x)+'" cy="'+f2(y)+'" rx="'+f2(rx)+'" ry="'+f2(ry)+'" fill="'+fill+'" opacity="'+(op==null?1:op)+'"/>';
+  const ci=(x,y,rr,fill,op)=>el(x,y,rr,rr,fill,op);
+  const band=(y0,y1,fill)=>'<rect x="0" y="'+f2(y0*r)+'" width="'+w+'" height="'+f2((y1-y0)*r+.5)+'" fill="'+fill+'"/>';
+  const wv=(y,amp,col,sw,op)=>'<path d="M0 '+f2(y*r)+' Q'+f2(w*.5)+' '+f2((y-amp)*r)+' '+w+' '+f2(y*r)+'" fill="none" stroke="'+col+'" stroke-width="'+f2(sw*r)+'" stroke-linecap="round" opacity="'+op+'"/>';
+  const ring=(cls,col,dash)=>'<circle class="'+cls+'" r="'+f2(r*1.38)+'" fill="none" stroke="'+col+'" stroke-width="'+f2(r*.12)+'" stroke-dasharray="'+dash+'" stroke-linecap="round" opacity=".85"/>';
+  let base='#888',tile='',over='',glowC=null,glowOp=.3,dur=20,pre='',post='',limb=.62;
+  switch(k){
+    case 'Sun':
+      base='#ffb000'; dur=26; glowC='#ffb347'; glowOp=.8; limb=.25;
+      tile=ci(.2*w,-.5*r,.38*r,'#ffd24d',.8)+ci(.7*w,-.1*r,.42*r,'#ff8a00',.6)+ci(.45*w,.5*r,.3*r,'#ffe27a',.7)+ci(.92*w,.5*r,.26*r,'#ff9d1a',.6)+ci(.05*w,.05*r,.2*r,'#fff0a8',.7);
+      pre=ring('spin','#ffd36b',f2(r*.25)+' '+f2(r*.42)); break;
+    case 'Moon':
+      base='#d3d7e0'; dur=44; glowC='#dfe8ff'; glowOp=.35;
+      tile=el(.3*w,-.3*r,.5*r,.34*r,'#9aa1b0',.55)+el(.78*w,.28*r,.46*r,.3*r,'#9aa1b0',.5)+ci(.55*w,-.55*r,.17*r,'#aab0bd',.8)+ci(.1*w,.5*r,.2*r,'#aab0bd',.8)+ci(.62*w,.62*r,.12*r,'#b7bcc8',.9)+ci(.92*w,-.25*r,.14*r,'#aab0bd',.8); break;
+    case 'Mars':
+      base='#c8512a'; dur=22; glowC='#ff6a3d'; glowOp=.4;
+      tile=el(.25*w,0,.6*r,.26*r,'#7d2e14',.7)+el(.72*w,.4*r,.5*r,.22*r,'#8e3519',.65)+el(.55*w,-.4*r,.45*r,.2*r,'#e58a55',.6)+ci(.9*w,-.1*r,.18*r,'#6e2812',.6);
+      over='<ellipse cy="'+f2(-r*.95)+'" rx="'+f2(r*.55)+'" ry="'+f2(r*.24)+'" fill="#fff" opacity=".85"/><ellipse cy="'+f2(r*.97)+'" rx="'+f2(r*.4)+'" ry="'+f2(r*.16)+'" fill="#fff" opacity=".6"/>'; break;
+    case 'Mercury':
+      base='#948f8a'; dur=30; glowC='#cfc8c0'; glowOp=.25;
+      tile=ci(.2*w,-.35*r,.2*r,'#6f6a66',.7)+ci(.5*w,.2*r,.28*r,'#7b7671',.7)+ci(.78*w,-.5*r,.15*r,'#6f6a66',.7)+ci(.85*w,.55*r,.18*r,'#7b7671',.7)+ci(.12*w,.5*r,.14*r,'#b5afa8',.8)+ci(.6*w,-.1*r,.1*r,'#b5afa8',.8); break;
+    case 'Jupiter':
+      base='#d8b48a'; dur=8; glowC='#ffc77a'; glowOp=.4;
+      tile=band(-1,-.7,'#c89a6b')+band(-.7,-.45,'#e8d0a9')+band(-.45,-.2,'#b5703f')+band(-.2,.05,'#efdcb8')+band(.05,.3,'#a8613a')+band(.3,.6,'#e3c79c')+band(.6,1,'#bc8a5a')+
+           el(.55*w,.42*r,.3*r,.16*r,'#b8412a',.95)+el(.55*w,.42*r,.18*r,.08*r,'#d9694a',.8); break;
+    case 'Venus':
+      base='#e8c273'; dur=30; glowC='#ffe6a0'; glowOp=.45;
+      tile=wv(-.45,.35,'#f7e5ae',.3,.85)+wv(-.05,-.3,'#cfa24f',.28,.55)+wv(.4,.35,'#f7e5ae',.3,.8)+wv(.8,-.25,'#d6ad5e',.24,.55)+ci(.4*w,.0,.2*r,'#fff3c4',.35); break;
+    case 'Saturn': {
+      base='#d9c08a'; dur=12; glowC='#f0dca4'; glowOp=.35;
+      tile=band(-1,-.6,'#c5a56c')+band(-.6,-.3,'#e4d1a1')+band(-.3,.05,'#b99a62')+band(.05,.4,'#dcc592')+band(.4,.7,'#c2a367')+band(.7,1,'#d6bd86');
+      const rx=r*1.95, ry=r*.52, sw=f2(r*.26);
+      pre='<g transform="rotate(-18)"><ellipse rx="'+f2(rx)+'" ry="'+f2(ry)+'" fill="none" stroke="#e6d3a3" stroke-width="'+sw+'" opacity=".85"/><ellipse rx="'+f2(rx*.8)+'" ry="'+f2(ry*.8)+'" fill="none" stroke="#a88a55" stroke-width="'+f2(r*.08)+'" opacity=".7"/></g>';
+      post='<g transform="rotate(-18)"><path d="M'+f2(-rx)+' 0 A'+f2(rx)+' '+f2(ry)+' 0 0 0 '+f2(rx)+' 0" fill="none" stroke="#efdcab" stroke-width="'+sw+'" opacity=".95"/><path d="M'+f2(-rx*.8)+' 0 A'+f2(rx*.8)+' '+f2(ry*.8)+' 0 0 0 '+f2(rx*.8)+' 0" fill="none" stroke="#a88a55" stroke-width="'+f2(r*.08)+'" opacity=".7"/></g>';
+      break; }
+    case 'Rahu':
+      base='#1a0e33'; dur=14; glowC='#9a6bff'; glowOp=.6;
+      tile=wv(-.4,.4,'#6d3fd0',.22,.55)+wv(.1,-.35,'#8b5cf6',.2,.5)+wv(.6,.4,'#5b2fb8',.24,.55)+ci(.3*w,.0,.18*r,'#b79cff',.3);
+      pre=ring('spin','#b79cff',f2(r*.3)+' '+f2(r*.35)); break;
+    case 'Ketu':
+      base='#2a1612'; dur=16; glowC='#ff7a3d'; glowOp=.55;
+      tile=ci(.2*w,-.3*r,.3*r,'#7a3b25',.7)+ci(.6*w,.3*r,.35*r,'#5a2a1a',.7)+ci(.4*w,-.6*r,.07*r,'#ff7a3d',.9)+ci(.85*w,-.1*r,.08*r,'#ff9a5c',.9)+ci(.1*w,.6*r,.07*r,'#ff7a3d',.9)+ci(.72*w,-.45*r,.06*r,'#ffb27a',.9);
+      pre=ring('spinr','#ff9a5c',f2(r*.18)+' '+f2(r*.4)); break;
+  }
+  let copies=''; for(let i=-2;i<=1;i++)copies+='<g transform="translate('+f2(i*w)+' 0)">'+tile+'</g>';
+  return '<defs><clipPath id="'+u+'c"><circle r="'+r+'"/></clipPath>'+
+    '<radialGradient id="'+u+'s" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000014" stop-opacity="'+limb+'"/></radialGradient>'+
+    '<radialGradient id="'+u+'g"><stop offset=".3" stop-color="'+glowC+'" stop-opacity="'+glowOp+'"/><stop offset="1" stop-color="'+glowC+'" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle class="pulse" r="'+f2(r*2.3)+'" fill="url(#'+u+'g)"/>'+pre+
+    '<circle r="'+r+'" fill="'+base+'"/>'+
+    '<g clip-path="url(#'+u+'c)"><g class="scr" style="--w:'+w+'px;animation-duration:'+dur+'s">'+copies+'</g>'+over+'</g>'+
+    '<circle r="'+r+'" fill="url(#'+u+'s)"/>'+post;
+}
+const miniSprite=(k,px)=>'<svg viewBox="-21 -21 42 42" width="'+px+'" height="'+px+'" aria-hidden="true" focusable="false">'+sprite(k,10)+'</svg>';
+
+/* ================= CHART SVG ================= */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let showNames=false, chart=null, chartStyle='north';
+function items(ch,fn){
+  return ch.planets.filter(fn).map(p=>({t:p.ab,r:p.retro,k:p.k,
+    tip:p.k+' ('+p.s+') \u00B7 '+SIGNS[p.sign][0]+' '+dms(p.deg)+' \u00B7 House '+p.house+(p.retro?' \u00B7 retrograde':'')}));
+}
+function block(list,cx,cy){
+  if(!list.length)return '';
+  const lines=[]; for(let i=0;i<list.length;i+=3)lines.push(list.slice(i,i+3));
+  const lh=16, y0=cy-(lines.length-1)*lh/2;
+  return lines.map((ln,li)=>'<text class="pl" x="'+cx+'" y="'+(y0+li*lh)+'" text-anchor="middle" dominant-baseline="central">'+
+    ln.map((it,ti)=>'<tspan'+(it.asc?' class="asc"':'')+(ti?' dx="7"':'')+'>'+it.t+(it.r?'\u02B3':'')+'</tspan>').join('')+'</text>').join('');
+}
+function spriteBlock(list,cx,cy){
+  const n=list.length; if(!n)return '';
+  const r=n===1?13:(n<=3?11.5:(n<=6?9.5:8)), per=n<=3?n:(n===4?2:3), rows=[];
+  for(let i=0;i<n;i+=per)rows.push(list.slice(i,i+per));
+  const hs=2.5*r+5, vs=2.3*r+4, y0=cy-(rows.length-1)*vs/2; let s='';
+  rows.forEach((row,ri)=>{
+    const x0=cx-(row.length-1)*hs/2;
+    row.forEach((it,ci)=>{
+      const x=x0+ci*hs, y=y0+ri*vs;
+      s+='<g transform="translate('+f2(x)+' '+f2(y)+')"><g class="bob" style="animation-delay:-'+((ri*3+ci)*.9).toFixed(1)+'s"><title>'+esc(it.tip)+'</title>'+sprite(it.k,r)+'</g>'+
+         (it.r?'<text class="rb" x="'+f2(r*.7)+'" y="'+f2(r*1.2)+'">R</text>':'')+'</g>';
+    });
+  });
+  return s;
+}
+const ASCTXT=(x,y,anchor)=>'<text class="pl" x="'+x+'" y="'+y+'" text-anchor="'+anchor+'"><tspan class="asc">Asc</tspan></text>';
+const NORTH=[
+ {p:'200,0 100,100 200,200 300,100',pl:[200,80],sg:[200,152]},
+ {p:'0,0 200,0 100,100',pl:[100,30],sg:[100,72]},
+ {p:'0,0 100,100 0,200',pl:[36,100],sg:[84,100]},
+ {p:'0,200 100,100 200,200 100,300',pl:[88,196],sg:[152,206]},
+ {p:'0,200 100,300 0,400',pl:[36,300],sg:[84,300]},
+ {p:'0,400 100,300 200,400',pl:[100,370],sg:[100,328]},
+ {p:'200,200 100,300 200,400 300,300',pl:[200,320],sg:[200,250]},
+ {p:'200,400 300,300 400,400',pl:[300,370],sg:[300,328]},
+ {p:'400,400 300,300 400,200',pl:[364,300],sg:[316,300]},
+ {p:'400,200 300,300 200,200 300,100',pl:[312,198],sg:[248,206]},
+ {p:'400,200 300,100 400,0',pl:[364,100],sg:[316,100]},
+ {p:'400,0 300,100 200,0',pl:[300,30],sg:[300,72]}
+];
+function northSVG(ch,still){
+  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="North Indian style Kundali chart">';
+  NORTH.forEach((h,i)=>{
+    const sign=(ch.ascSign+i)%12, list=items(ch,p=>p.house===i+1); let inner;
+    if(showNames){if(i===0)list.unshift({t:'Asc',asc:true}); inner=block(list,h.pl[0],h.pl[1]);}
+    else inner=spriteBlock(list,h.pl[0],h.pl[1])+(i===0?ASCTXT(200,22,'middle'):'');
+    s+='<g class="hg" style="animation-delay:'+(i*0.09).toFixed(2)+'s"><polygon class="hl'+(i===0?' asc-cell':'')+'" points="'+h.p+'"/>'+
+       '<text class="sg" x="'+h.sg[0]+'" y="'+h.sg[1]+'" text-anchor="middle" dominant-baseline="central">'+(sign+1)+'</text>'+inner+'</g>';
+  });
+  return s+'</svg>';
+}
+const SOUTH=[[1,0],[2,0],[3,0],[3,1],[3,2],[3,3],[2,3],[1,3],[0,3],[0,2],[0,1],[0,0]];
+function southSVG(ch,still){
+  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="South Indian style Kundali chart">';
+  for(let i=0;i<12;i++){
+    const x=SOUTH[i][0]*100, y=SOUTH[i][1]*100, list=items(ch,p=>p.sign===i), isAsc=ch.ascSign===i; let inner;
+    if(showNames){if(isAsc)list.unshift({t:'Asc',asc:true}); inner=block(list,x+50,y+58);}
+    else inner=spriteBlock(list,x+50,y+58)+(isAsc?ASCTXT(x+93,y+17,'end'):'');
+    const order=((SOUTH[i][0]+SOUTH[i][1]*4)%12)*0.07;
+    s+='<g class="hg" style="animation-delay:'+order.toFixed(2)+'s"><rect class="hl'+(isAsc?' asc-cell':'')+'" x="'+x+'" y="'+y+'" width="100" height="100"/>'+
+       '<text class="sg" x="'+(x+8)+'" y="'+(y+16)+'">'+SIGNS[i][1].slice(0,3)+'</text>'+
+       (isAsc?'<line x1="'+x+'" y1="'+(y+30)+'" x2="'+(x+30)+'" y2="'+y+'" stroke="#f2c66d" stroke-width="1.6"/>':'')+inner+'</g>';
+  }
+  const nm=ch.inp.name.length>16?ch.inp.name.slice(0,15)+'\u2026':ch.inp.name;
+  s+='<g class="hg" style="animation-delay:.9s"><text class="ctr" x="200" y="192" text-anchor="middle">'+esc(nm)+'</text><text class="ctr2" x="200" y="216" text-anchor="middle">Rashi chart</text></g>';
+  return s+'</svg>';
+}
+
+/* ================= RESULT ================= */
+function renderLegend(){
+  const el=$('legend');
+  if(showNames){el.innerHTML='<span>Su Sun \u00B7 Mo Moon \u00B7 Ma Mars \u00B7 Me Mercury \u00B7 Ju Jupiter \u00B7 Ve Venus \u00B7 Sa Saturn \u00B7 Ra Rahu \u00B7 Ke Ketu \u00B7 \u02B3 retrograde</span>';return;}
+  el.innerHTML=P.map(d=>'<span class="lg">'+miniSprite(d.k,28)+d.k+'</span>').join('')+'<span class="lg">R = retrograde \u00B7 hover a planet for its degree</span>';
+}
+function drawChart(still){
+  $('chart').innerHTML=chartStyle==='north'?northSVG(chart,still):southSVG(chart,still);
+  $('tab-n').setAttribute('aria-selected',String(chartStyle==='north'));
+  $('tab-s').setAttribute('aria-selected',String(chartStyle==='south'));
+  renderLegend();
+}
+$('tab-n').addEventListener('click',()=>{chartStyle='north';drawChart(true);});
+$('tab-s').addEventListener('click',()=>{chartStyle='south';drawChart(true);});
+$('sw-names').addEventListener('click',()=>{showNames=!showNames;$('sw-names').setAttribute('aria-checked',String(showNames));drawChart(true);});
+const dms=x=>{const d=Math.floor(x),m=Math.floor((x-d)*60);return d+'\u00B0'+String(m).padStart(2,'0')+'\u2032';};
+const monYr=ms=>new Date(ms).toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+function renderResult(){
+  const c=chart, i=c.inp, moon=c.planets[1], sun=c.planets[0];
+  $('r-name').textContent=i.name;
+  const dt=new Date(Date.UTC(i.y,i.mo-1,i.d)).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+  $('r-meta1').textContent='Born '+dt+' at '+String(i.hh).padStart(2,'0')+':'+String(i.mm).padStart(2,'0')+' ('+fmtTz(i.tz)+(i.tzName?', '+i.tzName.replace(/_/g,' '):'')+')';
+  $('r-meta2').textContent=(i.place?i.place+' \u00B7 ':'')+Math.abs(i.lat).toFixed(2)+'\u00B0'+(i.lat>=0?'N':'S')+', '+Math.abs(i.lon).toFixed(2)+'\u00B0'+(i.lon>=0?'E':'W');
+  drawChart(false);
+  const ds=dasha(moon.lon,c.utMs), now=Date.now(), cur=ds.find(x=>now>=x.start&&now<x.end);
+  $('side').innerHTML=
+    '<div class="card mini rv" style="animation-delay:.3s"><h3>Lagna (Ascendant)</h3><p class="big">'+SIGNS[c.ascSign][0]+' ('+SIGNS[c.ascSign][1]+') '+dms(c.ascDeg)+'</p><p>'+BLURB[c.ascSign]+' Your Lagna shapes how you meet the world.</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.4s"><h3>Moon sign (Rashi)</h3><p class="big">'+SIGNS[moon.sign][0]+' ('+SIGNS[moon.sign][1]+')</p><p>'+BLURB[moon.sign]+' The Moon describes your mind and emotional nature.</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.5s"><h3>Janma Nakshatra</h3><p class="big">'+moon.nak+', pada '+moon.pada+'</p><p>The lunar mansion the Moon occupied at birth. It sets your starting Mahadasha, '+ds[0].lord+'.</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.6s"><h3>Sun sign</h3><p class="big">'+SIGNS[sun.sign][0]+' ('+SIGNS[sun.sign][1]+')</p><p>'+BLURB[sun.sign]+' The Sun speaks of your core self and purpose.</p></div>'+
+    (cur?'<div class="card mini rv" style="animation-delay:.7s"><h3>Running now</h3><p class="big">'+cur.lord+' Mahadasha</p><p>From '+(cur.first?'birth':monYr(cur.start))+' to '+monYr(cur.end)+'.</p></div>':'');
+  let t='<tr><th>Planet</th><th>Sign</th><th>Degree</th><th>Nakshatra</th><th>House</th></tr>';
+  t+='<tr><td><span class="ti"></span>Lagna</td><td>'+SIGNS[c.ascSign][0]+'</td><td>'+dms(c.ascDeg)+'</td><td>'+NAKS[Math.floor(c.asc/(360/27))]+'</td><td>1</td></tr>';
+  c.planets.forEach(p=>{t+='<tr><td><span class="ti">'+miniSprite(p.k,24)+'</span>'+p.k+' ('+p.s+')'+(p.retro?' \u02B3':'')+'</td><td>'+SIGNS[p.sign][0]+'</td><td>'+dms(p.deg)+'</td><td>'+p.nak+' ('+p.pada+')</td><td>'+p.house+'</td></tr>';});
+  $('ptable').innerHTML=t;
+  $('ayan-note').textContent='Sidereal positions, Lahiri ayan\u0101\u1E41\u015Fa '+dms(c.ayan)+'. Rahu and Ketu are the mean lunar nodes.';
+  let dt2='<tr><th>Period</th><th>From</th><th>To</th></tr>';
+  ds.forEach(x=>{dt2+='<tr'+(x===cur?' class="now"':'')+'><td>'+x.lord+'</td><td>'+(x.first?'Birth':monYr(x.start))+'</td><td>'+monYr(x.end)+'</td></tr>';});
+  $('dtable').innerHTML=dt2;
+}
+
+/* ================= COSMOS CANVAS ================= */
+const cv=$('cosmos'), ctx=cv.getContext('2d');
+let W=0,H=0,cx=0,cy=0;
+function resize(){
+  const dpr=Math.min(window.devicePixelRatio||1,2); W=window.innerWidth; H=window.innerHeight;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); cx=W/2; cy=H/2;
+}
+window.addEventListener('resize',resize); resize();
+
+const STARS=[]; for(let i=0;i<380;i++)STARS.push({x:Math.random(),y:Math.random(),r:Math.random()*1.5+.4,a:Math.random()*.7+.25,f:Math.random()*2+.6,p:Math.random()*TAU});
+const GAL=[]; (function(){
+  for(let i=0;i<2400;i++){
+    const arm=i%3, r=Math.pow(Math.random(),.62);
+    const ang=arm*TAU/3+r*5.4+(Math.random()-.5)*(.6*(1-r*.55));
+    const c=r<.18?[255,228,175]:(r<.5?[216,164,255]:[130,160,255]);
+    const a=(Math.random()*.55+.25)*(r<.18?1:.85);
+    GAL.push({r:r,ang:ang,s:Math.random()*1.5+.5,col:'rgba('+c[0]+','+c[1]+','+c[2]+','+a.toFixed(2)+')'});
+  }
+})();
+
+const S={phase:'landing',castStart:0,tc:0,cap:false,tilt:.42,tiltT:.42,galA:1,galT:1,plA:1,plT:1,ringA:1,ringT:1,wheelA:0,wheelT:0,spin:0,mul:1,mulT:1,st:[],lvl:[]};
+const easeIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const base=()=>Math.min(W*.48,H*.5);
+const msz=()=>Math.min(W,H);
+function trN(){return clamp((S.tilt-.42)/.58,0,1);}
+function proj(x,y){
+  const rot=-.38*(1-trN()), yy=y*S.tilt, c=Math.cos(rot), s=Math.sin(rot);
+  return [cx+x*c-yy*s, cy+x*s+yy*c];
+}
+function orbitPos(i){
+  const d=P[i], R=base()*d.fr, om=.12/Math.pow(d.fr,1.5), a=PH[i]+S.spin*om;
+  const xy=proj(R*Math.cos(a),R*Math.sin(a)), dep=1+.3*Math.sin(a)*(1-trN());
+  return {x:xy[0],y:xy[1],s:Math.max(3,msz()*.014*d.f*dep)};
+}
+const OFF=[0,-1,1];
+function wheelTarget(i){
+  const Rp=msz()*.27, p=chart?chart:S.chart, lon=p.planets[i].lon, r=Rp*(1+.1*OFF[S.lvl[i]||0]);
+  const th=Math.PI-rad(lon-p.asc);
+  return {r:r,th:th,s:Math.max(3,msz()*.012*P[i].f)};
+}
+function planetState(i){
+  if(S.phase==='landing'||!S.cap)return {o:orbitPos(i),p:0};
+  const pr=S.phase==='result'?1:clamp((S.tc-.8-.14*i)/2.6,0,1), e=easeIO(pr), a=S.st[i], t=wheelTarget(i);
+  const dth=((((t.th-a.th)%TAU)+TAU)%TAU)+TAU;
+  const r=a.r+(t.r-a.r)*e, th=a.th+dth*e;
+  return {o:{x:cx+r*Math.cos(th),y:cy+r*Math.sin(th),s:a.s+(t.s-a.s)*e},p:pr,th:th};
+}
+function capture(){
+  S.st=P.map((_,i)=>{const o=orbitPos(i);return {r:Math.hypot(o.x-cx,o.y-cy),th:Math.atan2(o.y-cy,o.x-cx),s:o.s};});
+  S.cap=true;
+}
+const CAST_END=6.2;
+const CAST_MSG=[
+  ['Reading the sky at your first breath','Calculating where every planet stood'],
+  ['The planets are taking their places','Aligning them to the zodiac'],
+  ['Drawing your Kundali','Placing each graha in its house']
+];
+let castIdx=-1;
+function castText(tc){
+  const idx=tc<1.9?0:(tc<4.0?1:2);
+  if(idx!==castIdx){castIdx=idx;
+    const t=$('cast-title'); t.style.opacity=0;
+    setTimeout(()=>{t.textContent=CAST_MSG[idx][0];$('cast-sub').textContent=CAST_MSG[idx][1]+' for '+S.chart.inp.name;t.style.opacity=1;},idx?280:0);
+  }
+}
+function startCast(ch){
+  chart=ch; S.chart=ch; S.phase='cast'; S.castStart=performance.now()/1000; S.cap=false; S.tc=0; castIdx=-1;
+  const placed=[]; S.lvl=[];
+  ch.planets.forEach((p,i)=>{let c=0; placed.forEach(q=>{if(Math.abs(((p.lon-q.lon+540)%360)-180)<9)c++;}); S.lvl[i]=c%3; placed.push(p);});
+  S.plT=1;S.plA=1;
+  document.body.dataset.scene='cast'; window.scrollTo(0,0);
+}
+function showResult(){
+  S.phase='result'; S.plT=0; S.wheelT=0; S.galT=.5; S.tiltT=.42; S.ringT=.25; S.mulT=1;
+  document.body.dataset.scene='result';
+  $('landing').style.display='none';
+  const r=$('result'); r.style.display='block';
+  renderResult(); window.scrollTo(0,0);
+}
+function reset(){
+  S.phase='landing'; S.cap=false; S.plA=0; S.plT=1; S.wheelT=0; S.galT=1; S.tiltT=.42; S.ringT=1; S.mulT=1;
+  document.body.dataset.scene='landing';
+  $('result').style.display='none'; $('landing').style.display='';
+  window.scrollTo(0,0);
+}
+$('again').addEventListener('click',reset);
+$('kform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=readForm(); if(!v)return;
+  let ch; try{ch=computeChart(v);}catch(err){$('ferr').textContent='Something went wrong while calculating. Check your details and try again.';return;}
+  if(RM){chart=ch;S.chart=ch;showResult();return;}
+  startCast(ch);
+});
+
+function update(dt,now){
+  const k=1-Math.exp(-dt*2.2), ks=1-Math.exp(-dt*1.3);
+  if(S.phase==='cast'){
+    S.tc=now-S.castStart;
+    S.mulT=S.tc<.8?5:1.5;
+    if(S.tc>=.8&&!S.cap){capture();S.tiltT=1;S.galT=.3;S.ringT=0;}
+    S.wheelT=S.tc>1.3?1:0;
+    castText(S.tc);
+    if(S.tc>=CAST_END)showResult();
+  }
+  S.mul+=(S.mulT-S.mul)*k; S.spin+=dt*S.mul;
+  S.tilt+=(S.tiltT-S.tilt)*k; S.galA+=(S.galT-S.galA)*k; S.plA+=(S.plT-S.plA)*k;
+  S.ringA+=(S.ringT-S.ringA)*k; S.wheelA+=(S.wheelT-S.wheelA)*ks;
+}
+function glow(x,y,r,col){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();}
+function drawPlanet(d,x,y,s){
+  glow(x,y,s*3.4,d.glow);
+  const b=ctx.createRadialGradient(x-s*.35,y-s*.35,s*.1,x,y,s); b.addColorStop(0,d.hi); b.addColorStop(1,d.col);
+  ctx.fillStyle=b; ctx.beginPath(); ctx.arc(x,y,s,0,TAU); ctx.fill();
+  if(d.ring){ctx.strokeStyle=d.hi;ctx.lineWidth=Math.max(1,s*.2);ctx.beginPath();ctx.ellipse(x,y,s*1.95,s*.55,-.35,0,TAU);ctx.stroke();}
+}
+function drawWheel(a,now){
+  const Rp=msz()*.27, Ri=Rp*1.2, Ro=Rp*1.5, asc=S.chart.asc;
+  ctx.save(); ctx.globalAlpha=a; ctx.lineWidth=1.2; ctx.strokeStyle='rgba(242,198,109,.75)';
+  ctx.beginPath(); ctx.arc(cx,cy,Ri,0,TAU); ctx.stroke(); ctx.beginPath(); ctx.arc(cx,cy,Ro,0,TAU); ctx.stroke();
+  ctx.font=Math.round(Rp*.13)+'px "Segoe UI Symbol","Noto Sans Symbols",serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#f6dca0';
+  for(let k=0;k<12;k++){
+    const th=Math.PI-rad(30*k-asc), tm=Math.PI-rad(30*k+15-asc), c=Math.cos(th), s=Math.sin(th);
+    ctx.strokeStyle='rgba(242,198,109,.6)'; ctx.beginPath(); ctx.moveTo(cx+Ri*c,cy+Ri*s); ctx.lineTo(cx+Ro*c,cy+Ro*s); ctx.stroke();
+    ctx.strokeStyle='rgba(185,172,219,.10)'; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Ri*c,cy+Ri*s); ctx.stroke();
+    const rm=(Ri+Ro)/2; ctx.fillText(SIGNS[k][2],cx+rm*Math.cos(tm),cy+rm*Math.sin(tm));
+  }
+  ctx.strokeStyle='rgba(255,226,150,.9)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx-Ro,cy); ctx.stroke();
+  ctx.fillStyle='#ffe29a'; ctx.font='600 '+Math.max(11,Math.round(Rp*.1))+'px Inter,system-ui,sans-serif'; ctx.fillText('Lagna',cx-Ro*.62,cy-Rp*.1);
+  ctx.restore();
+}
+function draw(now){
+  ctx.clearRect(0,0,W,H);
+  const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*.75);
+  bg.addColorStop(0,'#1c1044'); bg.addColorStop(.5,'#0b0720'); bg.addColorStop(1,'#04020c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#fff';
+  for(const s of STARS){ctx.globalAlpha=s.a*(.55+.45*Math.sin(now*s.f+s.p));ctx.fillRect(s.x*W,s.y*H,s.r,s.r);}
+  /* galaxy */
+  const Gm=base()*1.3;
+  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=S.galA;
+  glow(cx,cy,Gm*.35,'rgba(255,214,150,.38)');
+  for(const p of GAL){
+    const a=p.ang+now*.09/(.25+p.r), R=p.r*Gm, xy=proj(R*Math.cos(a),R*Math.sin(a));
+    ctx.fillStyle=p.col; ctx.fillRect(xy[0],xy[1],p.s,p.s);
+  }
+  ctx.globalCompositeOperation='source-over';
+  /* orbit rings */
+  if(S.ringA>.01){
+    ctx.globalAlpha=1; ctx.lineWidth=1; ctx.strokeStyle='rgba(242,198,109,'+(.17*S.ringA).toFixed(3)+')';
+    const rot=-.38*(1-trN());
+    [.30,.40,.50,.60,.70,.80,.90,1.0].forEach(f=>{ctx.beginPath();ctx.ellipse(cx,cy,base()*f,base()*f*S.tilt,rot,0,TAU);ctx.stroke();});
+  }
+  /* wheel */
+  if(S.wheelA>.01&&S.chart)drawWheel(S.wheelA,now);
+  /* planets */
+  if(S.plA>.01){
+    const list=P.map((d,i)=>({d:d,i:i,st:planetState(i)})).sort((a,b)=>a.st.o.y-b.st.o.y);
+    for(const it of list){
+      ctx.globalAlpha=S.plA; drawPlanet(it.d,it.st.o.x,it.st.o.y,it.st.o.s);
+      if(it.st.p>.85){
+        const la=clamp((it.st.p-.85)/.15,0,1)*S.plA, th=it.st.th!==undefined?it.st.th:0, dd=it.st.o.s+Math.max(10,msz()*.03);
+        ctx.globalAlpha=la; ctx.fillStyle='#fff3d6'; ctx.font='600 '+Math.max(10,Math.round(msz()*.026))+'px Inter,system-ui,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(it.d.ab,it.st.o.x-dd*Math.cos(th),it.st.o.y-dd*Math.sin(th));
+      }
+    }
+  }
+  ctx.globalAlpha=1;
+}
+let last=performance.now()/1000;
+function frame(ts){
+  const now=ts/1000, dt=Math.min(.05,Math.max(0,now-last)); last=now;
+  update(dt,now); draw(now); requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+setHint(DEFAULT_HINT,false);
+})();
+</script>
+</body>
+</html>
