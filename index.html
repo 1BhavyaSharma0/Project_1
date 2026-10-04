@@ -4,50 +4,114 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kundali – The Path of Life</title>
+<meta name="description" content="Kundali – The Path of Life. Free Vedic birth chart with Navamsa, Panchang, Manglik and Kaal Sarp checks and readings, for any birthplace in the world, in English and Hindi.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#060414; --ink:#f4eeff; --muted:#b9acdb; --gold:#f2c66d; --gold-deep:#b8832c;
-  --violet:#8b5cf6; --card:rgba(18,10,42,.68); --line:rgba(242,198,109,.30); --err:#ff9a9a;
+  --violet:#8b5cf6; --card:rgba(18,10,42,.70); --line:rgba(242,198,109,.30); --err:#ff9a9a; --ok:#9fe3b5;
   color-scheme:dark; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:calc(4rem + env(safe-area-inset-top,0px))}
 *,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;min-height:100%}
 body[data-scene="cast"]{overflow:hidden}
+html[lang="hi"] body{font-family:'Noto Sans Devanagari','Inter',system-ui,sans-serif;line-height:1.7}
+html[lang="hi"] .title,html[lang="hi"] .sub,html[lang="hi"] .brandbtn,html[lang="hi"] .rhead h2,html[lang="hi"] h3,html[lang="hi"] .step h2,html[lang="hi"] #cast-title,html[lang="hi"] .rhead .brand{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',Georgia,serif;letter-spacing:0;font-style:normal}
 #cosmos{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
 main{position:relative;z-index:1}
+button{font-family:inherit}
+
+/* ---------- Top bar ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:calc(.7rem + env(safe-area-inset-top,0px)) clamp(.9rem,3vw,2rem) .7rem;pointer-events:none}
+.topbar>*{pointer-events:auto}
+.brandbtn{background:none;border:0;cursor:pointer;font:700 1.05rem 'Cinzel',Georgia,serif;letter-spacing:.12em;color:var(--gold);padding:.3rem .35rem;border-radius:8px;text-shadow:0 0 18px rgba(242,198,109,.45)}
+.tbr{display:flex;align-items:center;gap:.6rem}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:rgba(8,4,24,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.lang button{border:0;background:transparent;color:var(--muted);font:600 .82rem 'Inter','Noto Sans Devanagari',sans-serif;padding:.32rem .75rem;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--gold);color:#2a1700}
+.nbtn{display:none;align-items:center;font:600 .85rem 'Inter','Noto Sans Devanagari',sans-serif;color:var(--gold);background:rgba(8,4,24,.62);border:1px solid var(--gold);border-radius:999px;padding:.4rem .9rem;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body[data-scene="result"] .nbtn{display:inline-flex}
+.nbtn:hover{background:rgba(242,198,109,.14)}
 
 /* ---------- Landing ---------- */
-#landing{min-height:100svh;display:grid;align-items:center;gap:2.2rem;padding:clamp(1.2rem,4vw,3rem);max-width:1180px;margin:0 auto;transition:opacity .9s ease,transform .9s ease}
+#landing{min-height:100svh;display:grid;align-items:center;gap:2rem;padding:5.2rem clamp(1.1rem,4vw,3rem) 2.5rem;max-width:1180px;margin:0 auto;transition:opacity .9s ease,transform .9s ease}
 @media(min-width:900px){#landing{grid-template-columns:1.05fr .95fr;gap:4rem}}
 body[data-scene="cast"] #landing,body[data-scene="result"] #landing{opacity:0;transform:scale(.97);pointer-events:none}
-.title{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:clamp(3.4rem,12vw,7.4rem);letter-spacing:.06em;line-height:1;margin:0;
+.title{font-family:'Cinzel',Georgia,serif;font-weight:700;font-size:clamp(3.4rem,12vw,7.4rem);letter-spacing:.06em;line-height:1.05;margin:0;
   background:linear-gradient(180deg,#fff4cf 0%,#f2c66d 55%,#b8832c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 26px rgba(242,198,109,.38))}
 .sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(1.7rem,4.6vw,2.7rem);color:#eadfff;margin:.25em 0 0;letter-spacing:.05em}
 .lead{max-width:28rem;color:var(--muted);font-size:1.05rem;margin:1.4rem 0 0}
 .hero{text-align:center}
-@media(min-width:900px){.hero{text-align:left}}
+.hero .lead{margin-left:auto;margin-right:auto}
+@media(min-width:900px){.hero{text-align:left}.hero .lead{margin-left:0}}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(1.1rem,3vw,1.7rem);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-form h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.7rem;margin:0 0 1rem;color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(1.1rem,3vw,1.7rem);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 20px 60px rgba(0,0,0,.35)}
 label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:.85rem}
-input,select{display:block;width:100%;margin-top:.3rem;padding:.7rem .8rem;font:inherit;font-size:1rem;color:var(--ink);background:rgba(8,4,24,.7);border:1px solid rgba(185,172,219,.28);border-radius:10px;color-scheme:dark}
+input,select{display:block;width:100%;margin-top:.3rem;padding:.75rem .85rem;font:inherit;font-size:1rem;color:var(--ink);background:rgba(8,4,24,.72);border:1px solid rgba(185,172,219,.28);border-radius:12px;color-scheme:dark;transition:border-color .2s,box-shadow .2s}
 input::placeholder{color:#7f72a6}
-input:focus-visible,select:focus-visible,button:focus-visible,.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(242,198,109,.18);outline:none}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.row3{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.row3 label:last-child{grid-column:1 / -1}
-.hint{font-size:.82rem;color:var(--muted);margin:-.2rem 0 1rem}
-.hint.ok{color:#9fe3b5}
-.err{color:var(--err);font-size:.9rem;min-height:1.2em;margin:.7rem 0 0}
-.cta{width:100%;padding:.95rem 1rem;font:600 1.05rem 'Inter',system-ui,sans-serif;color:#2a1700;background:linear-gradient(180deg,#ffe19a,#f2c66d 55%,#d9a54a);border:0;border-radius:12px;cursor:pointer;box-shadow:0 8px 28px rgba(242,198,109,.28);transition:transform .15s ease,box-shadow .15s ease}
+.hint{font-size:.82rem;color:var(--muted);margin:.1rem 0 .8rem}
+.hint.ok{color:var(--ok)}
+.err{color:var(--err);font-size:.9rem;min-height:1.3em;margin:.7rem 0 0}
+
+/* stepper */
+.stepper{list-style:none;display:flex;align-items:center;gap:.5rem;margin:0 0 1.3rem;padding:0}
+.st{display:flex;align-items:center;gap:.45rem;color:var(--muted);font-size:.8rem;white-space:nowrap}
+.st b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-weight:600;font-size:.8rem;transition:all .3s}
+.st.act{color:var(--ink)}
+.st.act b{background:var(--gold);color:#2a1700;border-color:var(--gold);box-shadow:0 0 16px rgba(242,198,109,.5)}
+.st.done b{background:rgba(242,198,109,.2);color:var(--gold)}
+.bar{flex:1;height:1px;background:var(--line);min-width:12px}
+.step{display:none}
+.step.on{display:block;animation:stepin .45s ease}
+@keyframes stepin{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.step h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.8rem;line-height:1.2;margin:0 0 1rem;color:var(--gold)}
+.chk{display:flex;align-items:center;gap:.6rem;color:var(--ink);font-size:.92rem;margin:.1rem 0 .4rem;cursor:pointer}
+.chk input{width:18px;height:18px;margin:0;accent-color:var(--gold)}
+.nav{display:flex;gap:.7rem;margin-top:.6rem}
+.back{flex:0 0 auto;padding:.95rem 1.2rem;font:600 1rem 'Inter','Noto Sans Devanagari',sans-serif;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.back:hover{color:var(--ink);border-color:var(--gold)}
+.cta{flex:1;padding:.95rem 1rem;font:600 1.05rem 'Inter','Noto Sans Devanagari',sans-serif;color:#2a1700;background:linear-gradient(180deg,#ffe19a,#f2c66d 55%,#d9a54a);border:0;border-radius:12px;cursor:pointer;box-shadow:0 8px 28px rgba(242,198,109,.28);transition:transform .15s ease,box-shadow .15s ease}
 .cta:hover{transform:translateY(-1px);box-shadow:0 12px 34px rgba(242,198,109,.4)}
 .cta:active{transform:translateY(0)}
+
+/* place search */
+.combo{position:relative}
+.list{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;max-height:290px;overflow:auto;background:rgba(14,8,34,.98);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 44px rgba(0,0,0,.55);padding:.3rem;margin:0;list-style:none}
+.list li{padding:.6rem .75rem;border-radius:9px;cursor:pointer;display:flex;flex-direction:column;line-height:1.35}
+.list li[aria-selected="true"],.list li:hover{background:rgba(242,198,109,.15)}
+.list .nm{font-weight:600;color:var(--ink)}
+.list .sc{font-size:.8rem;color:var(--muted)}
+.status{font-size:.82rem;color:var(--muted);min-height:1.2em;margin:.4rem 0 .6rem}
+.chosen{display:flex;gap:.6rem;align-items:flex-start;padding:.7rem .85rem;border:1px solid var(--line);border-radius:12px;background:rgba(242,198,109,.07);margin:.2rem 0 .8rem;font-size:.92rem}
+.chosen .tick{color:var(--ok);font-weight:700}
+.chosen small{display:block;color:var(--muted);font-size:.8rem}
+.ghost{width:100%;margin:0 0 .8rem;padding:.6rem .8rem;font:500 .92rem 'Inter','Noto Sans Devanagari',sans-serif;color:var(--gold);background:rgba(242,198,109,.08);border:1px dashed var(--line);border-radius:10px;cursor:pointer}
+.ghost:hover{background:rgba(242,198,109,.15)}
+.ghost:disabled{opacity:.6;cursor:progress}
+details.adv{border:1px solid rgba(185,172,219,.2);border-radius:12px;padding:.1rem .85rem;margin:.2rem 0 .4rem}
+details.adv summary{cursor:pointer;color:var(--muted);font-size:.9rem;padding:.6rem 0;list-style:none}
+details.adv summary::before{content:'\25B8';display:inline-block;margin-right:.5rem;transition:transform .2s}
+details.adv[open] summary::before{transform:rotate(90deg)}
+details.adv .row{padding-bottom:.2rem}
+
+/* recent */
+.recent{margin-top:1rem;padding:0 .2rem}
+.rt{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 .5rem}
+.lnk{background:none;border:0;color:var(--gold);cursor:pointer;font-size:.82rem;text-decoration:underline;padding:0}
+#recent-list{display:flex;flex-wrap:wrap;gap:.5rem}
+.rc{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:rgba(8,4,24,.6);overflow:hidden}
+.rcb{background:none;border:0;color:var(--ink);padding:.4rem .5rem .4rem .85rem;font-size:.85rem;cursor:pointer}
+.rcx{background:none;border:0;color:var(--muted);padding:.4rem .75rem .4rem .35rem;font-size:1rem;line-height:1;cursor:pointer}
+.rcb:hover,.rcx:hover{color:var(--gold)}
 
 /* ---------- Casting overlay ---------- */
 #cast{position:fixed;left:0;right:0;bottom:calc(9vh + env(safe-area-inset-bottom,0px));text-align:center;padding:0 1.2rem;opacity:0;pointer-events:none;transition:opacity .7s ease;z-index:2}
@@ -56,57 +120,80 @@ body[data-scene="cast"] #cast{opacity:1}
 #cast-sub{margin:.3rem 0 0;color:var(--muted);font-size:.95rem}
 
 /* ---------- Result ---------- */
-#result{display:none;padding:clamp(1.2rem,4vw,3rem);max-width:1100px;margin:0 auto}
-.rhead{text-align:center;margin:1rem 0 1.8rem}
-.rhead .brand{font-family:'Cinzel',Georgia,serif;color:var(--gold);letter-spacing:.08em;font-size:1.05rem;margin:0}
-.rhead h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(2.2rem,7vw,3.6rem);line-height:1.1;margin:.2rem 0 .4rem}
+#result{display:none;padding:5rem clamp(1.1rem,4vw,3rem) 2rem;max-width:1100px;margin:0 auto}
+.rhead{text-align:center;margin:.4rem 0 1.8rem}
+.rhead .brand{font-family:'Cinzel',Georgia,serif;color:var(--gold);letter-spacing:.1em;font-size:1rem;margin:0}
+.rhead h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(2.3rem,7vw,3.8rem);line-height:1.1;margin:.2rem 0 .4rem}
 .rhead p.meta{color:var(--muted);margin:.15rem 0;font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.1rem}
+.chip{display:inline-flex;align-items:center;gap:.55rem;padding:.45rem 1rem .45rem .6rem;border:1px solid var(--line);border-radius:999px;background:rgba(18,10,42,.6);font-size:.95rem}
+.chip .gl{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(242,198,109,.15);color:var(--gold);font-size:1.15rem;line-height:1}
+.chip small{display:block;color:var(--muted);font-size:.72rem;line-height:1.1}
+.chip b{font-weight:600;line-height:1.15}
 .rgrid{display:grid;gap:1.4rem;margin-bottom:1.4rem}
 @media(min-width:900px){.rgrid{grid-template-columns:1.1fr .9fr;align-items:start}}
-.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:1rem;background:rgba(8,4,24,.55)}
-.tab{border:0;background:transparent;color:var(--muted);font:500 .9rem 'Inter',system-ui,sans-serif;padding:.45rem 1rem;border-radius:999px;cursor:pointer}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem 1rem;margin-bottom:1rem}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(8,4,24,.55)}
+.tab{border:0;background:transparent;color:var(--muted);font:500 .88rem 'Inter','Noto Sans Devanagari',system-ui,sans-serif;padding:.45rem .95rem;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
 .tab[aria-selected="true"]{background:var(--gold);color:#2a1700}
-#chart{max-width:520px;margin:0 auto}
-#chart svg{width:100%;height:auto;display:block}
-.hl{fill:rgba(139,92,246,.09);stroke:var(--gold);stroke-width:1.6;stroke-linejoin:round}
-.hl.asc-cell{fill:rgba(242,198,109,.10)}
-.pl{fill:var(--ink);font:600 15px 'Inter',system-ui,sans-serif}
-.pl .asc{fill:var(--gold)}
-.sg{fill:#9d8fd0;font:500 12px 'Inter',system-ui,sans-serif}
-.ctr{fill:var(--gold);font:600 20px 'Cormorant Garamond',Georgia,serif}
-.ctr2{fill:var(--muted);font:500 12px 'Inter',system-ui,sans-serif}
-.hg{opacity:0;animation:hin .9s ease forwards}
-@keyframes hin{from{opacity:0}to{opacity:1}}
-.legend{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem 1.1rem;font-size:.82rem;color:var(--muted);margin:1rem 0 0}
-.lg{display:inline-flex;align-items:center;gap:.3rem}
-.ti{display:inline-block;vertical-align:middle;width:24px;margin-right:.5rem;line-height:0}
-.side{display:grid;gap:.9rem}
-.mini h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.35rem;color:var(--gold);margin:0}
-.mini .big{font-size:1.15rem;font-weight:600;margin:.1rem 0 .3rem}
-.mini p{margin:0;color:var(--muted);font-size:.95rem}
-.section{margin-bottom:1.4rem}
-.section h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.5rem;color:var(--gold);margin:0 0 .8rem}
-.scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
-th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid rgba(185,172,219,.16)}
-th{color:var(--muted);font-weight:500;font-size:.85rem}
-tr.now td{background:rgba(242,198,109,.12);color:#fff0c8}
-.note{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
-.again{display:block;margin:1.8rem auto 1rem;padding:.8rem 1.6rem;font:600 1rem 'Inter',system-ui,sans-serif;color:var(--gold);background:transparent;border:1px solid var(--gold);border-radius:999px;cursor:pointer}
-.again:hover{background:rgba(242,198,109,.12)}
-.rv{opacity:0;animation:hin 1s ease forwards}
-[hidden]{display:none!important}
-.ctrl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1rem;margin-bottom:1rem}
-.ctrl .tabs{margin-bottom:0}
-.sw{display:inline-flex;align-items:center;gap:.6rem;background:transparent;border:0;color:var(--muted);font:500 .9rem 'Inter',system-ui,sans-serif;cursor:pointer;padding:.25rem 0}
+.sw{display:inline-flex;align-items:center;gap:.6rem;background:transparent;border:0;color:var(--muted);font:500 .9rem 'Inter','Noto Sans Devanagari',sans-serif;cursor:pointer;padding:.25rem 0}
 .sw .knob{position:relative;width:42px;height:24px;border-radius:999px;background:rgba(185,172,219,.25);border:1px solid var(--line);transition:background .2s}
 .sw .knob::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#e9ddff;transition:transform .2s,background .2s}
 .sw[aria-checked="true"] .knob{background:var(--gold)}
 .sw[aria-checked="true"] .knob::after{transform:translateX(18px);background:#2a1700}
 .sw:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
-.ghost{width:100%;margin:-.2rem 0 1rem;padding:.6rem .8rem;font:500 .92rem 'Inter',system-ui,sans-serif;color:var(--gold);background:rgba(242,198,109,.08);border:1px dashed var(--line);border-radius:10px;cursor:pointer}
-.ghost:hover{background:rgba(242,198,109,.15)}
-.ghost:disabled{opacity:.6;cursor:progress}
+.d9note{font-size:.85rem;color:var(--muted);margin:0 0 1rem;padding:.6rem .8rem;border-left:2px solid var(--gold);background:rgba(242,198,109,.06);border-radius:0 8px 8px 0}
+#chart{max-width:520px;margin:0 auto}
+#chart svg{width:100%;height:auto;display:block}
+.hl{fill:rgba(139,92,246,.09);stroke:var(--gold);stroke-width:1.6;stroke-linejoin:round}
+.hl.asc-cell{fill:rgba(242,198,109,.10)}
+.pl{fill:var(--ink);font:600 15px 'Inter','Noto Sans Devanagari',system-ui,sans-serif}
+.pl .asc{fill:var(--gold)}
+.sg{fill:#9d8fd0;font:500 12px 'Inter','Noto Sans Devanagari',system-ui,sans-serif}
+.ctr{fill:var(--gold);font:600 20px 'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif}
+.ctr2{fill:var(--muted);font:500 12px 'Inter','Noto Sans Devanagari',system-ui,sans-serif}
+.hg{opacity:0;animation:hin .9s ease forwards}
+@keyframes hin{from{opacity:0}to{opacity:1}}
+.still .hg{animation:none;opacity:1}
+.pk{cursor:pointer;outline:none}
+.pk .selring{fill:none;stroke:var(--gold);stroke-width:1.6;opacity:0;transition:opacity .2s}
+.pk:hover .selring,.pk:focus-visible .selring{opacity:.55}
+.pk.sel .selring{opacity:1}
+tspan.pk:hover,tspan.pk.sel{fill:var(--gold)}
+tspan.pk.sel{text-decoration:underline}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem 1.1rem;font-size:.82rem;color:var(--muted);margin:1rem 0 0}
+.lg{display:inline-flex;align-items:center;gap:.3rem}
+.pdetail{margin-top:1.1rem;padding-top:1rem;border-top:1px solid rgba(185,172,219,.16);min-height:3.2rem}
+.pdh{margin:0;text-align:center;color:var(--muted);font-size:.9rem}
+.pd{display:flex;gap:1rem;align-items:flex-start;animation:hin .35s ease}
+.pdi{flex:0 0 64px;height:64px;line-height:0}
+.pd h4{font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;font-size:1.4rem;font-weight:600;color:var(--gold);margin:0}
+.pd p{margin:.2rem 0 0;font-size:.92rem}
+.pd .pds{color:var(--muted);font-size:.85rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.tag{font-size:.74rem;padding:.12rem .55rem;border-radius:999px;border:1px solid var(--line);color:var(--gold);background:rgba(242,198,109,.08)}
+.actions{display:flex;justify-content:center;margin-top:1rem}
+.btn2{padding:.6rem 1.2rem;font:600 .92rem 'Inter','Noto Sans Devanagari',sans-serif;color:var(--gold);background:transparent;border:1px solid var(--gold);border-radius:999px;cursor:pointer}
+.btn2:hover{background:rgba(242,198,109,.12)}
+.btn2:disabled{opacity:.6;cursor:progress}
+.side{display:grid;gap:.9rem}
+.mini h3{font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;font-weight:600;font-size:1.35rem;color:var(--gold);margin:0}
+.mini .big{font-size:1.15rem;font-weight:600;margin:.1rem 0 .3rem}
+.mini p{margin:0;color:var(--muted);font-size:.95rem}
+.section{margin-bottom:1.4rem}
+.section h3{font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;font-weight:600;font-size:1.5rem;color:var(--gold);margin:0 0 .8rem}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.93rem}
+th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid rgba(185,172,219,.16);vertical-align:middle}
+th{color:var(--muted);font-weight:500;font-size:.85rem}
+tr.now td{background:rgba(242,198,109,.12);color:#fff0c8}
+.ti{display:inline-block;vertical-align:middle;width:24px;margin-right:.5rem;line-height:0}
+.note{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
+.again{display:block;margin:1.8rem auto 1rem;padding:.8rem 1.6rem;font:600 1rem 'Inter','Noto Sans Devanagari',sans-serif;color:var(--gold);background:transparent;border:1px solid var(--gold);border-radius:999px;cursor:pointer}
+.again:hover{background:rgba(242,198,109,.12)}
+.rv{opacity:0;animation:hin 1s ease forwards}
+
+/* ---------- planet animation (SVG sprites) ---------- */
 .scr{animation:scrx linear infinite}
 @keyframes scrx{from{transform:translateX(0)}to{transform:translateX(var(--w))}}
 .pulse{animation:pulse 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
@@ -117,106 +204,334 @@ tr.now td{background:rgba(242,198,109,.12);color:#fff0c8}
 .bob{animation:bob 4.5s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.8px)}}
 .rb{fill:var(--gold);font:700 8px 'Inter',system-ui,sans-serif}
-.still .hg{animation:none;opacity:1}
-@media(prefers-reduced-motion:reduce){.hg,.rv{animation:none;opacity:1}.cta{transition:none}.scr,.pulse,.spin,.spinr,.bob{animation:none}}
+@media(prefers-reduced-motion:reduce){.hg,.rv,.step.on,.pd{animation:none;opacity:1}.cta{transition:none}.scr,.pulse,.spin,.spinr,.bob{animation:none}}
+
+/* ---------- v3 additions ---------- */
+.tag1{font:600 clamp(1.05rem,2.4vw,1.35rem) 'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;color:#f6e6bd;margin:1.3rem 0 0;letter-spacing:.02em}
+html[lang="hi"] .tag1{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',serif}
+.herocta{margin-top:1.4rem;padding:.9rem 1.8rem;font:600 1.02rem 'Inter','Noto Sans Devanagari',sans-serif;color:#2a1700;background:linear-gradient(180deg,#ffe19a,#f2c66d 55%,#d9a54a);border:0;border-radius:999px;cursor:pointer;box-shadow:0 8px 28px rgba(242,198,109,.3);transition:transform .15s,box-shadow .15s}
+.herocta:hover{transform:translateY(-1px);box-shadow:0 12px 34px rgba(242,198,109,.45)}
+.feats{list-style:none;margin:1.8rem 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.8rem 1.2rem;max-width:30rem}
+.hero .feats{margin-left:auto;margin-right:auto}
+@media(min-width:900px){.hero .feats{margin-left:0}}
+.feats li{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.88rem;text-align:left}
+.fi{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--gold);background:rgba(242,198,109,.08);font-size:1rem}
+.fh{font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;font-weight:600;font-size:1.8rem;line-height:1.2;margin:0 0 1rem;color:var(--gold)}
+.cta.full{display:block;width:100%;margin-top:.4rem}
+.pops{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 .7rem}
+.pops button{background:rgba(8,4,24,.6);border:1px solid rgba(185,172,219,.25);color:var(--muted);border-radius:999px;padding:.28rem .75rem;font-size:.8rem;cursor:pointer}
+.pops button:hover{color:var(--gold);border-color:var(--gold)}
+
+/* progress in the loading scene */
+.prog{list-style:none;display:flex;justify-content:center;gap:clamp(.8rem,4vw,2.6rem);margin:1.4rem auto 0;padding:0;max-width:720px}
+.prog li{display:flex;flex-direction:column;align-items:center;gap:.45rem;font-size:.78rem;color:#7f72a6;position:relative;flex:1;transition:color .4s}
+.prog li i{width:14px;height:14px;border-radius:50%;border:2px solid #5d5088;background:transparent;display:block;transition:all .4s;position:relative;z-index:1}
+.prog li::before{content:'';position:absolute;top:6px;left:-50%;width:100%;height:2px;background:#3d3366;z-index:0;transition:background .4s}
+.prog li:first-child::before{display:none}
+.prog li.done{color:var(--muted)}
+.prog li.done i,.prog li.cur i{border-color:var(--gold);background:var(--gold);box-shadow:0 0 12px rgba(242,198,109,.7)}
+.prog li.done::before,.prog li.cur::before{background:var(--gold)}
+.prog li.cur{color:var(--ink)}
+
+/* dashboard */
+.snav{display:flex;gap:.4rem;overflow-x:auto;margin:0 0 1.2rem;padding:.35rem;border:1px solid var(--line);border-radius:16px;background:rgba(18,10,42,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);scrollbar-width:none}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex:0 0 auto;display:inline-flex;align-items:center;gap:.45rem;border:0;background:transparent;color:var(--muted);font:500 .9rem 'Inter','Noto Sans Devanagari',sans-serif;padding:.55rem .95rem;border-radius:11px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.snav button:hover{color:var(--ink)}
+.snav button[aria-selected="true"]{background:rgba(242,198,109,.16);color:var(--gold);box-shadow:inset 0 0 0 1px var(--line)}
+.si{font-size:1rem;line-height:1}
+@media(min-width:1000px){
+  #result{max-width:1220px}
+  #result .dashwrap{display:block}
+}
+.pane{display:none}
+.pane.on{display:block;animation:hin .45s ease}
+.dim{opacity:.75}
+
+/* highlights, readings */
+.hl3{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.8rem}
+.hk{border:1px solid rgba(185,172,219,.2);border-radius:12px;padding:.6rem .8rem;background:rgba(8,4,24,.45)}
+.hk small{display:block;color:var(--muted);font-size:.75rem}
+.hk b{font-weight:600;font-size:1rem}
+.traits{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
+.trait{font-size:.78rem;padding:.2rem .65rem;border:1px solid var(--line);border-radius:999px;color:var(--gold);background:rgba(242,198,109,.07);text-transform:capitalize}
+.acc details{border:1px solid rgba(185,172,219,.2);border-radius:14px;margin-bottom:.6rem;background:rgba(8,4,24,.4);overflow:hidden}
+.acc summary{display:flex;align-items:center;gap:.7rem;cursor:pointer;padding:.7rem .9rem;list-style:none;font-weight:500}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:'+';margin-left:auto;color:var(--gold);font-size:1.2rem;line-height:1}
+.acc details[open] summary::after{content:'\2212'}
+.acc summary small{display:block;color:var(--muted);font-weight:400;font-size:.8rem}
+.acc .body{padding:0 1rem 1rem}
+.acc .body p{margin:.5rem 0 0;color:#e2d8f7;font-size:.95rem}
+.acc .body .btn2{margin-top:.8rem}
+.hno{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--gold);font-weight:600;background:rgba(242,198,109,.08)}
+.sicon{width:34px;height:34px;flex:0 0 34px;line-height:0}
+
+/* table rows clickable */
+tr.clk{cursor:pointer}
+tr.clk:hover td{background:rgba(242,198,109,.08)}
+.deg{font-variant-numeric:tabular-nums;color:#fff0c8;font-weight:600}
+
+/* panchang */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem}
+.pc{border:1px solid rgba(185,172,219,.2);border-radius:14px;padding:.8rem .95rem;background:rgba(8,4,24,.45)}
+.pc small{display:block;color:var(--muted);font-size:.78rem}
+.pc b{display:block;font-size:1.15rem;font-weight:600;margin:.1rem 0 .2rem;font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;color:var(--gold);font-size:1.4rem}
+.pc p{margin:0;color:var(--muted);font-size:.85rem}
+.bar2{height:5px;border-radius:99px;background:rgba(185,172,219,.18);margin-top:.5rem;overflow:hidden}
+.bar2 i{display:block;height:100%;background:linear-gradient(90deg,#f2c66d,#ffe19a)}
+
+/* doshas */
+.dgrid{display:grid;gap:1.2rem}
+@media(min-width:900px){.dgrid{grid-template-columns:1fr 1fr}}
+.dc h3{margin-bottom:.4rem}
+.pill{display:inline-block;font-size:.8rem;font-weight:600;padding:.2rem .75rem;border-radius:999px;margin:.1rem 0 .7rem}
+.pill.good{background:rgba(159,227,181,.14);color:var(--ok);border:1px solid rgba(159,227,181,.4)}
+.pill.warn{background:rgba(242,198,109,.14);color:var(--gold);border:1px solid var(--line)}
+.pill.high{background:rgba(255,154,154,.12);color:var(--err);border:1px solid rgba(255,154,154,.4)}
+.dc ul{margin:.3rem 0 .8rem;padding-left:1.1rem;color:#e2d8f7;font-size:.93rem}
+.dc p{margin:.4rem 0;color:#e2d8f7;font-size:.95rem}
+.dc .sm{color:var(--muted);font-size:.85rem}
+
+/* dasha timeline */
+.tl{display:grid;gap:.6rem}
+.tr{display:grid;grid-template-columns:34px 1fr auto;gap:.8rem;align-items:center;padding:.7rem .85rem;border:1px solid rgba(185,172,219,.2);border-radius:14px;background:rgba(8,4,24,.4)}
+.tr.cur{border-color:var(--gold);background:rgba(242,198,109,.1);box-shadow:0 0 24px rgba(242,198,109,.12)}
+.tr.past{opacity:.7}
+.tr b{font-weight:600}
+.tr small{display:block;color:var(--muted);font-size:.8rem}
+.st2{font-size:.76rem;padding:.15rem .6rem;border-radius:99px;border:1px solid rgba(185,172,219,.3);color:var(--muted);white-space:nowrap}
+.tr.cur .st2{color:var(--gold);border-color:var(--gold)}
+.tr .bar2{grid-column:2 / -1;margin-top:.1rem}
+
+/* chart degree labels */
+.dg{fill:#cdbfee;font:500 7.5px 'Inter',system-ui,sans-serif}
+.pl .dd{font-size:10px;fill:#cdbfee;font-weight:500}
+
+/* planet modal */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal[hidden]{display:none}
+.mback{position:absolute;inset:0;background:rgba(3,1,12,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.mcard{position:relative;width:min(520px,100%);max-height:calc(100svh - 2rem);overflow:auto;background:rgba(16,9,38,.97);border:1px solid var(--line);border-radius:22px;padding:1.4rem;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.mx{position:absolute;top:.7rem;right:.8rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(8,4,24,.7);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer}
+.mx:hover{color:var(--gold);border-color:var(--gold)}
+.mhead{display:flex;gap:1.1rem;align-items:center;margin-bottom:1rem;padding-right:2.4rem}
+.mpl{flex:0 0 112px;height:112px;line-height:0}
+.mhead h3{font-family:'Cormorant Garamond','Tiro Devanagari Hindi',Georgia,serif;font-weight:600;font-size:1.9rem;color:var(--gold);margin:0 0 .3rem}
+.mdl{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1.2rem;margin:0 0 1rem;font-size:.93rem}
+.mdl dt{color:var(--muted)}
+.mdl dd{margin:0;font-weight:500}
+.mread{margin:0;color:#e2d8f7;font-size:.95rem;line-height:1.7;border-top:1px solid rgba(185,172,219,.18);padding-top:.9rem}
+body.mopen{overflow:hidden}
 </style>
 </head>
 <body data-scene="landing">
 <canvas id="cosmos" aria-hidden="true"></canvas>
 
+<header class="topbar">
+  <button type="button" class="brandbtn" id="brand" data-i="title">Kundali</button>
+  <div class="tbr">
+    <button type="button" class="nbtn" id="newk" data-i="newk">New Kundali</button>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-l="en" aria-pressed="true">EN</button>
+      <button type="button" data-l="hi" aria-pressed="false">हिं</button>
+    </div>
+  </div>
+</header>
+
 <main>
   <section id="landing">
     <div class="hero">
-      <h1 class="title">Kundali</h1>
-      <p class="sub">The Path of Life</p>
-      <p class="lead"></p>
+      <h1 class="title" data-i="title">Kundali</h1>
+      <p class="sub" data-i="sub">The Path of Life</p>
+      <p class="tag1" data-i="tagline"></p>
+      <p class="lead" data-i="lead"></p>
+      <button type="button" class="herocta" id="hero-cta" data-i="cta_hero"></button>
+      <ul class="feats">
+        <li><span class="fi" aria-hidden="true">✦</span><span data-i="f1"></span></li>
+        <li><span class="fi" aria-hidden="true">◎</span><span data-i="f2"></span></li>
+        <li><span class="fi" aria-hidden="true">☉</span><span data-i="f3"></span></li>
+        <li><span class="fi" aria-hidden="true">✧</span><span data-i="f4"></span></li>
+      </ul>
     </div>
 
-    <form id="kform" class="card" autocomplete="off" novalidate>
-      <h2>Your birth details</h2>
-      <label for="f-name">Full name
-        <input id="f-name" type="text" placeholder="e.g. Aarav Sharma" maxlength="60">
-      </label>
-      <div class="row">
-        <label for="f-date">Date of birth
-          <input id="f-date" type="date" min="1900-01-01">
+    <div>
+      <form id="kform" class="card" autocomplete="off" novalidate>
+        <h2 class="fh" data-i="form_title"></h2>
+        <label for="f-name"><span data-i="l_name"></span>
+          <input id="f-name" type="text" maxlength="60" data-ip="ph_name">
         </label>
-        <label for="f-time">Time of birth
-          <input id="f-time" type="time">
-        </label>
+        <div class="row">
+          <label for="f-date"><span data-i="l_date"></span>
+            <input id="f-date" type="date" min="1900-01-01">
+          </label>
+          <label for="f-time"><span data-i="l_time"></span>
+            <input id="f-time" type="time">
+          </label>
+        </div>
+        <label class="chk" for="f-unk"><input id="f-unk" type="checkbox"><span data-i="unknown"></span></label>
+        <p class="hint" id="time-hint"></p>
+
+        <div class="combo">
+          <label for="f-place"><span data-i="l_place"></span>
+            <input id="f-place" type="text" role="combobox" aria-expanded="false" aria-controls="place-list" aria-autocomplete="list" data-ip="ph_place" autocapitalize="words" spellcheck="false">
+          </label>
+          <ul class="list" id="place-list" role="listbox" hidden></ul>
+        </div>
+        <p class="status" id="place-status" aria-live="polite"></p>
+        <div class="pops" id="pops"></div>
+        <button type="button" class="ghost" id="ask-claude" hidden></button>
+        <div class="chosen" id="chosen" hidden></div>
+        <details class="adv" id="adv">
+          <summary data-i="adv"></summary>
+          <div class="row">
+            <label for="f-lat"><span data-i="l_lat"></span>
+              <input id="f-lat" type="number" step="any" inputmode="decimal" placeholder="28.6139">
+            </label>
+            <label for="f-lon"><span data-i="l_lon"></span>
+              <input id="f-lon" type="number" step="any" inputmode="decimal" placeholder="77.2090">
+            </label>
+          </div>
+          <label for="f-tz"><span data-i="l_tz"></span>
+            <select id="f-tz"></select>
+          </label>
+          <label for="f-off" id="off-wrap" hidden><span data-i="l_off"></span>
+            <input id="f-off" type="number" step="any" inputmode="decimal" placeholder="5.5">
+          </label>
+        </details>
+        <p class="hint" id="tz-info"></p>
+
+        <button type="submit" class="cta full" id="btn-next"></button>
+        <p class="err" id="ferr" role="alert"></p>
+      </form>
+
+      <div id="recent" class="recent" hidden>
+        <p class="rt"><span data-i="recent"></span><button type="button" class="lnk" id="rc-clear" data-i="clear"></button></p>
+        <div id="recent-list"></div>
       </div>
-      <label for="f-place">Place of birth
-        <input id="f-place" type="text" list="cities" placeholder="Start typing a city">
-      </label>
-      <datalist id="cities"></datalist>
-      <div class="row3">
-        <label for="f-lat">Latitude (+N / −S)
-          <input id="f-lat" type="number" step="any" inputmode="decimal" placeholder="28.6139">
-        </label>
-        <label for="f-lon">Longitude (+E / −W)
-          <input id="f-lon" type="number" step="any" inputmode="decimal" placeholder="77.2090">
-        </label>
-        <label for="f-tz">Time zone at birth
-          <select id="f-tz"></select>
-        </label>
-        <label for="f-off" id="off-wrap" hidden>UTC offset in hours (for example 5.5 or −3.5)
-          <input id="f-off" type="number" step="any" inputmode="decimal" placeholder="5.5">
-        </label>
-      </div>
-      <button type="button" class="ghost" id="ask-claude" hidden>Locate this place with Claude</button>
-      <p class="hint" id="place-hint"></p>
-      <p class="hint" id="tz-info"></p>
-      <button class="cta" type="submit">Reveal my Kundali</button>
-      <p class="err" id="ferr" role="alert"></p>
-    </form>
+    </div>
   </section>
 
   <div id="cast" aria-live="polite">
     <p id="cast-title"></p>
     <p id="cast-sub"></p>
+    <ol class="prog" id="prog" aria-hidden="true">
+      <li><i></i><span data-i="pg0"></span></li>
+      <li><i></i><span data-i="pg1"></span></li>
+      <li><i></i><span data-i="pg2"></span></li>
+      <li><i></i><span data-i="pg3"></span></li>
+    </ol>
   </div>
 
-  <section id="result" aria-label="Your Kundali">
+  <section id="result" aria-label="Kundali">
     <header class="rhead rv">
-      <p class="brand">Kundali · The Path of Life</p>
+      <p class="brand" id="r-brand"></p>
       <h2 id="r-name"></h2>
       <p class="meta" id="r-meta1"></p>
       <p class="meta" id="r-meta2"></p>
+      <div class="chips" id="r-chips"></div>
     </header>
 
-    <div class="rgrid">
-      <div class="card rv" style="animation-delay:.2s">
-        <div class="ctrl">
-          <div class="tabs" role="tablist" aria-label="Chart style">
-            <button class="tab" role="tab" id="tab-n" aria-selected="true">North Indian</button>
-            <button class="tab" role="tab" id="tab-s" aria-selected="false">South Indian</button>
+    <nav class="snav" id="snav" role="tablist" aria-label="Sections">
+      <button type="button" role="tab" data-p="overview" aria-selected="true"><span class="si" aria-hidden="true">✦</span><span data-i="n_overview"></span></button>
+      <button type="button" role="tab" data-p="planets" aria-selected="false"><span class="si" aria-hidden="true">☉</span><span data-i="n_planets"></span></button>
+      <button type="button" role="tab" data-p="houses" aria-selected="false"><span class="si" aria-hidden="true">⌂</span><span data-i="n_houses"></span></button>
+      <button type="button" role="tab" data-p="panchang" aria-selected="false"><span class="si" aria-hidden="true">☽</span><span data-i="n_panchang"></span></button>
+      <button type="button" role="tab" data-p="doshas" aria-selected="false"><span class="si" aria-hidden="true">☋</span><span data-i="n_doshas"></span></button>
+      <button type="button" role="tab" data-p="dasha" aria-selected="false"><span class="si" aria-hidden="true">◔</span><span data-i="n_dasha"></span></button>
+    </nav>
+
+    <div class="panes">
+      <div class="pane on" id="p-overview" role="tabpanel">
+        <div class="rgrid">
+          <div class="card">
+            <div class="ctrl">
+              <div class="tabs" role="tablist" aria-label="Chart">
+                <button class="tab" role="tab" id="tab-d1" aria-selected="true" data-i="d1"></button>
+                <button class="tab" role="tab" id="tab-d9" aria-selected="false" data-i="d9"></button>
+              </div>
+              <div class="tabs" role="tablist" aria-label="Style">
+                <button class="tab" role="tab" id="tab-n" aria-selected="true" data-i="north"></button>
+                <button class="tab" role="tab" id="tab-s" aria-selected="false" data-i="south"></button>
+              </div>
+            </div>
+            <div class="ctrl">
+              <button type="button" class="sw" id="sw-names" role="switch" aria-checked="false"><span class="knob" aria-hidden="true"></span><span data-i="sw_names"></span></button>
+              <button type="button" class="sw" id="sw-deg" role="switch" aria-checked="true"><span class="knob" aria-hidden="true"></span><span data-i="sw_deg"></span></button>
+            </div>
+            <p class="d9note" id="d9note" hidden data-i="d9note"></p>
+            <div id="chart"></div>
+            <div class="legend" id="legend"></div>
+            <div class="actions">
+              <button type="button" class="btn2" id="save-img" hidden data-i="save_img"></button>
+              <button type="button" class="btn2" id="save-rep" hidden data-i="save_rep"></button>
+            </div>
           </div>
-          <button type="button" class="sw" id="sw-names" role="switch" aria-checked="false"><span class="knob" aria-hidden="true"></span><span>Show planet names</span></button>
+          <div class="side" id="side"></div>
         </div>
-        <div id="chart"></div>
-        <div class="legend" id="legend"></div>
       </div>
-      <div class="side" id="side"></div>
+
+      <div class="pane" id="p-planets" role="tabpanel">
+        <div class="card section">
+          <h3 data-i="h_pos"></h3>
+          <p class="note" style="margin:-.3rem 0 .8rem" data-i="tap_row"></p>
+          <div class="scroll"><table id="ptable"></table></div>
+          <p class="note" id="ayan-note"></p>
+        </div>
+        <div class="card section">
+          <h3 data-i="h_preads"></h3>
+          <div id="preads" class="acc"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="p-houses" role="tabpanel">
+        <div class="card section">
+          <h3 data-i="h_houses"></h3>
+          <p class="note" style="margin:-.3rem 0 .8rem" data-i="houses_note"></p>
+          <div id="hreads" class="acc"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="p-panchang" role="tabpanel">
+        <div class="card section">
+          <h3 data-i="h_panchang"></h3>
+          <div class="pgrid" id="pgrid"></div>
+          <p class="note" id="pnote"></p>
+        </div>
+      </div>
+
+      <div class="pane" id="p-doshas" role="tabpanel">
+        <div class="dgrid" id="dgrid"></div>
+        <p class="note" data-i="dosha_note" style="text-align:center;max-width:44rem;margin:1rem auto 0"></p>
+      </div>
+
+      <div class="pane" id="p-dasha" role="tabpanel">
+        <div class="card section">
+          <h3 data-i="h_dasha"></h3>
+          <div id="dtl" class="tl"></div>
+          <p class="note" data-i="dasha_note"></p>
+        </div>
+      </div>
     </div>
 
-    <div class="card section rv" style="animation-delay:.4s">
-      <h3>Planetary positions</h3>
-      <div class="scroll"><table id="ptable"></table></div>
-      <p class="note" id="ayan-note"></p>
-    </div>
-
-    <div class="card section rv" style="animation-delay:.5s">
-      <h3>Vimshottari Mahadasha</h3>
-      <div class="scroll"><table id="dtable"></table></div>
-      <p class="note">Planetary periods counted from the Moon's nakshatra at birth. The highlighted row is the period running today.</p>
-    </div>
-
-    <p class="note" style="text-align:center;max-width:46rem;margin:0 auto">
-      Positions are computed in your browser with a compact astronomical model (sidereal zodiac, Lahiri ayanāṁśa, whole-sign houses, mean lunar node). They are accurate to a small fraction of a degree for most uses, but for professional or ritual decisions, confirm with a full ephemeris and a qualified astrologer. The readings here are brief traditional descriptions, offered for reflection.
-    </p>
-    <button class="again" id="again" type="button">Create another Kundali</button>
+    <p class="note" style="text-align:center;max-width:46rem;margin:1.2rem auto 0" data-i="disc"></p>
+    <button class="again" id="again" type="button" data-i="again"></button>
   </section>
 </main>
+
+<div class="modal" id="pmodal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div class="mback" id="pm-back"></div>
+  <div class="mcard">
+    <button type="button" class="mx" id="pm-x" aria-label="Close">×</button>
+    <div class="mhead">
+      <div class="mpl" id="pm-sprite"></div>
+      <div><h3 id="pm-title"></h3><div class="tags" id="pm-tags"></div></div>
+    </div>
+    <dl class="mdl" id="pm-dl"></dl>
+    <p class="mread" id="pm-read"></p>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -224,6 +539,8 @@ tr.now td{background:rgba(242,198,109,.12);color:#fff0c8}
 const TAU=Math.PI*2, rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI, n360=x=>((x%360)+360)%360, clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
 const $=id=>document.getElementById(id);
 const RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f2=x=>Math.round(x*100)/100;
 
 /* ================= DATA ================= */
 const SIGNS=[
@@ -232,7 +549,9 @@ const SIGNS=[
  ['Tula','Libra','\u264E\uFE0E'],['Vrishchika','Scorpio','\u264F\uFE0E'],['Dhanu','Sagittarius','\u2650\uFE0E'],
  ['Makara','Capricorn','\u2651\uFE0E'],['Kumbha','Aquarius','\u2652\uFE0E'],['Meena','Pisces','\u2653\uFE0E']
 ];
-const BLURB=[
+const HI_SIGN=['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+const BLURB={
+ en:[
  'Bold, energetic and pioneering. You act first and inspire others to follow.',
  'Steady, sensual and loyal. You build security patiently and treasure comfort and beauty.',
  'Curious, witty and adaptable. Your mind is always weaving ideas and connections.',
@@ -244,11 +563,147 @@ const BLURB=[
  'Optimistic, philosophical and free-spirited. You chase truth, travel and wisdom.',
  'Disciplined, ambitious and patient. You climb steadily toward lasting achievement.',
  'Original, humane and independent. You think ahead of your time.',
- 'Compassionate, imaginative and spiritual. You sense what lies beneath the surface.'
-];
+ 'Compassionate, imaginative and spiritual. You sense what lies beneath the surface.'],
+ hi:[
+ 'साहसी, ऊर्जावान और अग्रणी। आप पहला कदम उठाते हैं और दूसरों को प्रेरित करते हैं।',
+ 'स्थिर, संवेदनशील और निष्ठावान। आप धैर्य से सुरक्षा बनाते हैं और सुख व सौंदर्य को सराहते हैं।',
+ 'जिज्ञासु, चतुर और अनुकूलनशील। आपका मन लगातार विचारों को जोड़ता रहता है।',
+ 'पालन करने वाले, सहज-बोध वाले और रक्षक। भावनाएँ गहरी हैं और घर आपका आधार है।',
+ 'तेजस्वी, उदार और स्वाभिमानी। आप हृदय से नेतृत्व करते हैं और सृजन पसंद करते हैं।',
+ 'विश्लेषक, व्यावहारिक और सेवाभावी। आप बारीकियाँ निखारते हैं और सार्थक व्यवस्था चाहते हैं।',
+ 'सुघड़, न्यायप्रिय और संबंध-प्रधान। आप सामंजस्य, सुंदरता और संतुलन खोजते हैं।',
+ 'तीव्र, पारखी और दृढ़। आप गहराई, जुनून और एकाग्रता से रूपांतरित होते हैं।',
+ 'आशावादी, दार्शनिक और स्वतंत्र। आप सत्य, यात्रा और ज्ञान का पीछा करते हैं।',
+ 'अनुशासित, महत्वाकांक्षी और धैर्यवान। आप धीरे-धीरे स्थायी सफलता की ओर बढ़ते हैं।',
+ 'मौलिक, मानवतावादी और स्वतंत्र। आप अपने समय से आगे सोचते हैं।',
+ 'करुणामय, कल्पनाशील और आध्यात्मिक। आप सतह के नीचे की बात भाँप लेते हैं।']
+};
 const NAKS=['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+const HI_NAK=['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्वा फाल्गुनी','उत्तरा फाल्गुनी','हस्त','चित्रा','स्वाति','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्वभाद्रपद','उत्तरभाद्रपद','रेवती'];
 const DL=['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
 const DY=[7,20,6,10,7,18,16,19,17];
+const HI_PL={Sun:'सूर्य',Moon:'चंद्र',Mars:'मंगल',Mercury:'बुध',Jupiter:'गुरु',Venus:'शुक्र',Saturn:'शनि',Rahu:'राहु',Ketu:'केतु'};
+const HI_AB={Sun:'सू',Moon:'चं',Mars:'मं',Mercury:'बु',Jupiter:'गु',Venus:'शु',Saturn:'श',Rahu:'रा',Ketu:'के'};
+const PMEAN={
+ en:{Sun:'Soul, vitality, authority and the father.',Moon:'Mind, emotions, the mother and nurturing.',Mars:'Energy, courage, drive and action.',Mercury:'Intellect, speech, learning and commerce.',Jupiter:'Wisdom, growth, teachers and fortune.',Venus:'Love, beauty, art and comforts.',Saturn:'Discipline, karma, patience and time.',Rahu:'Ambition, desire and the unconventional path.',Ketu:'Detachment, intuition and skills from the past.'},
+ hi:{Sun:'आत्मा, जीवन-शक्ति, अधिकार और पिता।',Moon:'मन, भावनाएँ, माता और पोषण।',Mars:'ऊर्जा, साहस, उत्साह और कर्म।',Mercury:'बुद्धि, वाणी, विद्या और व्यापार।',Jupiter:'ज्ञान, विस्तार, गुरु और सौभाग्य।',Venus:'प्रेम, सौंदर्य, कला और सुख-सुविधा।',Saturn:'अनुशासन, कर्म, धैर्य और समय।',Rahu:'महत्वाकांक्षा, इच्छा और अपरंपरागत मार्ग।',Ketu:'वैराग्य, अंतर्ज्ञान और पूर्व-जन्म के संस्कार।'}
+};
+const HMEAN={
+ en:['Self and body','Wealth and family','Courage and siblings','Home and mother','Children and creativity','Health and service','Partnership and marriage','Change and longevity','Fortune and dharma','Career and status','Gains and friends','Loss, moksha and foreign lands'],
+ hi:['स्वयं व शरीर','धन व परिवार','साहस व भाई-बहन','घर व माता','संतान व सृजन','स्वास्थ्य व सेवा','साझेदारी व विवाह','परिवर्तन व आयु','भाग्य व धर्म','कर्म व प्रतिष्ठा','लाभ व मित्र','व्यय, मोक्ष व विदेश']
+};
+const EXALT={Sun:0,Moon:1,Mars:9,Mercury:5,Jupiter:3,Venus:11,Saturn:6};
+const OWN={Sun:[4],Moon:[3],Mars:[0,7],Mercury:[2,5],Jupiter:[8,11],Venus:[1,6],Saturn:[9,10]};
+function dignity(k,s){
+  if(EXALT[k]===undefined)return '';
+  if(EXALT[k]===s)return 'exalt';
+  if((EXALT[k]+6)%12===s)return 'debil';
+  if(OWN[k].indexOf(s)>=0)return 'own';
+  return '';
+}
+
+/* ================= TRANSLATIONS ================= */
+let LANG='en'; try{const sv=localStorage.getItem('kundali.lang'); if(sv==='hi'||sv==='en')LANG=sv;}catch(e){}
+const I={
+en:{
+ doc_title:'Kundali – The Path of Life', title:'Kundali', sub:'The Path of Life',
+ lead:'Tell us when and where you arrived, anywhere on Earth. We read the sky at that exact moment and draw your birth chart.',
+ st0:'Who', st1:'When', st2:'Where', q0:'Who is this Kundali for?', q1:'When were you born?', q2:'Where were you born?',
+ l_name:'Full name', ph_name:'e.g. Aarav Sharma', l_date:'Date of birth', l_time:'Time of birth',
+ unknown:"I don't know the exact time",
+ time_hint:'The Lagna changes about every two hours, so the exact time matters.',
+ unknown_note:'We will use 12:00 noon. The Moon sign and planet signs stay close, but the Lagna and houses may be wrong.',
+ l_place:'Place of birth', ph_place:'Search any city, town or village',
+ searching:'Searching worldwide…', nomatch:'No match yet. Add the state or country, or enter coordinates under "Edit coordinates and time zone".',
+ offline:'Worldwide search is not available on this page, so only the built-in city list was searched.',
+ nomatch_off:'Worldwide search is not available here and the built-in list has no match. Use the lookup button, or enter coordinates under "Edit coordinates and time zone".',
+ adv:'Edit coordinates and time zone', l_lat:'Latitude (+N / −S)', l_lon:'Longitude (+E / −W)', l_tz:'Time zone at birth',
+ custom_off:'Custom UTC offset…', l_off:'UTC offset in hours (for example 5.5)',
+ tz_used:'Offset used for this birth: {x}', tz_auto:' (daylight saving and historical changes applied)',
+ tz_guess:'Time zone suggested from the nearest listed city ({c}). Please check it.',
+ back:'Back', next:'Next', reveal:'Reveal my Kundali', locate:'Locate this place with Claude', locating:'Locating…',
+ e_name:'Enter a name.', e_date:'Enter the date of birth.', e_year:'Birth year must be between 1900 and 2100.', e_future:'The birth date cannot be in the future.',
+ e_time:'Enter the time of birth.', e_place:'Choose a place from the results, or enter valid coordinates under "Edit coordinates and time zone".',
+ e_tz:'That time zone is not available in this browser. Choose a custom UTC offset.', e_off:'Enter the UTC offset in hours, for example 5.5.',
+ e_calc:'Something went wrong while calculating. Check your details and try again.',
+ claude_ok:'Claude placed it at {p} ({a}, {b}). Please check that this is right.',
+ claude_none:'Claude could not find that place. Add the state or country, or enter coordinates yourself.',
+ claude_denied:'Permission to ask Claude was not given. Enter the coordinates manually instead.',
+ claude_rate:'Too many lookups. Wait a moment, or enter coordinates manually.', claude_fail:'The lookup did not work this time. Enter the coordinates manually.',
+ recent:'Saved on this device only', clear:'Clear', remove:'Remove',
+ cast0a:'Reading the sky at your first breath', cast0b:'Calculating where every planet stood',
+ cast1a:'The planets are taking their places', cast1b:'Aligning them to the zodiac',
+ cast2a:'Drawing your Kundali', cast2b:'Placing each graha in its house', for:' for {n}',
+ brand_r:'Janma Kundali', born:'Born {d} at {t} ({z})',
+ d1:'Rashi (D1)', d9:'Navamsa (D9)', north:'North Indian', south:'South Indian', sw_names:'Show planet names',
+ d9note:'The Navamsa (D9) splits each sign into nine parts. It shows the inner strength of the planets and is read for marriage and dharma.',
+ centre1:'Rashi chart', centre9:'Navamsa chart', asc_ab:'Asc',
+ legend_hint:'R = retrograde · tap a planet for details', legend_names:'retrograde',
+ pd_hint:'Tap any planet in the chart to see what it means.',
+ c_lagna:'Lagna (Ascendant)', c_moon:'Moon sign (Rashi)', c_nak:'Janma Nakshatra', c_sun:'Sun sign', c_now:'Running now', c_dasha:'{l} Mahadasha',
+ pada:'pada {p}', s_lagna:' Your Lagna shapes how you meet the world.', s_moon:' The Moon describes your mind and emotional nature.', s_sun:' The Sun speaks of your core self and purpose.',
+ s_nak:'The lunar mansion the Moon occupied at birth. It sets your starting Mahadasha, {l}.', from_to:'From {a} to {b}.', birth:'Birth',
+ k_lagna:'Lagna', k_moon:'Moon', k_sun:'Sun',
+ h_pos:'Planetary positions', h_dasha:'Vimshottari Mahadasha',
+ th_planet:'Planet', th_sign:'Sign', th_deg:'Degree', th_nak:'Nakshatra', th_house:'House', th_nav:'Navamsa', th_status:'Status', th_period:'Period', th_from:'From', th_to:'To', lagna:'Lagna',
+ ayan:'Sidereal positions, Lahiri ayanāṁśa {a}. Rahu and Ketu are the mean lunar nodes.',
+ dasha_note:"Planetary periods counted from the Moon's nakshatra at birth. The highlighted row is the period running today.",
+ disc:'Positions are computed in your browser with a compact astronomical model (sidereal zodiac, Lahiri ayanāṁśa, whole-sign houses, mean lunar node). They are accurate to a small fraction of a degree for most uses, but for professional or ritual decisions, confirm with a full ephemeris and a qualified astrologer. The readings here are brief traditional descriptions, offered for reflection.',
+ save_img:'Save chart image', saving:'Preparing…', again:'Create another Kundali', newk:'New Kundali',
+ exalt:'Exalted', debil:'Debilitated', own:'Own sign', varg:'Vargottama', retro:'Retrograde', house:'House', nav:'Navamsa'
+},
+hi:{
+ doc_title:'कुंडली – जीवन का पथ', title:'कुंडली', sub:'जीवन का पथ',
+ lead:'बताइए आप कब और कहाँ आए, पृथ्वी पर कहीं भी। हम उसी क्षण का आकाश पढ़कर आपकी जन्म कुंडली बनाते हैं।',
+ st0:'कौन', st1:'कब', st2:'कहाँ', q0:'यह कुंडली किसके लिए है?', q1:'आपका जन्म कब हुआ?', q2:'आपका जन्म कहाँ हुआ?',
+ l_name:'पूरा नाम', ph_name:'जैसे: आरव शर्मा', l_date:'जन्म तिथि', l_time:'जन्म का समय',
+ unknown:'मुझे सही समय नहीं पता',
+ time_hint:'लग्न लगभग हर दो घंटे में बदलता है, इसलिए सही समय ज़रूरी है।',
+ unknown_note:'हम दोपहर 12:00 मानेंगे। चंद्र राशि और ग्रहों की राशियाँ लगभग सही रहेंगी, पर लग्न और भाव ग़लत हो सकते हैं।',
+ l_place:'जन्म स्थान', ph_place:'कोई भी शहर, कस्बा या गाँव खोजें',
+ searching:'दुनिया भर में खोज रहे हैं…', nomatch:'अभी कोई परिणाम नहीं। राज्य या देश जोड़ें, या "निर्देशांक और समय क्षेत्र बदलें" में निर्देशांक दें।',
+ offline:'इस पेज पर विश्वव्यापी खोज उपलब्ध नहीं है, इसलिए केवल इन-बिल्ट शहर सूची में खोजा गया।',
+ nomatch_off:'यहाँ विश्वव्यापी खोज उपलब्ध नहीं है और इन-बिल्ट सूची में भी परिणाम नहीं मिला। खोज बटन दबाएँ, या "निर्देशांक और समय क्षेत्र बदलें" में निर्देशांक दें।',
+ adv:'निर्देशांक और समय क्षेत्र बदलें', l_lat:'अक्षांश (+उत्तर / −दक्षिण)', l_lon:'देशांतर (+पूर्व / −पश्चिम)', l_tz:'जन्म के समय का समय क्षेत्र',
+ custom_off:'कस्टम UTC अंतर…', l_off:'UTC अंतर घंटों में (जैसे 5.5)',
+ tz_used:'इस जन्म के लिए उपयोग किया गया अंतर: {x}', tz_auto:' (डेलाइट सेविंग व ऐतिहासिक बदलाव शामिल)',
+ tz_guess:'निकटतम सूचीबद्ध शहर ({c}) से समय क्षेत्र सुझाया गया है। कृपया जाँच लें।',
+ back:'पीछे', next:'आगे', reveal:'मेरी कुंडली देखें', locate:'Claude से यह स्थान खोजें', locating:'खोज रहे हैं…',
+ e_name:'नाम लिखें।', e_date:'जन्म तिथि भरें।', e_year:'जन्म वर्ष 1900 से 2100 के बीच होना चाहिए।', e_future:'जन्म तिथि भविष्य की नहीं हो सकती।',
+ e_time:'जन्म का समय भरें।', e_place:'परिणामों में से स्थान चुनें, या "निर्देशांक और समय क्षेत्र बदलें" में सही निर्देशांक दें।',
+ e_tz:'यह समय क्षेत्र इस ब्राउज़र में उपलब्ध नहीं है। कस्टम UTC अंतर चुनें।', e_off:'UTC अंतर घंटों में लिखें, जैसे 5.5।',
+ e_calc:'गणना में कुछ गड़बड़ हुई। विवरण जाँचकर फिर कोशिश करें।',
+ claude_ok:'Claude ने इसे {p} ({a}, {b}) पर पाया। कृपया जाँच लें कि यह सही है।',
+ claude_none:'Claude को यह स्थान नहीं मिला। राज्य या देश जोड़ें, या निर्देशांक स्वयं दें।',
+ claude_denied:'Claude से पूछने की अनुमति नहीं मिली। निर्देशांक हाथ से दें।',
+ claude_rate:'बहुत अधिक खोजें हुईं। थोड़ा रुकें, या निर्देशांक हाथ से दें।', claude_fail:'इस बार खोज नहीं हो पाई। निर्देशांक हाथ से दें।',
+ recent:'केवल इसी डिवाइस पर सहेजी गई', clear:'हटाएँ', remove:'हटाएँ',
+ cast0a:'आपके पहले श्वास के क्षण का आकाश पढ़ रहे हैं', cast0b:'हर ग्रह की स्थिति की गणना हो रही है',
+ cast1a:'ग्रह अपने स्थान ले रहे हैं', cast1b:'उन्हें राशिचक्र में संरेखित किया जा रहा है',
+ cast2a:'आपकी कुंडली बन रही है', cast2b:'हर ग्रह को उसके भाव में रखा जा रहा है', for:' — {n} के लिए',
+ brand_r:'जन्म कुंडली', born:'जन्म: {d}, {t} ({z})',
+ d1:'राशि (D1)', d9:'नवांश (D9)', north:'उत्तर भारतीय', south:'दक्षिण भारतीय', sw_names:'ग्रहों के नाम दिखाएँ',
+ d9note:'नवांश (D9) हर राशि को नौ भागों में बाँटता है। यह ग्रहों की आंतरिक शक्ति दिखाता है और विवाह व धर्म के लिए देखा जाता है।',
+ centre1:'राशि कुंडली', centre9:'नवांश कुंडली', asc_ab:'ल',
+ legend_hint:'R = वक्री · विवरण के लिए ग्रह पर टैप करें', legend_names:'वक्री',
+ pd_hint:'अर्थ जानने के लिए चार्ट में किसी ग्रह पर टैप करें।',
+ c_lagna:'लग्न', c_moon:'चंद्र राशि', c_nak:'जन्म नक्षत्र', c_sun:'सूर्य राशि', c_now:'अभी चल रही', c_dasha:'{l} महादशा',
+ pada:'चरण {p}', s_lagna:' आपका लग्न दुनिया से मिलने का आपका ढंग गढ़ता है।', s_moon:' चंद्रमा आपके मन और भावनात्मक स्वभाव को दर्शाता है।', s_sun:' सूर्य आपके मूल स्वरूप और उद्देश्य को बताता है।',
+ s_nak:'जन्म के समय चंद्रमा जिस नक्षत्र में था। इसी से आपकी पहली महादशा ({l}) तय होती है।', from_to:'{a} से {b} तक।', birth:'जन्म',
+ k_lagna:'लग्न', k_moon:'चंद्र', k_sun:'सूर्य',
+ h_pos:'ग्रह स्थिति', h_dasha:'विंशोत्तरी महादशा',
+ th_planet:'ग्रह', th_sign:'राशि', th_deg:'अंश', th_nak:'नक्षत्र', th_house:'भाव', th_nav:'नवांश', th_status:'स्थिति', th_period:'दशा', th_from:'से', th_to:'तक', lagna:'लग्न',
+ ayan:'निरयन स्थितियाँ, लाहिरी अयनांश {a}। राहु और केतु मध्यम चंद्र-नोड हैं।',
+ dasha_note:'चंद्रमा के जन्म-नक्षत्र से गिनी गई ग्रह-दशाएँ। चिह्नित पंक्ति आज चल रही दशा है।',
+ disc:'ग्रह स्थितियाँ आपके ब्राउज़र में एक संक्षिप्त खगोलीय मॉडल से निकाली जाती हैं (निरयन राशिचक्र, लाहिरी अयनांश, सम-राशि भाव, मध्यम चंद्र-नोड)। सामान्य उपयोग के लिए ये डिग्री के एक छोटे अंश तक सटीक हैं, पर महत्वपूर्ण या धार्मिक निर्णयों के लिए पूर्ण पंचांग और योग्य ज्योतिषी से मिलान करें। यहाँ के फल संक्षिप्त पारंपरिक वर्णन हैं, चिंतन के लिए।',
+ save_img:'कुंडली का चित्र सहेजें', saving:'तैयार हो रहा है…', again:'नई कुंडली बनाएँ', newk:'नई कुंडली',
+ exalt:'उच्च', debil:'नीच', own:'स्वराशि', varg:'वर्गोत्तम', retro:'वक्री', house:'भाव', nav:'नवांश'
+}};
+function t(k,v){
+  let s=I[LANG][k]; if(s===undefined)s=I.en[k]; if(s===undefined)return k;
+  if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);
+  return s;
+}
 
 /* name, abbreviation, orbit fraction (landing animation), size factor, colours */
 const P=[
@@ -819,6 +1274,7 @@ Noumea,-22.27,166.46,Pacific/Noumea
 @French Polynesia
 Papeete,-17.54,-149.57,Pacific/Tahiti`;
 
+
 /* ================= ASTRONOMY ================= */
 function kepler(Mdeg,e){
   const M=rad(n360(Mdeg)); let E=M+e*Math.sin(M)*(1+e*Math.cos(M));
@@ -887,7 +1343,7 @@ function computeChart(inp){
   const asc=n360(ascTrop-ayan), ascSign=Math.floor(asc/30);
   const planets=P.map(p=>{
     const lon=n360(trop[p.k]-ayan), sign=Math.floor(lon/30), nIdx=Math.floor(lon/(360/27));
-    return {k:p.k,s:p.s,ab:p.ab,lon:lon,sign:sign,deg:lon%30,nak:NAKS[nIdx],pada:Math.floor((lon%(360/27))/(360/108))+1,
+    return {k:p.k,s:p.s,ab:p.ab,lon:lon,sign:sign,deg:lon%30,nak:NAKS[nIdx],nIdx:nIdx,pada:Math.floor((lon%(360/27))/(360/108))+1,
             house:((sign-ascSign+12)%12)+1,retro:retro(p.k)};
   });
   return {inp:inp,ayan:ayan,asc:asc,ascSign:ascSign,ascDeg:asc%30,planets:planets,utMs:utMs};
@@ -900,10 +1356,23 @@ function dasha(moonLonSid,birthMs){
   return out;
 }
 
-/* ================= FORM ================= */
-function parseCities(t){
+
+/* ================= HELPERS ================= */
+const PBY={}; P.forEach(p=>{PBY[p.k]=p;});
+const signName=i=>LANG==='hi'?HI_SIGN[i]:SIGNS[i][0]+' ('+SIGNS[i][1]+')';
+const signShort=i=>LANG==='hi'?HI_SIGN[i]:SIGNS[i][0];
+const plName=k=>LANG==='hi'?HI_PL[k]:k;
+const plFull=k=>LANG==='hi'?HI_PL[k]:k+' ('+PBY[k].s+')';
+const plAb=k=>LANG==='hi'?HI_AB[k]:PBY[k].ab;
+const nakName=i=>LANG==='hi'?HI_NAK[i]:NAKS[i];
+const dms=x=>{const d=Math.floor(x),m=Math.floor((x-d)*60);return d+'\u00B0'+String(m).padStart(2,'0')+'\u2032';};
+const fmtTz=v=>{const s=v<0?'\u2212':'+',tm=Math.round(Math.abs(v)*60);return 'UTC'+s+Math.floor(tm/60)+':'+String(tm%60).padStart(2,'0');};
+const LOC=()=>LANG==='hi'?'hi-IN':'en-GB';
+
+/* ================= TIME ZONES (worldwide, with history and daylight saving) ================= */
+function parseCities(txt){
   const out=[]; let cc='',tz='';
-  t.split('\n').forEach(l=>{
+  txt.split('\n').forEach(l=>{
     l=l.trim(); if(!l)return;
     if(l[0]==='@'){const p=l.slice(1).split('|');cc=p[0];tz=p[1]||'';return;}
     const p=l.split(','); out.push([p[0],cc,+p[1],+p[2],p[3]||tz]);
@@ -911,21 +1380,17 @@ function parseCities(t){
   return out;
 }
 const CITIES=parseCities(CITY_TXT);
-const tzSel=$('f-tz'), dl=$('cities');
-CITIES.forEach(c=>{const o=document.createElement('option'); o.value=c[0]+', '+c[1]; dl.appendChild(o);});
+const tzSel=$('f-tz');
 let zones=[]; try{zones=Intl.supportedValuesOf('timeZone').slice();}catch(e){}
 CITIES.forEach(c=>{if(zones.indexOf(c[4])<0)zones.push(c[4]);});
 zones.sort();
-tzSel.innerHTML='<option value="__manual">Custom UTC offset\u2026</option>'+zones.map(z=>'<option value="'+z+'">'+z.replace(/_/g,' ')+'</option>').join('');
+tzSel.innerHTML='<option value="__manual"></option>'+zones.map(z=>'<option value="'+z+'">'+z.replace(/_/g,' ')+'</option>').join('');
 tzSel.value='Asia/Kolkata';
 function ensureOpt(z){
   if(!z)return;
   for(let i=0;i<tzSel.options.length;i++)if(tzSel.options[i].value===z)return;
   const o=document.createElement('option'); o.value=z; o.textContent=z.replace(/_/g,' '); tzSel.appendChild(o);
 }
-const fmtTz=t=>{const s=t<0?'\u2212':'+',tm=Math.round(Math.abs(t)*60);return 'UTC'+s+Math.floor(tm/60)+':'+String(tm%60).padStart(2,'0');};
-
-/* time zone offset on the actual birth date (daylight saving and history included) */
 const dtfs={}, ZALIAS={'Europe/Kyiv':'Europe/Kiev'};
 function mkDtf(z){return new Intl.DateTimeFormat('en-US',{timeZone:z,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'});}
 function dtf(z){
@@ -936,9 +1401,9 @@ function dtf(z){
 }
 function zoneOffset(z,utcMs){
   const f=dtf(z); if(!f)return null;
-  const t=Math.floor(utcMs/1000)*1000, p={};
-  f.formatToParts(new Date(t)).forEach(x=>{if(x.type!=='literal')p[x.type]=+x.value;});
-  return (Date.UTC(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second)-t)/3600000;
+  const tt=Math.floor(utcMs/1000)*1000, p={};
+  f.formatToParts(new Date(tt)).forEach(x=>{if(x.type!=='literal')p[x.type]=+x.value;});
+  return (Date.UTC(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second)-tt)/3600000;
 }
 function resolveOffset(z,y,mo,d,hh,mm){
   const local=Date.UTC(y,mo-1,d,hh,mm), o1=zoneOffset(z,local);
@@ -955,20 +1420,10 @@ function currentOffset(){
   return off===null?null:{off:off};
 }
 function refreshTz(){
+  tzSel.options[0].textContent=t('custom_off');
   $('off-wrap').hidden=tzSel.value!=='__manual';
-  const r=currentOffset(), el=$('tz-info');
-  el.textContent=r?('Offset used for this birth: '+fmtTz(r.off)+(tzSel.value!=='__manual'?' (daylight saving and historical changes applied automatically)':'')):'';
-}
-['f-date','f-time','f-off'].forEach(id=>$(id).addEventListener('input',refreshTz));
-tzSel.addEventListener('change',refreshTz);
-$('f-date').max=new Date().toISOString().slice(0,10);
-
-/* places */
-const DEFAULT_HINT='Search over 400 cities worldwide. For any other place, enter its latitude and longitude (right-click the spot in a map app and copy the coordinates), or let Claude look it up.';
-function setHint(t,ok){const h=$('place-hint');h.textContent=t;h.classList.toggle('ok',!!ok);}
-function findCity(q){
-  q=q.trim().toLowerCase(); if(!q)return null;
-  return CITIES.find(c=>(c[0]+', '+c[1]).toLowerCase()===q)||CITIES.find(c=>c[0].toLowerCase()===q)||(q.length>=3?CITIES.find(c=>c[0].toLowerCase().startsWith(q)):null);
+  const r=currentOffset();
+  $('tz-info').textContent=r?t('tz_used',{x:fmtTz(r.off)})+(tzSel.value!=='__manual'?t('tz_auto'):''):'';
 }
 function nearest(lat,lon){
   let best=null,bd=1e9;
@@ -978,75 +1433,544 @@ function nearest(lat,lon){
   });
   return best;
 }
-let SAMPLE=null, matched=false;
+tzSel.addEventListener('change',()=>{refreshTz();renderChosen();});
+['f-date','f-time','f-off'].forEach(id=>$(id).addEventListener('input',refreshTz));
+
+/* ================= FORM (one simple page) ================= */
+const nowD=new Date(), todayStr=nowD.getFullYear()+'-'+String(nowD.getMonth()+1).padStart(2,'0')+'-'+String(nowD.getDate()).padStart(2,'0');
+$('f-date').max=todayStr;
+function setTimeHint(){$('time-hint').textContent=$('f-unk').checked?t('unknown_note'):t('time_hint');}
+$('f-unk').addEventListener('change',()=>{
+  const on=$('f-unk').checked, ti=$('f-time');
+  if(on){ti.dataset.prev=ti.value;ti.value='12:00';ti.disabled=true;}
+  else{ti.disabled=false;ti.value=ti.dataset.prev||'';}
+  setTimeHint(); refreshTz();
+});
+function validLat(){const a=$('f-lat').value,v=parseFloat(a);return a!==''&&v>=-90&&v<=90;}
+function validLon(){const a=$('f-lon').value,v=parseFloat(a);return a!==''&&v>=-180&&v<=180;}
+function validate(){
+  if(!$('f-name').value.trim())return {k:'e_name',f:'f-name'};
+  const d=$('f-date').value;
+  if(!d)return {k:'e_date',f:'f-date'};
+  const y=+d.split('-')[0]; if(y<1900||y>2100)return {k:'e_year',f:'f-date'};
+  if(d>todayStr)return {k:'e_future',f:'f-date'};
+  if(!$('f-time').value)return {k:'e_time',f:'f-time'};
+  if(!validLat()||!validLon()){$('adv').open=!$('f-place').value.trim();return {k:'e_place',f:'f-place'};}
+  if(!currentOffset()){$('adv').open=true;return {k:tzSel.value==='__manual'?'e_off':'e_tz',f:tzSel.value==='__manual'?'f-off':'f-tz'};}
+  return null;
+}
+function readInput(){
+  const a=$('f-date').value.split('-').map(Number), b=$('f-time').value.split(':').map(Number), r=currentOffset();
+  return {name:$('f-name').value.trim(),y:a[0],mo:a[1],d:a[2],hh:b[0],mm:b[1],lat:parseFloat($('f-lat').value),lon:parseFloat($('f-lon').value),
+          tz:r.off,tzName:tzSel.value==='__manual'?'':tzSel.value,place:$('f-place').value.trim(),unk:$('f-unk').checked};
+}
+$('kform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=validate();
+  if(v){$('ferr').textContent=t(v.k);const el=$(v.f);if(el)try{el.focus();}catch(x){} return;}
+  $('ferr').textContent=''; go(readInput());
+});
+function go(inp){
+  let ch; try{ch=computeChart(inp);}catch(err){$('ferr').textContent=t('e_calc');return;}
+  saveRecent(inp); selK=null;
+  if(RM){chart=ch;S.chart=ch;showResult();return;}
+  startCast(ch);
+}
+$('hero-cta').addEventListener('click',()=>{
+  $('kform').scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>{try{$('f-name').focus({preventScroll:true});}catch(e){}},450);
+});
+const POPS=['Delhi','Mumbai','London','New York','Tokyo','Sydney'];
+function renderPops(){
+  $('pops').innerHTML=POPS.map(n=>'<button type="button" data-pop="'+esc(n)+'">'+esc(n)+'</button>').join('');
+}
+$('pops').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const c=CITIES.find(x=>x[0]===b.getAttribute('data-pop')); if(!c)return;
+  results=[{name:c[0],region:'',country:c[1],lat:c[2],lon:c[3],tz:c[4],src:'list'}]; choose(0);
+});
+
+/* ================= PLACE SEARCH (worldwide) ================= */
+const pIn=$('f-place'), pList=$('place-list');
+let results=[], active=-1, deb=null, seq=0, curCtl=null, statusKey='', customCoords=false, SAMPLE=null, DL_CAP=null;
+function setStatus(k){statusKey=k;$('place-status').textContent=k?t(k):'';}
+function labelOf(r){return [r.name,r.region,r.country].filter(Boolean).join(', ');}
+function localSearch(q){
+  const s=q.toLowerCase(), a=[], b=[];
+  CITIES.forEach(c=>{
+    const n=c[0].toLowerCase(), full=(c[0]+', '+c[1]).toLowerCase();
+    if(n.indexOf(s)===0||full.indexOf(s)===0)a.push(c);
+    else if(n.indexOf(s)>=0||c[1].toLowerCase().indexOf(s)===0)b.push(c);
+  });
+  return a.concat(b).slice(0,6).map(c=>({name:c[0],region:'',country:c[1],lat:c[2],lon:c[3],tz:c[4],src:'list'}));
+}
+/* Open-Meteo geocoding: free, no key, returns coordinates AND the IANA time zone.
+   It only works where the page may call outside services (your own hosting). */
+async function remoteSearch(q){
+  if(curCtl)curCtl.abort();
+  const ctl=new AbortController(); curCtl=ctl;
+  const to=setTimeout(()=>ctl.abort(),6000);
+  try{
+    const url='https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=8&language='+(LANG==='hi'?'hi':'en')+'&format=json';
+    const r=await fetch(url,{signal:ctl.signal});
+    if(!r.ok)throw new Error('http '+r.status);
+    const j=await r.json(); clearTimeout(to);
+    return (j.results||[]).map(x=>({name:x.name,region:x.admin1||'',country:x.country||'',lat:x.latitude,lon:x.longitude,tz:x.timezone,src:'web'}));
+  }catch(e){clearTimeout(to);return null;}
+}
+function renderList(){
+  if(!results.length){closeList();return;}
+  pList.innerHTML=results.map((r,i)=>'<li role="option" id="po'+i+'" data-n="'+i+'" aria-selected="'+(i===active)+'"><span class="nm">'+esc(r.name)+'</span><span class="sc">'+esc([r.region,r.country].filter(Boolean).join(', '))+'</span></li>').join('');
+  pList.hidden=false; pIn.setAttribute('aria-expanded','true');
+  if(active>=0)pIn.setAttribute('aria-activedescendant','po'+active);else pIn.removeAttribute('aria-activedescendant');
+}
+function closeList(){pList.hidden=true;pIn.setAttribute('aria-expanded','false');pIn.removeAttribute('aria-activedescendant');active=-1;}
+function choose(i){
+  const r=results[i]; if(!r)return;
+  customCoords=false;
+  pIn.value=labelOf(r);
+  $('f-lat').value=(+r.lat).toFixed(4); $('f-lon').value=(+r.lon).toFixed(4);
+  if(r.tz&&dtf(r.tz)){ensureOpt(r.tz);tzSel.value=r.tz;}
+  else{const n=nearest(r.lat,r.lon);ensureOpt(n[4]);tzSel.value=n[4];}
+  closeList(); setStatus(''); seq++; if(curCtl)curCtl.abort();
+  renderChosen(); refreshTz(); updateAsk();
+}
+function renderChosen(){
+  const el=$('chosen');
+  if(!validLat()||!validLon()){el.hidden=true;return;}
+  const lat=parseFloat($('f-lat').value), lon=parseFloat($('f-lon').value);
+  el.hidden=false;
+  el.innerHTML='<span class="tick">\u2713</span><span>'+esc(pIn.value.trim()||'\u2014')+'<small>'+Math.abs(lat).toFixed(2)+'\u00B0'+(lat>=0?'N':'S')+', '+Math.abs(lon).toFixed(2)+'\u00B0'+(lon>=0?'E':'W')+' \u00B7 '+(tzSel.value==='__manual'?t('custom_off').replace('\u2026',''):esc(tzSel.value.replace(/_/g,' ')))+'</small></span>';
+}
 function updateAsk(){
-  const b=$('ask-claude'); if(!b)return;
-  b.hidden=!(SAMPLE&&!matched&&$('f-place').value.trim().length>=2);
+  const b=$('ask-claude'), q=pIn.value.trim();
+  const picked=validLat()&&validLon()&&!customCoords;
+  b.hidden=!(SAMPLE&&q.length>=2&&!picked);
+  if(!b.disabled)b.textContent=t('locate');
 }
-function onPlace(){
-  const c=findCity($('f-place').value);
-  if(c){
-    matched=true; $('f-lat').value=c[2]; $('f-lon').value=c[3]; ensureOpt(c[4]); tzSel.value=c[4];
-    setHint('Coordinates and time zone filled for '+c[0]+', '+c[1]+'.',true);
-  }else{matched=false; setHint(DEFAULT_HINT,false);}
-  refreshTz(); updateAsk();
-}
-$('f-place').addEventListener('input',onPlace);
-$('f-place').addEventListener('change',onPlace);
+pIn.addEventListener('input',()=>{
+  const q=pIn.value.trim();
+  if(!customCoords){$('f-lat').value='';$('f-lon').value='';}
+  renderChosen(); clearTimeout(deb);
+  if(q.length<2){results=[];closeList();setStatus('');updateAsk();return;}
+  results=localSearch(q); active=-1; renderList(); updateAsk();
+  const mine=++seq; setStatus('searching');
+  deb=setTimeout(async()=>{
+    const rem=await remoteSearch(q);
+    if(mine!==seq)return;
+    const loc=localSearch(q);
+    if(rem===null){results=loc;setStatus(loc.length?'offline':'nomatch_off');}
+    else{
+      const extra=rem.filter(r=>!loc.some(l=>Math.abs(l.lat-r.lat)<.25&&Math.abs(l.lon-r.lon)<.25));
+      results=loc.concat(extra).slice(0,10); setStatus(results.length?'':'nomatch');
+    }
+    active=-1; renderList(); updateAsk();
+  },320);
+});
+pIn.addEventListener('keydown',e=>{
+  const open=!pList.hidden&&results.length;
+  if(e.key==='ArrowDown'&&open){e.preventDefault();active=(active+1)%results.length;renderList();}
+  else if(e.key==='ArrowUp'&&open){e.preventDefault();active=(active-1+results.length)%results.length;renderList();}
+  else if(e.key==='Enter'&&open){e.preventDefault();choose(active>=0?active:0);}
+  else if(e.key==='Escape'&&open){closeList();}
+});
+pIn.addEventListener('blur',()=>setTimeout(closeList,160));
+pList.addEventListener('mousedown',e=>{const li=e.target.closest('li');if(li){e.preventDefault();choose(+li.getAttribute('data-n'));}});
 function onCoords(){
-  matched=false;
-  const a=$('f-lat').value, b=$('f-lon').value, lat=parseFloat(a), lon=parseFloat(b);
-  if(a!==''&&b!==''&&lat>=-90&&lat<=90&&lon>=-180&&lon<=180){
-    const n=nearest(lat,lon); ensureOpt(n[4]); tzSel.value=n[4];
-    setHint('Time zone suggested from the nearest listed city ('+n[0]+'). Please check it, or choose a custom UTC offset.',false);
+  customCoords=true;
+  if(validLat()&&validLon()){
+    const lat=parseFloat($('f-lat').value), lon=parseFloat($('f-lon').value), n=nearest(lat,lon);
+    ensureOpt(n[4]); tzSel.value=n[4]; setStatus(''); $('place-status').textContent=t('tz_guess',{c:n[0]});
   }
-  refreshTz(); updateAsk();
+  renderChosen(); refreshTz(); updateAsk();
 }
 $('f-lat').addEventListener('input',onCoords);
 $('f-lon').addEventListener('input',onCoords);
 
-/* optional: ask Claude to locate any place on Earth (only if the viewer's runtime offers it) */
+/* optional lookup by Claude (only offered where the runtime provides it) */
 if(window.claude&&typeof window.claude.use==='function'){
   window.claude.use('sample').then(s=>{if(s){SAMPLE=s;updateAsk();}}).catch(()=>{});
+  window.claude.use('downloads').then(d=>{if(d){DL_CAP=d;updateSave();}}).catch(()=>{});
 }
 $('ask-claude').addEventListener('click',async()=>{
-  const place=$('f-place').value.trim(), btn=$('ask-claude'); if(!place||!SAMPLE)return;
-  btn.disabled=true; btn.textContent='Locating\u2026';
+  const place=pIn.value.trim(), btn=$('ask-claude'); if(!place||!SAMPLE)return;
+  btn.disabled=true; btn.textContent=t('locating');
+  let msg='';
   try{
     const q='Locate this place of birth: '+JSON.stringify(place)+'. Reply with ONLY a JSON object and nothing else: {"found":true or false,"name":"place name","region":"state or province","country":"country","lat":decimal degrees with north positive,"lon":decimal degrees with east positive,"tz":"IANA time zone id for this place, for example Asia/Kolkata"}. Choose the best-known, most populous match and give at least 2 decimal places. If you are not confident that this place exists, set found to false.';
     const r=await SAMPLE.json(q,{modelTier:'quick'});
-    const lat=+r.lat, lon=+r.lon;
-    if(!r||!r.found||!(lat>=-90&&lat<=90)||!(lon>=-180&&lon<=180)||isNaN(lat)||isNaN(lon)){setHint('Claude could not find that place. Add the state or country, or enter coordinates yourself.',false);}
+    const lat=+(r&&r.lat), lon=+(r&&r.lon);
+    if(!r||!r.found||isNaN(lat)||isNaN(lon)||lat<-90||lat>90||lon<-180||lon>180){msg=t('claude_none');}
     else{
-      $('f-lat').value=lat.toFixed(4); $('f-lon').value=lon.toFixed(4); matched=true;
+      customCoords=false;
+      $('f-lat').value=lat.toFixed(4); $('f-lon').value=lon.toFixed(4);
+      pIn.value=[r.name,r.region,r.country].filter(Boolean).join(', ')||place;
       if(r.tz&&dtf(r.tz)){ensureOpt(r.tz);tzSel.value=r.tz;}else{const n=nearest(lat,lon);ensureOpt(n[4]);tzSel.value=n[4];}
-      setHint('Claude placed it at '+[r.name,r.region,r.country].filter(Boolean).join(', ')+' ('+lat.toFixed(2)+', '+lon.toFixed(2)+'). Please check that this is right.',true);
+      closeList(); renderChosen(); refreshTz();
+      msg=t('claude_ok',{p:pIn.value,a:lat.toFixed(2),b:lon.toFixed(2)});
     }
   }catch(e){
-    const code=e&&e.code;
-    setHint(code==='not_granted'?'Permission to ask Claude was not given. Enter the coordinates manually instead.':(code==='rate_limited'?'Too many lookups. Wait a moment, or enter coordinates manually.':'The lookup did not work this time. Enter the coordinates manually.'),false);
+    const c=e&&e.code;
+    msg=c==='not_granted'?t('claude_denied'):(c==='rate_limited'?t('claude_rate'):t('claude_fail'));
   }
-  btn.disabled=false; btn.textContent='Locate this place with Claude'; refreshTz(); updateAsk();
+  statusKey=''; $('place-status').textContent=msg;
+  btn.disabled=false; updateAsk();
 });
 
-function readForm(){
-  const err=$('ferr'); err.textContent='';
-  const name=$('f-name').value.trim(), date=$('f-date').value, time=$('f-time').value;
-  const lat=parseFloat($('f-lat').value), lon=parseFloat($('f-lon').value);
-  if(!name){err.textContent='Enter your name.';$('f-name').focus();return null;}
-  if(!date){err.textContent='Enter your date of birth.';$('f-date').focus();return null;}
-  if(!time){err.textContent='Enter your time of birth.';$('f-time').focus();return null;}
-  if(!(lat>=-90&&lat<=90)||!(lon>=-180&&lon<=180)||$('f-lat').value===''||$('f-lon').value===''){err.textContent='Choose a city from the list, or enter a valid latitude and longitude.';$('f-place').focus();return null;}
-  const a=date.split('-').map(Number), b=time.split(':').map(Number);
-  if(a[0]<1900||a[0]>2100){err.textContent='Birth year must be between 1900 and 2100.';return null;}
-  const r=currentOffset();
-  if(!r){err.textContent=tzSel.value==='__manual'?'Enter the UTC offset in hours, for example 5.5.':'That time zone is not available in this browser. Choose a custom UTC offset.';return null;}
-  return {name:name,y:a[0],mo:a[1],d:a[2],hh:b[0],mm:b[1],lat:lat,lon:lon,tz:r.off,tzName:tzSel.value==='__manual'?'':tzSel.value,place:$('f-place').value.trim()};
+/* ================= SAVED KUNDALIS (this device only) ================= */
+const RK='kundali.recent.v2';
+function loadRecent(){try{const a=JSON.parse(localStorage.getItem(RK)||'[]');return Array.isArray(a)?a:[];}catch(e){return [];}}
+function saveRecent(inp){
+  try{
+    let a=loadRecent().filter(x=>!(x.name===inp.name&&x.y===inp.y&&x.mo===inp.mo&&x.d===inp.d&&x.hh===inp.hh&&x.mm===inp.mm));
+    a.unshift(inp); localStorage.setItem(RK,JSON.stringify(a.slice(0,5)));
+  }catch(e){}
+  renderRecent();
+}
+function renderRecent(){
+  const a=loadRecent(), el=$('recent');
+  if(!a.length){el.hidden=true;return;}
+  el.hidden=false;
+  $('recent-list').innerHTML=a.map((x,i)=>'<span class="rc"><button type="button" class="rcb" data-r="'+i+'">'+esc(x.name)+' \u00B7 '+x.d+'/'+x.mo+'/'+x.y+'</button><button type="button" class="rcx" data-x="'+i+'" aria-label="'+esc(t('remove'))+'">\u00D7</button></span>').join('');
+}
+$('recent-list').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const a=loadRecent();
+  if(b.hasAttribute('data-r')){const x=a[+b.getAttribute('data-r')];if(x)go(x);}
+  else if(b.hasAttribute('data-x')){a.splice(+b.getAttribute('data-x'),1);try{localStorage.setItem(RK,JSON.stringify(a));}catch(err){}renderRecent();}
+});
+$('rc-clear').addEventListener('click',()=>{try{localStorage.removeItem(RK);}catch(e){}renderRecent();});
+
+/* ================= LANGUAGE ================= */
+function applyLang(){
+  document.documentElement.lang=LANG; document.title=t('doc_title');
+  document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.getAttribute('data-i'));});
+  document.querySelectorAll('[data-ip]').forEach(el=>{el.setAttribute('placeholder',t(el.getAttribute('data-ip')));});
+  document.querySelectorAll('.lang button').forEach(b=>{b.setAttribute('aria-pressed',String(b.getAttribute('data-l')===LANG));});
+  $('btn-next').textContent=t('reveal'); setTimeHint(); refreshTz(); renderChosen(); renderRecent(); setStatus(statusKey); updateAsk();
+  if(typeof castIdx!=='undefined')castIdx=-1;
+  if(S.phase==='result'&&chart){renderResult();if(!$('pmodal').hidden&&selK)openPlanet(selK,true);}
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>{
+  LANG=b.getAttribute('data-l'); try{localStorage.setItem('kundali.lang',LANG);}catch(e){}
+  applyLang();
+}));
+
+/* ================= EXTRA TRANSLATIONS ================= */
+Object.assign(I.en,{
+ tagline:'Your birth. Your planets. Your path.', cta_hero:'Create My Kundali',
+ f1:'Accurate calculations', f2:'Birth places worldwide', f3:'Detailed insights', f4:'Beautiful visuals', form_title:'Your birth details',
+ pg0:'Locating Sun', pg1:'Calculating Planets', pg2:'Setting Houses', pg3:'Finalizing Kundali',
+ n_overview:'Overview', n_planets:'Planets', n_houses:'Houses', n_panchang:'Panchang', n_doshas:'Doshas', n_dasha:'Dasha',
+ sw_deg:'Show degrees', save_rep:'Save full report', tap_row:'Tap a planet for its full reading.',
+ h_preads:'Reading for each planet', h_houses:'The 12 houses', houses_note:'Open a house to read what it means for you, based on its sign, its lord and the planets in it.',
+ h_panchang:'Panchang at your birth', pn_vara:'Vara (weekday)', pn_tithi:'Tithi', pn_nak:'Nakshatra', pn_yoga:'Yoga', pn_kar:'Karana', pn_sun:'Sunrise at birthplace',
+ pk_shukla:'Shukla paksha (waxing Moon)', pk_krishna:'Krishna paksha (waning Moon)', purnima:'Purnima', amavasya:'Amavasya',
+ vara_note:'The Hindu day begins at sunrise, so a birth before sunrise belongs to the previous weekday.',
+ ruled_by:'Ruled by {l}', good_y:'Auspicious by tradition', bad_y:'Challenging by tradition', k_fixed:'Fixed karana', k_mov:'Movable karana',
+ tithi_no:'Tithi {n} of 15 · {p}% had passed', 
+ pnote:'Panchang is computed for the exact moment of birth from the Sun and Moon positions, using the sidereal zodiac.',
+ h_manglik:'Manglik (Kuja) dosha', h_ks:'Kaal Sarp yoga',
+ m_none:'Not Manglik', m_partial:'Partial Manglik', m_yes:'Manglik', m_strong:'Strong Manglik',
+ m_intro:'Mars in the 1st, 2nd, 4th, 7th, 8th or 12th house from a reference point is called Manglik.',
+ m_from_lagna:'From the Lagna: Mars is in house {h}', m_from_moon:'From the Moon: house {h}', m_from_venus:'From Venus: house {h}', m_counts:' (counts)', m_nocount:' (does not count)',
+ m_mit_own:'Mars is in its own or exalted sign, which traditionally softens the dosha.', m_mit_jup:'Jupiter joins or aspects Mars, which traditionally softens the dosha.', mit_title:'Softening factors',
+ m_txt_none:'Mars does not stand in a Manglik house from the Lagna, Moon or Venus.',
+ m_txt_partial:'Mars is in a Manglik house only from the Moon or Venus, so the effect is considered mild.',
+ m_txt_yes:'Mars is in a Manglik house from the Lagna. It can add intensity to partnerships, so many families compare charts before marriage.',
+ m_txt_strong:'Mars is in a Manglik house from the Lagna and from at least one more reference point, which is read as a stronger Manglik dosha.',
+ ks_none:'No Kaal Sarp yoga', ks_full:'Kaal Sarp yoga present', ks_rev:'Reverse Kaal Sarp (Ketu to Rahu)', ks_part:'Partial Kaal Sarp',
+ ks_txt_none:'The seven planets are on both sides of the Rahu–Ketu axis, so there is no Kaal Sarp yoga.',
+ ks_txt_full:'All seven planets lie between Rahu and Ketu, moving from Rahu to Ketu. Traditionally this points to strong karmic themes, results that can come late but with force, and a life of intense focus.',
+ ks_txt_rev:'All seven planets lie between Ketu and Rahu. Some traditions call this a reverse Kaal Sarp yoga and read it as a milder form.',
+ ks_txt_part:'Six of the seven planets are on one side of the Rahu–Ketu axis, with {p} on the other side. Many astrologers call this a partial yoga with a weaker effect.',
+ ks_type:'Type: {n} (Rahu in house {h})', ks_rahu:'Rahu is in house {h} and Ketu in house {k}.',
+ dosha_note:'These checks follow common traditional rules. Methods differ between schools, so treat them as a starting point for a conversation with an experienced astrologer, not as a verdict.',
+ hl_title:'Key highlights', hl_rul:'Ruling planet', hl_num:'Lucky number', hl_col:'Lucky colour', hl_comp:'Harmonious signs', hl_note:'Traditional associations of your Lagna lord and Moon sign.', traits:'Core traits',
+ tl_done:'Completed', tl_cur:'Current', tl_up:'Upcoming', yrs:'{y} years', pct:'{p}% complete',
+ pm_lord:'Sign lord', close:'Close',
+ pr_1:'{P} is in {S}, in your {O} house ({H}).', pr_3:'In {S} it acts in a {F} way.',
+ pr_4:'The {O} house stands for {H}, so this is where you will feel its influence most.',
+ pr_5:'Its sign lord, {L}, sits in your {LO} house ({LH}), so the results of {P} are coloured by those matters.',
+ pr_5b:'{P} rules its own sign, so it answers mostly to itself.',
+ pr_exalt:'It is exalted here, which strengthens it and lets its best qualities shine.',
+ pr_debil:'It is debilitated here, so its themes call for patience and conscious effort.',
+ pr_own:'It sits in its own sign, which gives it comfort and steady strength.',
+ pr_retro:'It is retrograde, so its energy turns inward and often matures later in life.',
+ pr_varg:'It falls in the same sign in the Navamsa (Vargottama), which adds lasting strength.',
+ hr_2:'This house falls in {S}, so these matters are approached in a {F} way. Its lord is {L}.',
+ hr_3:'The lord, {L}, is placed in your {O} house in {S}, so {H0} is tied to {H}.',
+ hr_3b:'The lord, {L}, sits in this very house, which strengthens these matters.',
+ hr_4:'Planets here: {P}. They bring their own themes into this area of life.',
+ hr_4b:'No planet occupies this house, so its results follow the condition of its lord.',
+ hsum:'House {n} · {S}', lord_w:'lord {l}', empty_h:'empty',
+ rp_planets:'PLANETS', rp_panchang:'PANCHANG', rp_doshas:'DOSHAS', rp_houses:'HOUSES', rp_readings:'PLANET READINGS', rp_dasha:'MAHADASHA'
+});
+Object.assign(I.hi,{
+ tagline:'आपका जन्म। आपके ग्रह। आपका पथ।', cta_hero:'मेरी कुंडली बनाएँ',
+ f1:'सटीक गणना', f2:'दुनिया भर के जन्म स्थान', f3:'विस्तृत विश्लेषण', f4:'सुंदर चित्रण', form_title:'आपका जन्म विवरण',
+ pg0:'सूर्य की स्थिति', pg1:'ग्रहों की गणना', pg2:'भाव निर्धारण', pg3:'कुंडली तैयार',
+ n_overview:'सारांश', n_planets:'ग्रह', n_houses:'भाव', n_panchang:'पंचांग', n_doshas:'दोष', n_dasha:'दशा',
+ sw_deg:'अंश दिखाएँ', save_rep:'पूरी रिपोर्ट सहेजें', tap_row:'पूरा फल पढ़ने के लिए किसी ग्रह पर टैप करें।',
+ h_preads:'हर ग्रह का फल', h_houses:'12 भाव', houses_note:'किसी भाव को खोलकर पढ़ें कि उसकी राशि, स्वामी और उसमें बैठे ग्रहों के आधार पर वह आपके लिए क्या कहता है।',
+ h_panchang:'जन्म के समय का पंचांग', pn_vara:'वार', pn_tithi:'तिथि', pn_nak:'नक्षत्र', pn_yoga:'योग', pn_kar:'करण', pn_sun:'जन्म स्थान पर सूर्योदय',
+ pk_shukla:'शुक्ल पक्ष (बढ़ता चंद्र)', pk_krishna:'कृष्ण पक्ष (घटता चंद्र)', purnima:'पूर्णिमा', amavasya:'अमावस्या',
+ vara_note:'हिंदू दिन सूर्योदय से शुरू होता है, इसलिए सूर्योदय से पहले का जन्म पिछले वार का माना जाता है।',
+ ruled_by:'स्वामी: {l}', good_y:'परंपरा से शुभ', bad_y:'परंपरा से कठिन', k_fixed:'स्थिर करण', k_mov:'चर करण',
+ tithi_no:'15 में से तिथि {n} · {p}% बीत चुकी थी',
+ pnote:'पंचांग जन्म के सटीक क्षण के लिए सूर्य-चंद्र की निरयन स्थिति से निकाला गया है।',
+ h_manglik:'मांगलिक (कुज) दोष', h_ks:'कालसर्प योग',
+ m_none:'मांगलिक नहीं', m_partial:'आंशिक मांगलिक', m_yes:'मांगलिक', m_strong:'प्रबल मांगलिक',
+ m_intro:'मंगल का किसी संदर्भ बिंदु से 1, 2, 4, 7, 8 या 12वें भाव में होना मांगलिक कहलाता है।',
+ m_from_lagna:'लग्न से: मंगल {h}वें भाव में', m_from_moon:'चंद्रमा से: {h}वाँ भाव', m_from_venus:'शुक्र से: {h}वाँ भाव', m_counts:' (गिना जाता है)', m_nocount:' (नहीं गिना जाता)',
+ m_mit_own:'मंगल अपनी या उच्च राशि में है, जो परंपरा से दोष को हल्का करता है।', m_mit_jup:'गुरु मंगल के साथ है या उसे देखता है, जो परंपरा से दोष को हल्का करता है।', mit_title:'दोष को हल्का करने वाले कारण',
+ m_txt_none:'मंगल लग्न, चंद्रमा या शुक्र से किसी मांगलिक भाव में नहीं है।',
+ m_txt_partial:'मंगल केवल चंद्रमा या शुक्र से मांगलिक भाव में है, इसलिए प्रभाव हल्का माना जाता है।',
+ m_txt_yes:'मंगल लग्न से मांगलिक भाव में है। यह साझेदारी में तीव्रता ला सकता है, इसलिए कई परिवार विवाह से पहले कुंडलियाँ मिलाते हैं।',
+ m_txt_strong:'मंगल लग्न और कम से कम एक और संदर्भ बिंदु से मांगलिक भाव में है, जिसे प्रबल मांगलिक दोष माना जाता है।',
+ ks_none:'कालसर्प योग नहीं', ks_full:'कालसर्प योग है', ks_rev:'उलटा कालसर्प (केतु से राहु)', ks_part:'आंशिक कालसर्प',
+ ks_txt_none:'सातों ग्रह राहु-केतु अक्ष के दोनों ओर हैं, इसलिए कालसर्प योग नहीं बनता।',
+ ks_txt_full:'सातों ग्रह राहु से केतु की दिशा में राहु और केतु के बीच हैं। परंपरा से यह प्रबल कर्म-विषयों, देर से पर ज़ोरदार फल और गहन एकाग्रता वाले जीवन का संकेत है।',
+ ks_txt_rev:'सातों ग्रह केतु और राहु के बीच हैं। कुछ परंपराएँ इसे उलटा कालसर्प योग कहती हैं और इसे अपेक्षाकृत हल्का मानती हैं।',
+ ks_txt_part:'सात में से छह ग्रह राहु-केतु अक्ष की एक ओर हैं और {p} दूसरी ओर है। कई ज्योतिषी इसे कमज़ोर प्रभाव वाला आंशिक योग कहते हैं।',
+ ks_type:'प्रकार: {n} (राहु {h}वें भाव में)', ks_rahu:'राहु {h}वें भाव में और केतु {k}वें भाव में है।',
+ dosha_note:'ये जाँचें प्रचलित पारंपरिक नियमों पर आधारित हैं। विभिन्न परंपराओं में विधियाँ अलग हैं, इसलिए इन्हें अनुभवी ज्योतिषी से चर्चा की शुरुआत मानें, अंतिम निर्णय नहीं।',
+ hl_title:'मुख्य बातें', hl_rul:'शासक ग्रह', hl_num:'शुभ अंक', hl_col:'शुभ रंग', hl_comp:'अनुकूल राशियाँ', hl_note:'आपके लग्नेश और चंद्र राशि से जुड़े पारंपरिक संकेत।', traits:'मुख्य गुण',
+ tl_done:'पूर्ण', tl_cur:'चल रही', tl_up:'आगामी', yrs:'{y} वर्ष', pct:'{p}% पूर्ण',
+ pm_lord:'राशि स्वामी', close:'बंद करें',
+ pr_1:'{P} {S} राशि में है और आपके {O} भाव ({H}) में स्थित है।', pr_3:'{S} में यह {F} ढंग से काम करता है।',
+ pr_4:'{O} भाव {H} से जुड़ा है, इसलिए इसका प्रभाव आपको सबसे अधिक इन्हीं विषयों में दिखेगा।',
+ pr_5:'इसकी राशि का स्वामी {L} आपके {LO} भाव ({LH}) में है, इसलिए {P} के फल उन्हीं विषयों के रंग में रंगे होंगे।',
+ pr_5b:'{P} अपनी ही राशि का स्वामी है, इसलिए यह मुख्यतः स्वयं के प्रति उत्तरदायी है।',
+ pr_exalt:'यह यहाँ उच्च का है, जिससे इसकी शुभ क्षमताएँ प्रबल होती हैं।',
+ pr_debil:'यह यहाँ नीच का है, इसलिए इसके विषयों में धैर्य और सचेत प्रयास चाहिए।',
+ pr_own:'यह अपनी ही राशि में है, जिससे इसे स्थिरता और बल मिलता है।',
+ pr_retro:'यह वक्री है, इसलिए इसकी ऊर्जा भीतर की ओर मुड़ती है और अक्सर जीवन में देर से परिपक्व होती है।',
+ pr_varg:'यह नवांश में भी उसी राशि में है (वर्गोत्तम), जिससे स्थायी बल मिलता है।',
+ hr_2:'यह भाव {S} राशि में है, इसलिए इन विषयों को आप {F} ढंग से देखते हैं। इसका स्वामी {L} है।',
+ hr_3:'स्वामी {L} आपके {O} भाव में {S} राशि में है, इसलिए {H0} का संबंध {H} से जुड़ता है।',
+ hr_3b:'स्वामी {L} इसी भाव में बैठा है, जिससे इन विषयों को बल मिलता है।',
+ hr_4:'यहाँ स्थित ग्रह: {P}। वे जीवन के इस क्षेत्र में अपने विषय जोड़ते हैं।',
+ hr_4b:'इस भाव में कोई ग्रह नहीं है, इसलिए इसके फल इसके स्वामी की स्थिति के अनुसार होंगे।',
+ hsum:'भाव {n} · {S}', lord_w:'स्वामी {l}', empty_h:'रिक्त',
+ rp_planets:'ग्रह', rp_panchang:'पंचांग', rp_doshas:'दोष', rp_houses:'भाव', rp_readings:'ग्रहों का फल', rp_dasha:'महादशा'
+});
+
+/* ================= READING DATA ================= */
+const ORD={en:['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th'],
+           hi:['पहले','दूसरे','तीसरे','चौथे','पाँचवें','छठे','सातवें','आठवें','नौवें','दसवें','ग्यारहवें','बारहवें']};
+const SIGN_LORD=['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter'];
+const FLAVOR={
+ en:['direct, fast and self-starting','steady, patient and sensory','curious, quick and communicative','caring, protective and emotional','confident, warm and expressive','careful, analytical and practical','balanced, diplomatic and relationship-minded','intense, deep and determined','open, optimistic and truth-seeking','disciplined, serious and goal-driven','independent, inventive and detached','gentle, intuitive and imaginative'],
+ hi:['सीधे, तेज़ और स्वयं पहल करने वाले','स्थिर, धैर्यवान और इंद्रिय-सुख प्रेमी','जिज्ञासु, फुर्तीले और संवादप्रिय','स्नेही, रक्षक और भावुक','आत्मविश्वासी, गर्मजोश और अभिव्यक्तिपूर्ण','सावधान, विश्लेषणात्मक और व्यावहारिक','संतुलित, कूटनीतिक और संबंध-प्रधान','तीव्र, गहरे और दृढ़','खुले, आशावादी और सत्य-खोजी','अनुशासित, गंभीर और लक्ष्य-केंद्रित','स्वतंत्र, आविष्कारी और निर्लिप्त','कोमल, सहज-बोधी और कल्पनाशील']
+};
+const PLONG={
+ en:{Sun:'The Sun is your core identity: vitality, confidence, authority and your relationship with father figures and leadership.',
+     Moon:'The Moon rules your mind: emotional needs, instincts, comfort, memory, the mother and how you nurture and are nurtured.',
+     Mars:'Mars is your drive: energy, courage, competitiveness, ambition and the way you take action and defend yourself.',
+     Mercury:'Mercury governs thinking and speech: learning, analysis, trade, writing, humour and how quickly you adapt.',
+     Jupiter:'Jupiter is the great teacher: wisdom, faith, growth, generosity, children, mentors and good fortune.',
+     Venus:'Venus rules love and pleasure: relationships, beauty, art, harmony, comfort and the values you hold dear.',
+     Saturn:'Saturn is the taskmaster: discipline, responsibility, patience, long-term effort, limits and lessons learned through time.',
+     Rahu:'Rahu is the hungry node: worldly ambition, obsession, foreign or unusual paths and a drive to go beyond the familiar.',
+     Ketu:'Ketu is the detached node: intuition, spiritual insight, letting go and mastery carried over from the past.'},
+ hi:{Sun:'सूर्य आपकी मूल पहचान है: जीवन-शक्ति, आत्मविश्वास, अधिकार, पिता तुल्य व्यक्तियों और नेतृत्व से संबंध।',
+     Moon:'चंद्रमा आपके मन का स्वामी है: भावनात्मक ज़रूरतें, सहज प्रवृत्ति, सुकून, स्मृति, माता और पोषण का भाव।',
+     Mars:'मंगल आपकी प्रेरक शक्ति है: ऊर्जा, साहस, प्रतिस्पर्धा, महत्वाकांक्षा और कार्य करने व रक्षा करने का ढंग।',
+     Mercury:'बुध सोच और वाणी का कारक है: सीखना, विश्लेषण, व्यापार, लेखन, विनोद और अनुकूलन की गति।',
+     Jupiter:'गुरु महान शिक्षक है: ज्ञान, श्रद्धा, विकास, उदारता, संतान, मार्गदर्शक और सौभाग्य।',
+     Venus:'शुक्र प्रेम और सुख का कारक है: संबंध, सौंदर्य, कला, सामंजस्य, सुविधा और आपके प्रिय मूल्य।',
+     Saturn:'शनि कठोर शिक्षक है: अनुशासन, ज़िम्मेदारी, धैर्य, दीर्घकालिक प्रयास, सीमाएँ और समय से मिली सीख।',
+     Rahu:'राहु भूखा छाया-ग्रह है: सांसारिक महत्वाकांक्षा, लगाव, विदेशी या अनोखे मार्ग और परिचित से आगे जाने की चाह।',
+     Ketu:'केतु वैराग्य का छाया-ग्रह है: अंतर्ज्ञान, आध्यात्मिक दृष्टि, त्याग और पूर्व-जन्म की साधना।'}
+};
+const HLONG={
+ en:['The 1st house is you: your body, temperament, appearance and the way you begin everything.',
+     'The 2nd house covers the wealth you earn and save, family, speech, food and your early values.',
+     'The 3rd house shows courage, effort, skills, communication, siblings and short journeys.',
+     'The 4th house is your inner foundation: home, mother, property, vehicles, emotional peace and the roots of your education.',
+     'The 5th house governs creativity, intelligence, romance, children and the merit carried from past actions.',
+     'The 6th house relates to daily work, service, health habits, debts, competition and how you overcome obstacles.',
+     'The 7th house is about partnership: marriage, business partners, contracts and how you meet the mirror of others.',
+     'The 8th house covers transformation: sudden change, shared resources, research, secrets, longevity and deep healing.',
+     'The 9th house is fortune and dharma: higher learning, beliefs, teachers, long journeys and the father.',
+     'The 10th house is career and public life: your actions, authority, reputation and the legacy you build.',
+     'The 11th house brings gains: income, networks, friends, elder siblings and the fulfilment of desires.',
+     'The 12th house is release: expenses, solitude, sleep, foreign lands, spirituality and what you let go of.'],
+ hi:['पहला भाव आप स्वयं हैं: शरीर, स्वभाव, रूप-रंग और हर काम शुरू करने का ढंग।',
+     'दूसरा भाव अर्जित व संचित धन, परिवार, वाणी, भोजन और आरंभिक मूल्यों को दर्शाता है।',
+     'तीसरा भाव साहस, परिश्रम, कौशल, संवाद, भाई-बहन और छोटी यात्राओं को बताता है।',
+     'चौथा भाव आपकी आंतरिक नींव है: घर, माता, संपत्ति, वाहन, मानसिक शांति और शिक्षा की जड़ें।',
+     'पाँचवाँ भाव सृजनशीलता, बुद्धि, प्रेम, संतान और पूर्व कर्मों के पुण्य को दर्शाता है।',
+     'छठा भाव दैनिक कार्य, सेवा, स्वास्थ्य की आदतें, ऋण, प्रतिस्पर्धा और बाधाओं पर विजय से जुड़ा है।',
+     'सातवाँ भाव साझेदारी का है: विवाह, व्यापारिक साझेदार, अनुबंध और दूसरों के दर्पण में स्वयं को देखना।',
+     'आठवाँ भाव परिवर्तन का है: अचानक बदलाव, साझा संसाधन, शोध, रहस्य, आयु और गहरा उपचार।',
+     'नौवाँ भाव भाग्य और धर्म का है: उच्च शिक्षा, आस्था, गुरु, लंबी यात्राएँ और पिता।',
+     'दसवाँ भाव कर्म और सार्वजनिक जीवन है: आपके कार्य, अधिकार, प्रतिष्ठा और आपकी बनाई विरासत।',
+     'ग्यारहवाँ भाव लाभ का है: आय, संपर्क, मित्र, बड़े भाई-बहन और इच्छाओं की पूर्ति।',
+     'बारहवाँ भाव मुक्ति का है: व्यय, एकांत, निद्रा, विदेश, आध्यात्मिकता और जो आप छोड़ देते हैं।']
+};
+const LNUM={Sun:1,Moon:2,Mars:9,Mercury:5,Jupiter:3,Venus:6,Saturn:8,Rahu:4,Ketu:7};
+const LCOL={
+ en:{Sun:'Gold or saffron',Moon:'White or silver',Mars:'Red',Mercury:'Green',Jupiter:'Yellow',Venus:'White or pink',Saturn:'Blue or black',Rahu:'Smoky grey',Ketu:'Brown'},
+ hi:{Sun:'सुनहरा या केसरिया',Moon:'सफ़ेद या चाँदी',Mars:'लाल',Mercury:'हरा',Jupiter:'पीला',Venus:'सफ़ेद या गुलाबी',Saturn:'नीला या काला',Rahu:'धुएँ-सा स्लेटी',Ketu:'भूरा'}
+};
+
+/* ================= PANCHANG ================= */
+const VARA=[['Sunday (Ravivara)','रविवार','Sun'],['Monday (Somavara)','सोमवार','Moon'],['Tuesday (Mangalavara)','मंगलवार','Mars'],['Wednesday (Budhavara)','बुधवार','Mercury'],['Thursday (Guruvara)','गुरुवार','Jupiter'],['Friday (Shukravara)','शुक्रवार','Venus'],['Saturday (Shanivara)','शनिवार','Saturn']];
+const TITHI={en:['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi'],
+             hi:['प्रतिपदा','द्वितीया','तृतीया','चतुर्थी','पंचमी','षष्ठी','सप्तमी','अष्टमी','नवमी','दशमी','एकादशी','द्वादशी','त्रयोदशी','चतुर्दशी']};
+const YOGA={en:['Vishkambha','Priti','Ayushman','Saubhagya','Shobhana','Atiganda','Sukarma','Dhriti','Shula','Ganda','Vriddhi','Dhruva','Vyaghata','Harshana','Vajra','Siddhi','Vyatipata','Variyana','Parigha','Shiva','Siddha','Sadhya','Shubha','Shukla','Brahma','Indra','Vaidhriti'],
+            hi:['विष्कम्भ','प्रीति','आयुष्मान','सौभाग्य','शोभन','अतिगण्ड','सुकर्मा','धृति','शूल','गण्ड','वृद्धि','ध्रुव','व्याघात','हर्षण','वज्र','सिद्धि','व्यतीपात','वरीयान','परिघ','शिव','सिद्ध','साध्य','शुभ','शुक्ल','ब्रह्म','इन्द्र','वैधृति']};
+const BAD_YOGA=[0,5,8,9,12,14,16,18,26];
+const KAR_MOV={en:['Bava','Balava','Kaulava','Taitila','Gara','Vanija','Vishti (Bhadra)'],hi:['बव','बालव','कौलव','तैतिल','गर','वणिज','विष्टि (भद्रा)']};
+const KAR_FIX={en:['Shakuni','Chatushpada','Naga'],hi:['शकुनि','चतुष्पाद','नाग']};
+const KIMS={en:'Kimstughna',hi:'किंस्तुघ्न'};
+function sunriseMs(ch){
+  const i=ch.inp, noon0=Date.UTC(i.y,i.mo-1,i.d,12,0)-(i.lon/15)*3600000;
+  const jd=noon0/86400000+2440587.5, d=jd-2451543.5, sun=sunPos(d), eps=rad(23.4393-3.563e-7*d);
+  const L=n360(sun.w+sun.M), ra=n360(deg(Math.atan2(Math.cos(eps)*Math.sin(rad(sun.lon)),Math.cos(rad(sun.lon)))));
+  const eot=((L-ra+540)%360)-180, dec=Math.asin(Math.sin(eps)*Math.sin(rad(sun.lon))), phi=rad(i.lat);
+  const c=(Math.sin(rad(-0.833))-Math.sin(phi)*Math.sin(dec))/(Math.cos(phi)*Math.cos(dec));
+  if(!(Math.abs(c)<=1))return Date.UTC(i.y,i.mo-1,i.d,6,0)-i.tz*3600000;
+  return noon0-eot*4*60000-(deg(Math.acos(c))/15)*3600000;
+}
+function panchang(ch){
+  const sun=ch.planets[0].lon, moon=ch.planets[1].lon, el=n360(moon-sun), ti=Math.floor(el/12);
+  const sr=sunriseMs(ch), i=ch.inp;
+  let wd=new Date(Date.UTC(i.y,i.mo-1,i.d)).getUTCDay(); if(ch.utMs<sr)wd=(wd+6)%7;
+  const kn=Math.floor(el/6);
+  return {el:el,tithi:ti,paksha:ti<15?0:1,tn:ti%15,tfrac:(el%12)/12,yoga:Math.floor(n360(sun+moon)/(360/27)),kn:kn,vara:wd,sunrise:sr};
+}
+function karanaName(kn){
+  if(kn===0)return {n:KIMS[LANG],fixed:true};
+  if(kn>=57)return {n:KAR_FIX[LANG][kn-57],fixed:true};
+  return {n:KAR_MOV[LANG][(kn-1)%7],fixed:false};
+}
+function tithiName(pc){
+  if(pc.tn===14)return t(pc.paksha===0?'purnima':'amavasya');
+  return TITHI[LANG][pc.tn];
+}
+function renderPanchang(){
+  const pc=panchang(chart), moon=chart.planets[1], i=chart.inp, kr=karanaName(pc.kn), bad=BAD_YOGA.indexOf(pc.yoga)>=0;
+  const sr=new Date(pc.sunrise+i.tz*3600000), srs=String(sr.getUTCHours()).padStart(2,'0')+':'+String(sr.getUTCMinutes()).padStart(2,'0');
+  const nl=DL[Math.floor(moon.lon/(360/27))%9];
+  const card=(k,v,p,bar)=>'<div class="pc"><small>'+esc(t(k))+'</small><b>'+esc(v)+'</b><p>'+esc(p)+'</p>'+(bar!==undefined?'<div class="bar2"><i style="width:'+bar+'%"></i></div>':'')+'</div>';
+  const vr=VARA[pc.vara];
+  $('pgrid').innerHTML=
+    card('pn_vara',LANG==='hi'?vr[1]:vr[0],t('ruled_by',{l:plName(vr[2])}))+
+    card('pn_tithi',tithiName(pc),t(pc.paksha===0?'pk_shukla':'pk_krishna')+' \u00B7 '+t('tithi_no',{n:pc.tn+1,p:Math.round(pc.tfrac*100)}),Math.round(pc.tfrac*100))+
+    card('pn_nak',nakName(moon.nIdx),t('pada',{p:moon.pada})+' \u00B7 '+t('ruled_by',{l:plName(nl)}))+
+    card('pn_yoga',YOGA[LANG][pc.yoga],t(bad?'bad_y':'good_y'))+
+    card('pn_kar',kr.n,t(kr.fixed?'k_fixed':'k_mov'))+
+    card('pn_sun',srs,fmtTz(i.tz));
+  $('pnote').textContent=t('pnote')+' '+t('vara_note');
+}
+
+/* ================= MANGLIK AND KAAL SARP ================= */
+function manglik(ch){
+  const M=ch.planets[2], moon=ch.planets[1], ven=ch.planets[5], jup=ch.planets[4];
+  const BAD=[1,2,4,7,8,12], rel=(a,b)=>((a-b+12)%12)+1;
+  const refs=[{k:'m_from_lagna',h:M.house},{k:'m_from_moon',h:rel(M.sign,moon.sign)},{k:'m_from_venus',h:rel(M.sign,ven.sign)}];
+  refs.forEach(r=>{r.bad=BAD.indexOf(r.h)>=0;});
+  const n=refs.filter(r=>r.bad).length;
+  let level='none'; if(refs[0].bad)level=n>=2?'strong':'yes'; else if(n>=1)level='partial';
+  const mit=[]; if([0,7,9].indexOf(M.sign)>=0)mit.push('m_mit_own'); if([1,5,7,9].indexOf(rel(M.sign,jup.sign))>=0)mit.push('m_mit_jup');
+  return {refs:refs,level:level,mit:mit};
+}
+const KS_NAMES={en:['Anant','Kulik','Vasuki','Shankhpal','Padma','Mahapadma','Takshak','Karkotak','Shankhchud','Ghatak','Vishdhar','Sheshnag'],
+                hi:['अनंत','कुलिक','वासुकि','शंखपाल','पद्म','महापद्म','तक्षक','कर्कोटक','शंखचूड़','घातक','विषधर','शेषनाग']};
+function kaalsarp(ch){
+  const R=ch.planets[7].lon, seven=ch.planets.slice(0,7);
+  const side=seven.map(p=>{const x=n360(p.lon-R);return x>0&&x<180?1:0;}), ahead=side.reduce((a,b)=>a+b,0);
+  let type='none', odd=null;
+  if(ahead===7)type='full'; else if(ahead===0)type='rev';
+  else if(ahead===6){type='part';odd=seven[side.indexOf(0)];}
+  else if(ahead===1){type='part';odd=seven[side.indexOf(1)];}
+  return {type:type,odd:odd,rahuHouse:ch.planets[7].house,ketuHouse:ch.planets[8].house};
+}
+function renderDoshas(){
+  const m=manglik(chart), k=kaalsarp(chart);
+  const mpill=m.level==='none'?'good':(m.level==='partial'?'warn':'high');
+  const mkey={none:'m_none',partial:'m_partial',yes:'m_yes',strong:'m_strong'}[m.level];
+  const mtxt={none:'m_txt_none',partial:'m_txt_partial',yes:'m_txt_yes',strong:'m_txt_strong'}[m.level];
+  const refs=m.refs.map(r=>'<li>'+esc(t(r.k,{h:r.h})+t(r.bad?'m_counts':'m_nocount'))+'</li>').join('');
+  let h='<div class="card dc"><h3>'+esc(t('h_manglik'))+'</h3><span class="pill '+mpill+'">'+esc(t(mkey))+'</span>'+
+    '<p class="sm">'+esc(t('m_intro'))+'</p><ul>'+refs+'</ul><p>'+esc(t(mtxt))+'</p>'+
+    (m.mit.length&&m.level!=='none'?'<p class="sm"><b>'+esc(t('mit_title'))+':</b></p><ul>'+m.mit.map(x=>'<li>'+esc(t(x))+'</li>').join('')+'</ul>':'')+'</div>';
+  const kkey={none:'ks_none',full:'ks_full',rev:'ks_rev',part:'ks_part'}[k.type], kpill=k.type==='none'?'good':(k.type==='full'?'high':'warn');
+  let ktxt=k.type==='part'?t('ks_txt_part',{p:plName(k.odd.k)}):t({none:'ks_txt_none',full:'ks_txt_full',rev:'ks_txt_rev'}[k.type]);
+  h+='<div class="card dc"><h3>'+esc(t('h_ks'))+'</h3><span class="pill '+kpill+'">'+esc(t(kkey))+'</span>'+
+    '<p>'+esc(ktxt)+'</p><p class="sm">'+esc(t('ks_rahu',{h:k.rahuHouse,k:k.ketuHouse}))+'</p>'+
+    (k.type==='full'?'<p class="sm">'+esc(t('ks_type',{n:KS_NAMES[LANG][k.rahuHouse-1],h:k.rahuHouse}))+'</p>':'')+'</div>';
+  $('dgrid').innerHTML=h;
+}
+
+/* ================= LONGER READINGS ================= */
+function planetReading(p){
+  const o=ORD[LANG], hm=HMEAN[LANG].map(x=>LANG==='en'?x.toLowerCase():x), d9=viewOf(chart,'D9').planets.find(x=>x.k===p.k);
+  const lord=SIGN_LORD[p.sign], lp=chart.planets.find(x=>x.k===lord);
+  const out=[t('pr_1',{P:plName(p.k),S:signName(p.sign),O:o[p.house-1],H:hm[p.house-1]}),PLONG[LANG][p.k],
+    t('pr_3',{S:signShort(p.sign),F:FLAVOR[LANG][p.sign]}),t('pr_4',{O:o[p.house-1],H:hm[p.house-1]})];
+  out.push(lord===p.k?t('pr_5b',{P:plName(p.k)}):t('pr_5',{L:plName(lord),LO:o[lp.house-1],LH:hm[lp.house-1],P:plName(p.k)}));
+  const dn=dignity(p.k,p.sign); if(dn)out.push(t('pr_'+dn));
+  if(p.retro&&p.k!=='Rahu'&&p.k!=='Ketu')out.push(t('pr_retro'));
+  if(p.sign===d9.sign&&p.k!=='Rahu'&&p.k!=='Ketu')out.push(t('pr_varg'));
+  return out.join(' ');
+}
+function houseReading(n){
+  const o=ORD[LANG], hm=HMEAN[LANG].map(x=>LANG==='en'?x.toLowerCase():x), sign=(chart.ascSign+n-1)%12, lord=SIGN_LORD[sign], lp=chart.planets.find(x=>x.k===lord);
+  const occ=chart.planets.filter(p=>p.house===n);
+  const out=[HLONG[LANG][n-1],t('hr_2',{S:signName(sign),F:FLAVOR[LANG][sign],L:plName(lord)})];
+  out.push(lp.house===n?t('hr_3b',{L:plName(lord)}):t('hr_3',{L:plName(lord),O:o[lp.house-1],S:signShort(lp.sign),H0:hm[n-1],H:hm[lp.house-1]}));
+  out.push(occ.length?t('hr_4',{P:occ.map(p=>plName(p.k)).join(', ')}):t('hr_4b'));
+  return out.join(' ');
+}
+function renderReads(){
+  $('preads').innerHTML=chart.planets.map(p=>
+    '<details><summary><span class="sicon">'+miniSprite(p.k,34)+'</span><span>'+esc(plFull(p.k))+(p.retro?' \u02B3':'')+'<small>'+esc(signShort(p.sign))+' '+dms(p.deg)+' \u00B7 '+esc(t('house'))+' '+p.house+'</small></span></summary>'+
+    '<div class="body"><p>'+esc(planetReading(p))+'</p><button type="button" class="btn2" data-open="'+p.k+'">'+esc(plName(p.k))+' \u2192</button></div></details>').join('');
+  let h='';
+  for(let n=1;n<=12;n++){
+    const sign=(chart.ascSign+n-1)%12, occ=chart.planets.filter(p=>p.house===n);
+    h+='<details><summary><span class="hno">'+n+'</span><span>'+esc(t('hsum',{n:n,S:signShort(sign)}))+' \u00B7 '+esc(t('lord_w',{l:plName(SIGN_LORD[sign])}))+
+       '<small>'+esc(HMEAN[LANG][n-1])+' \u00B7 '+(occ.length?esc(occ.map(p=>plName(p.k)).join(', ')):esc(t('empty_h')))+'</small></span></summary>'+
+       '<div class="body"><p>'+esc(houseReading(n))+'</p></div></details>';
+  }
+  $('hreads').innerHTML=h;
+}
+
+/* ================= HIGHLIGHTS ================= */
+function flavorWords(i){return FLAVOR[LANG][i].replace(' and ',', ').replace(' \u0914\u0930 ',', ').split(', ');}
+function highlightsHtml(){
+  const c=chart, moon=c.planets[1], lord=SIGN_LORD[c.ascSign];
+  const comp=[(moon.sign+4)%12,(moon.sign+8)%12].map(signShort).join(', ');
+  const words=flavorWords(c.ascSign).concat(flavorWords(moon.sign));
+  return '<div class="card mini rv" style="animation-delay:.25s"><h3>'+esc(t('hl_title'))+'</h3><div class="hl3">'+
+    '<div class="hk"><small>'+esc(t('hl_rul'))+'</small><b>'+esc(plName(lord))+'</b></div>'+
+    '<div class="hk"><small>'+esc(t('hl_num'))+'</small><b>'+LNUM[lord]+'</b></div>'+
+    '<div class="hk"><small>'+esc(t('hl_col'))+'</small><b>'+esc(LCOL[LANG][lord])+'</b></div>'+
+    '<div class="hk"><small>'+esc(t('hl_comp'))+'</small><b>'+esc(comp)+'</b></div></div>'+
+    '<div class="traits">'+words.map(w=>'<span class="trait">'+esc(w)+'</span>').join('')+'</div>'+
+    '<p style="margin-top:.7rem;font-size:.8rem">'+esc(t('hl_note'))+'</p></div>';
+}
+
+/* ================= DASHA TIMELINE ================= */
+const PCOL={Sun:'#ffb703',Moon:'#cfd8e8',Mars:'#d9452b',Mercury:'#5fbf8f',Jupiter:'#e0a24f',Venus:'#f4a6c8',Saturn:'#c8a86a',Rahu:'#7a5cc8',Ketu:'#b87333'};
+const YR_MS=365.2425*86400000;
+function renderTimeline(ds){
+  const now=Date.now();
+  $('dtl').innerHTML=ds.map(x=>{
+    const cur=now>=x.start&&now<x.end, past=now>=x.end, pc=cur?Math.round((now-x.start)/(x.end-x.start)*100):0;
+    const yrs=Math.round((x.end-x.start)/YR_MS*10)/10;
+    const dot='<span class="sicon" style="width:34px;height:34px">'+miniSprite(x.lord,34)+'</span>';
+    return '<div class="tr'+(cur?' cur':'')+(past?' past':'')+'">'+dot+'<div><b>'+esc(plName(x.lord))+'</b><small>'+(x.first?esc(t('birth')):monYr(x.start))+' \u2013 '+monYr(x.end)+' \u00B7 '+esc(t('yrs',{y:yrs}))+'</small></div>'+
+      '<span class="st2">'+esc(t(cur?'tl_cur':(past?'tl_done':'tl_up')))+'</span>'+(cur?'<div class="bar2"><i style="width:'+pc+'%"></i></div>':'')+'</div>';
+  }).join('');
 }
 
 /* ================= PLANET SPRITES (animated SVG) ================= */
 let uidN=0;
-const f2=x=>Math.round(x*100)/100;
 function sprite(k,r){
   const u='sp'+(uidN++), w=f2(2*r);
   const el=(x,y,rx,ry,fill,op)=>'<ellipse cx="'+f2(x)+'" cy="'+f2(y)+'" rx="'+f2(rx)+'" ry="'+f2(ry)+'" fill="'+fill+'" opacity="'+(op==null?1:op)+'"/>';
@@ -1104,55 +2028,74 @@ function sprite(k,r){
 }
 const miniSprite=(k,px)=>'<svg viewBox="-21 -21 42 42" width="'+px+'" height="'+px+'" aria-hidden="true" focusable="false">'+sprite(k,10)+'</svg>';
 
-/* ================= CHART SVG ================= */
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let showNames=false, chart=null, chartStyle='north';
-function items(ch,fn){
-  return ch.planets.filter(fn).map(p=>({t:p.ab,r:p.retro,k:p.k,
-    tip:p.k+' ('+p.s+') \u00B7 '+SIGNS[p.sign][0]+' '+dms(p.deg)+' \u00B7 House '+p.house+(p.retro?' \u00B7 retrograde':'')}));
+
+/* ================= CANVAS PLANET IMAGES (reuse the SVG planets on the landing sky) ================= */
+const PIMG={}, PR=40, PVB=PR*2.45, PIMG_K=(PVB*2)/PR;
+function buildPlanetImages(){
+  P.forEach(d=>{
+    const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+f2(PVB*2)+'" height="'+f2(PVB*2)+'" viewBox="'+f2(-PVB)+' '+f2(-PVB)+' '+f2(PVB*2)+' '+f2(PVB*2)+'">'+sprite(d.k,PR)+'</svg>';
+    const im=new Image(); im.onload=()=>{PIMG[d.k]=im;}; im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  });
 }
-function block(list,cx,cy){
+
+/* ================= CHART VIEWS ================= */
+let showNames=false, showDeg=true, chart=null, chartStyle='north', chartMode='D1', selK=null;
+function viewOf(ch,mode){
+  if(mode==='D1')return {asc:ch.ascSign,mode:mode,planets:ch.planets.map(p=>({k:p.k,sign:p.sign,house:p.house,deg:p.deg,retro:p.retro}))};
+  const ns=l=>Math.floor(l*9/30)%12, a=ns(ch.asc);
+  return {asc:a,mode:mode,planets:ch.planets.map(p=>{const s=ns(p.lon);return {k:p.k,sign:s,house:((s-a+12)%12)+1,deg:(p.lon%(30/9))*9,retro:p.retro};})};
+}
+function items(v,fn){
+  return v.planets.filter(fn).map(p=>({k:p.k,r:p.retro,deg:p.deg,
+    tip:plFull(p.k)+' \u00B7 '+signShort(p.sign)+' '+dms(p.deg)+' \u00B7 '+t('house')+' '+p.house+(p.retro?' \u00B7 '+t('retro'):'')}));
+}
+function block(list,cx,cy,per){
   if(!list.length)return '';
-  const lines=[]; for(let i=0;i<list.length;i+=3)lines.push(list.slice(i,i+3));
-  const lh=16, y0=cy-(lines.length-1)*lh/2;
-  return lines.map((ln,li)=>'<text class="pl" x="'+cx+'" y="'+(y0+li*lh)+'" text-anchor="middle" dominant-baseline="central">'+
-    ln.map((it,ti)=>'<tspan'+(it.asc?' class="asc"':'')+(ti?' dx="7"':'')+'>'+it.t+(it.r?'\u02B3':'')+'</tspan>').join('')+'</text>').join('');
+  const lines=[]; for(let i=0;i<list.length;i+=per)lines.push(list.slice(i,i+per));
+  const lh=showDeg?17:16, y0=cy-(lines.length-1)*lh/2;
+  return lines.map((ln,li)=>'<text class="pl" x="'+cx+'" y="'+f2(y0+li*lh)+'" text-anchor="middle" dominant-baseline="central">'+
+    ln.map((it,ti)=>{
+      if(it.asc)return '<tspan class="asc"'+(ti?' dx="7"':'')+'>'+esc(t('asc_ab'))+'</tspan>';
+      return '<tspan class="pk" data-k="'+it.k+'"'+(ti?' dx="7"':'')+'>'+esc(plAb(it.k))+(it.r?'\u02B3':'')+'</tspan>'+(showDeg?'<tspan class="dd" dx="2">'+Math.floor(it.deg)+'\u00B0</tspan>':'');
+    }).join('')+'</text>').join('');
 }
 function spriteBlock(list,cx,cy){
   const n=list.length; if(!n)return '';
   const r=n===1?13:(n<=3?11.5:(n<=6?9.5:8)), per=n<=3?n:(n===4?2:3), rows=[];
   for(let i=0;i<n;i+=per)rows.push(list.slice(i,i+per));
-  const hs=2.5*r+5, vs=2.3*r+4, y0=cy-(rows.length-1)*vs/2; let s='';
+  const hs=2.5*r+5, vs=2.3*r+4+(showDeg?9:0), y0=cy-(rows.length-1)*vs/2; let s='';
   rows.forEach((row,ri)=>{
     const x0=cx-(row.length-1)*hs/2;
     row.forEach((it,ci)=>{
       const x=x0+ci*hs, y=y0+ri*vs;
-      s+='<g transform="translate('+f2(x)+' '+f2(y)+')"><g class="bob" style="animation-delay:-'+((ri*3+ci)*.9).toFixed(1)+'s"><title>'+esc(it.tip)+'</title>'+sprite(it.k,r)+'</g>'+
-         (it.r?'<text class="rb" x="'+f2(r*.7)+'" y="'+f2(r*1.2)+'">R</text>':'')+'</g>';
+      s+='<g transform="translate('+f2(x)+' '+f2(y)+')"><g class="pk" data-k="'+it.k+'" role="button" tabindex="0" aria-label="'+esc(it.tip)+'">'+
+         '<g class="bob" style="animation-delay:-'+((ri*3+ci)*.9).toFixed(1)+'s"><title>'+esc(it.tip)+'</title>'+sprite(it.k,r)+'</g>'+
+         '<circle class="selring" r="'+f2(r*1.6)+'"/>'+(it.r?'<text class="rb" x="'+f2(r*.7)+'" y="'+f2(r*1.2)+'">R</text>':'')+
+         (showDeg?'<text class="dg" x="0" y="'+f2(r+9.5)+'" text-anchor="middle">'+Math.floor(it.deg)+'\u00B0</text>':'')+'</g></g>';
     });
   });
   return s;
 }
-const ASCTXT=(x,y,anchor)=>'<text class="pl" x="'+x+'" y="'+y+'" text-anchor="'+anchor+'"><tspan class="asc">Asc</tspan></text>';
+const ASCTXT=(x,y,anchor)=>'<text class="pl" x="'+x+'" y="'+y+'" text-anchor="'+anchor+'"><tspan class="asc">'+esc(t('asc_ab'))+'</tspan></text>';
 const NORTH=[
- {p:'200,0 100,100 200,200 300,100',pl:[200,80],sg:[200,152]},
- {p:'0,0 200,0 100,100',pl:[100,30],sg:[100,72]},
- {p:'0,0 100,100 0,200',pl:[36,100],sg:[84,100]},
- {p:'0,200 100,100 200,200 100,300',pl:[88,196],sg:[152,206]},
- {p:'0,200 100,300 0,400',pl:[36,300],sg:[84,300]},
- {p:'0,400 100,300 200,400',pl:[100,370],sg:[100,328]},
- {p:'200,200 100,300 200,400 300,300',pl:[200,320],sg:[200,250]},
- {p:'200,400 300,300 400,400',pl:[300,370],sg:[300,328]},
- {p:'400,400 300,300 400,200',pl:[364,300],sg:[316,300]},
- {p:'400,200 300,300 200,200 300,100',pl:[312,198],sg:[248,206]},
- {p:'400,200 300,100 400,0',pl:[364,100],sg:[316,100]},
- {p:'400,0 300,100 200,0',pl:[300,30],sg:[300,72]}
+ {p:'200,0 100,100 200,200 300,100',pl:[200,80],sg:[200,152],w:3},
+ {p:'0,0 200,0 100,100',pl:[100,30],sg:[100,72],w:2},
+ {p:'0,0 100,100 0,200',pl:[38,100],sg:[86,100],w:2},
+ {p:'0,200 100,100 200,200 100,300',pl:[84,196],sg:[154,206],w:2},
+ {p:'0,200 100,300 0,400',pl:[38,300],sg:[86,300],w:2},
+ {p:'0,400 100,300 200,400',pl:[100,370],sg:[100,328],w:2},
+ {p:'200,200 100,300 200,400 300,300',pl:[200,320],sg:[200,250],w:3},
+ {p:'200,400 300,300 400,400',pl:[300,370],sg:[300,328],w:2},
+ {p:'400,400 300,300 400,200',pl:[362,300],sg:[314,300],w:2},
+ {p:'400,200 300,300 200,200 300,100',pl:[316,198],sg:[246,206],w:2},
+ {p:'400,200 300,100 400,0',pl:[362,100],sg:[314,100],w:2},
+ {p:'400,0 300,100 200,0',pl:[300,30],sg:[300,72],w:2}
 ];
-function northSVG(ch,still){
-  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="North Indian style Kundali chart">';
+function northSVG(v,still){
+  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="'+esc(t(v.mode==='D1'?'centre1':'centre9'))+'">';
   NORTH.forEach((h,i)=>{
-    const sign=(ch.ascSign+i)%12, list=items(ch,p=>p.house===i+1); let inner;
-    if(showNames){if(i===0)list.unshift({t:'Asc',asc:true}); inner=block(list,h.pl[0],h.pl[1]);}
+    const sign=(v.asc+i)%12, list=items(v,p=>p.house===i+1); let inner;
+    if(showNames){if(i===0)list.unshift({asc:true}); inner=block(list,h.pl[0],h.pl[1],showDeg?h.w:3);}
     else inner=spriteBlock(list,h.pl[0],h.pl[1])+(i===0?ASCTXT(200,22,'middle'):'');
     s+='<g class="hg" style="animation-delay:'+(i*0.09).toFixed(2)+'s"><polygon class="hl'+(i===0?' asc-cell':'')+'" points="'+h.p+'"/>'+
        '<text class="sg" x="'+h.sg[0]+'" y="'+h.sg[1]+'" text-anchor="middle" dominant-baseline="central">'+(sign+1)+'</text>'+inner+'</g>';
@@ -1160,62 +2103,727 @@ function northSVG(ch,still){
   return s+'</svg>';
 }
 const SOUTH=[[1,0],[2,0],[3,0],[3,1],[3,2],[3,3],[2,3],[1,3],[0,3],[0,2],[0,1],[0,0]];
-function southSVG(ch,still){
-  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="South Indian style Kundali chart">';
+function southSVG(v,still){
+  let s='<svg viewBox="-4 -4 408 408"'+(still?' class="still"':'')+' role="img" aria-label="'+esc(t(v.mode==='D1'?'centre1':'centre9'))+'">';
   for(let i=0;i<12;i++){
-    const x=SOUTH[i][0]*100, y=SOUTH[i][1]*100, list=items(ch,p=>p.sign===i), isAsc=ch.ascSign===i; let inner;
-    if(showNames){if(isAsc)list.unshift({t:'Asc',asc:true}); inner=block(list,x+50,y+58);}
+    const x=SOUTH[i][0]*100, y=SOUTH[i][1]*100, list=items(v,p=>p.sign===i), isAsc=v.asc===i; let inner;
+    if(showNames){if(isAsc)list.unshift({asc:true}); inner=block(list,x+50,y+58,showDeg?2:3);}
     else inner=spriteBlock(list,x+50,y+58)+(isAsc?ASCTXT(x+93,y+17,'end'):'');
     const order=((SOUTH[i][0]+SOUTH[i][1]*4)%12)*0.07;
     s+='<g class="hg" style="animation-delay:'+order.toFixed(2)+'s"><rect class="hl'+(isAsc?' asc-cell':'')+'" x="'+x+'" y="'+y+'" width="100" height="100"/>'+
-       '<text class="sg" x="'+(x+8)+'" y="'+(y+16)+'">'+SIGNS[i][1].slice(0,3)+'</text>'+
+       '<text class="sg" x="'+(x+8)+'" y="'+(y+16)+'">'+(LANG==='hi'?HI_SIGN[i]:SIGNS[i][1].slice(0,3))+'</text>'+
        (isAsc?'<line x1="'+x+'" y1="'+(y+30)+'" x2="'+(x+30)+'" y2="'+y+'" stroke="#f2c66d" stroke-width="1.6"/>':'')+inner+'</g>';
   }
-  const nm=ch.inp.name.length>16?ch.inp.name.slice(0,15)+'\u2026':ch.inp.name;
-  s+='<g class="hg" style="animation-delay:.9s"><text class="ctr" x="200" y="192" text-anchor="middle">'+esc(nm)+'</text><text class="ctr2" x="200" y="216" text-anchor="middle">Rashi chart</text></g>';
+  const nm=chart?(chart.inp.name.length>16?chart.inp.name.slice(0,15)+'\u2026':chart.inp.name):'';
+  s+='<g class="hg" style="animation-delay:.9s"><text class="ctr" x="200" y="192" text-anchor="middle">'+esc(nm)+'</text><text class="ctr2" x="200" y="216" text-anchor="middle">'+esc(t(v.mode==='D1'?'centre1':'centre9'))+'</text></g>';
   return s+'</svg>';
 }
 
 /* ================= RESULT ================= */
 function renderLegend(){
   const el=$('legend');
-  if(showNames){el.innerHTML='<span>Su Sun \u00B7 Mo Moon \u00B7 Ma Mars \u00B7 Me Mercury \u00B7 Ju Jupiter \u00B7 Ve Venus \u00B7 Sa Saturn \u00B7 Ra Rahu \u00B7 Ke Ketu \u00B7 \u02B3 retrograde</span>';return;}
-  el.innerHTML=P.map(d=>'<span class="lg">'+miniSprite(d.k,28)+d.k+'</span>').join('')+'<span class="lg">R = retrograde \u00B7 hover a planet for its degree</span>';
+  if(showNames){
+    el.innerHTML='<span>'+P.map(d=>plAb(d.k)+' '+plName(d.k)).join(' \u00B7 ')+' \u00B7 \u02B3 '+esc(t('legend_names'))+'</span>';
+    return;
+  }
+  el.innerHTML=P.map(d=>'<span class="lg">'+miniSprite(d.k,28)+esc(plName(d.k))+'</span>').join('')+'<span class="lg">'+esc(t('legend_hint'))+'</span>';
+}
+function markSel(){
+  Array.prototype.forEach.call($('chart').querySelectorAll('.pk'),el=>{el.classList.toggle('sel',el.getAttribute('data-k')===selK);});
 }
 function drawChart(still){
-  $('chart').innerHTML=chartStyle==='north'?northSVG(chart,still):southSVG(chart,still);
+  const v=viewOf(chart,chartMode);
+  $('chart').innerHTML=chartStyle==='north'?northSVG(v,still):southSVG(v,still);
+  $('tab-d1').setAttribute('aria-selected',String(chartMode==='D1'));
+  $('tab-d9').setAttribute('aria-selected',String(chartMode==='D9'));
   $('tab-n').setAttribute('aria-selected',String(chartStyle==='north'));
   $('tab-s').setAttribute('aria-selected',String(chartStyle==='south'));
-  renderLegend();
+  $('sw-names').setAttribute('aria-checked',String(showNames));
+  $('sw-deg').setAttribute('aria-checked',String(showDeg));
+  $('d9note').hidden=chartMode!=='D9';
+  renderLegend(); markSel();
 }
+$('tab-d1').addEventListener('click',()=>{chartMode='D1';drawChart(true);});
+$('tab-d9').addEventListener('click',()=>{chartMode='D9';drawChart(true);});
 $('tab-n').addEventListener('click',()=>{chartStyle='north';drawChart(true);});
 $('tab-s').addEventListener('click',()=>{chartStyle='south';drawChart(true);});
-$('sw-names').addEventListener('click',()=>{showNames=!showNames;$('sw-names').setAttribute('aria-checked',String(showNames));drawChart(true);});
-const dms=x=>{const d=Math.floor(x),m=Math.floor((x-d)*60);return d+'\u00B0'+String(m).padStart(2,'0')+'\u2032';};
-const monYr=ms=>new Date(ms).toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+$('sw-names').addEventListener('click',()=>{showNames=!showNames;drawChart(true);});
+$('sw-deg').addEventListener('click',()=>{showDeg=!showDeg;drawChart(true);});
+
+/* dashboard sections */
+function showPane(id){
+  Array.prototype.forEach.call(document.querySelectorAll('.pane'),p=>p.classList.toggle('on',p.id==='p-'+id));
+  Array.prototype.forEach.call($('snav').querySelectorAll('button'),b=>b.setAttribute('aria-selected',String(b.getAttribute('data-p')===id)));
+}
+$('snav').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  showPane(b.getAttribute('data-p'));
+  $('snav').scrollIntoView({block:'start',behavior:'smooth'});
+});
+
+/* planet pop-up */
+let lastFocus=null;
+function statusTags(p,d9sign){
+  const tags=[]; if(p.retro)tags.push(t('retro'));
+  const dn=dignity(p.k,p.sign); if(dn)tags.push(t(dn));
+  if(p.sign===d9sign&&p.k!=='Rahu'&&p.k!=='Ketu')tags.push(t('varg'));
+  return tags;
+}
+function openPlanet(k,keepFocus){
+  const p=chart&&chart.planets.find(x=>x.k===k); if(!p)return;
+  const d9=viewOf(chart,'D9').planets.find(x=>x.k===k), tags=statusTags(p,d9.sign);
+  const row=(a,b)=>'<dt>'+esc(t(a))+'</dt><dd>'+esc(b)+'</dd>';
+  $('pm-sprite').innerHTML=miniSprite(k,112);
+  $('pm-title').textContent=plFull(k);
+  $('pm-tags').innerHTML=tags.map(x=>'<span class="tag">'+esc(x)+'</span>').join('');
+  $('pm-dl').innerHTML=row('th_house',p.house+' \u2014 '+HMEAN[LANG][p.house-1])+row('th_sign',signName(p.sign))+row('th_deg',dms(p.deg))+
+    row('th_nak',nakName(p.nIdx)+' ('+t('pada',{p:p.pada})+')')+row('pm_lord',plName(SIGN_LORD[p.sign]))+row('th_nav',signShort(d9.sign));
+  $('pm-read').textContent=planetReading(p);
+  $('pm-x').setAttribute('aria-label',t('close'));
+  if(!keepFocus)lastFocus=document.activeElement;
+  $('pmodal').hidden=false; document.body.classList.add('mopen');
+  selK=k; markSel();
+  try{$('pm-x').focus();}catch(e){}
+}
+function closePlanet(){
+  $('pmodal').hidden=true; document.body.classList.remove('mopen'); selK=null; if(chart)markSel();
+  if(lastFocus&&lastFocus.focus)try{lastFocus.focus();}catch(e){}
+}
+$('pm-x').addEventListener('click',closePlanet);
+$('pm-back').addEventListener('click',closePlanet);
+document.addEventListener('keydown',e=>{
+  if($('pmodal').hidden)return;
+  if(e.key==='Escape')closePlanet();
+  else if(e.key==='Tab'){e.preventDefault();try{$('pm-x').focus();}catch(x){}}
+});
+$('chart').addEventListener('click',e=>{const el=e.target.closest('.pk');if(el)openPlanet(el.getAttribute('data-k'));});
+$('chart').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  const el=e.target.closest&&e.target.closest('.pk'); if(el){e.preventDefault();openPlanet(el.getAttribute('data-k'));}
+});
+$('ptable').addEventListener('click',e=>{const tr=e.target.closest('tr[data-k]');if(tr)openPlanet(tr.getAttribute('data-k'));});
+$('preads').addEventListener('click',e=>{const b=e.target.closest('button[data-open]');if(b)openPlanet(b.getAttribute('data-open'));});
+
+const monYr=ms=>new Date(ms).toLocaleDateString(LOC(),{month:'short',year:'numeric'});
 function renderResult(){
   const c=chart, i=c.inp, moon=c.planets[1], sun=c.planets[0];
-  $('r-name').textContent=i.name;
-  const dt=new Date(Date.UTC(i.y,i.mo-1,i.d)).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
-  $('r-meta1').textContent='Born '+dt+' at '+String(i.hh).padStart(2,'0')+':'+String(i.mm).padStart(2,'0')+' ('+fmtTz(i.tz)+(i.tzName?', '+i.tzName.replace(/_/g,' '):'')+')';
+  $('r-brand').textContent=t('brand_r'); $('r-name').textContent=i.name;
+  const dt=new Date(Date.UTC(i.y,i.mo-1,i.d)).toLocaleDateString(LOC(),{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+  $('r-meta1').textContent=t('born',{d:dt,t:String(i.hh).padStart(2,'0')+':'+String(i.mm).padStart(2,'0'),z:fmtTz(i.tz)+(i.tzName?', '+i.tzName.replace(/_/g,' '):'')});
   $('r-meta2').textContent=(i.place?i.place+' \u00B7 ':'')+Math.abs(i.lat).toFixed(2)+'\u00B0'+(i.lat>=0?'N':'S')+', '+Math.abs(i.lon).toFixed(2)+'\u00B0'+(i.lon>=0?'E':'W');
+  const chip=(gl,k,name)=>'<span class="chip"><span class="gl">'+gl+'</span><span><small>'+esc(t(k))+'</small><b>'+esc(name)+'</b></span></span>';
+  $('r-chips').innerHTML=chip(SIGNS[c.ascSign][2],'k_lagna',signShort(c.ascSign))+chip(SIGNS[moon.sign][2],'k_moon',signShort(moon.sign))+chip(SIGNS[sun.sign][2],'k_sun',signShort(sun.sign));
   drawChart(false);
-  const ds=dasha(moon.lon,c.utMs), now=Date.now(), cur=ds.find(x=>now>=x.start&&now<x.end);
-  $('side').innerHTML=
-    '<div class="card mini rv" style="animation-delay:.3s"><h3>Lagna (Ascendant)</h3><p class="big">'+SIGNS[c.ascSign][0]+' ('+SIGNS[c.ascSign][1]+') '+dms(c.ascDeg)+'</p><p>'+BLURB[c.ascSign]+' Your Lagna shapes how you meet the world.</p></div>'+
-    '<div class="card mini rv" style="animation-delay:.4s"><h3>Moon sign (Rashi)</h3><p class="big">'+SIGNS[moon.sign][0]+' ('+SIGNS[moon.sign][1]+')</p><p>'+BLURB[moon.sign]+' The Moon describes your mind and emotional nature.</p></div>'+
-    '<div class="card mini rv" style="animation-delay:.5s"><h3>Janma Nakshatra</h3><p class="big">'+moon.nak+', pada '+moon.pada+'</p><p>The lunar mansion the Moon occupied at birth. It sets your starting Mahadasha, '+ds[0].lord+'.</p></div>'+
-    '<div class="card mini rv" style="animation-delay:.6s"><h3>Sun sign</h3><p class="big">'+SIGNS[sun.sign][0]+' ('+SIGNS[sun.sign][1]+')</p><p>'+BLURB[sun.sign]+' The Sun speaks of your core self and purpose.</p></div>'+
-    (cur?'<div class="card mini rv" style="animation-delay:.7s"><h3>Running now</h3><p class="big">'+cur.lord+' Mahadasha</p><p>From '+(cur.first?'birth':monYr(cur.start))+' to '+monYr(cur.end)+'.</p></div>':'');
-  let t='<tr><th>Planet</th><th>Sign</th><th>Degree</th><th>Nakshatra</th><th>House</th></tr>';
-  t+='<tr><td><span class="ti"></span>Lagna</td><td>'+SIGNS[c.ascSign][0]+'</td><td>'+dms(c.ascDeg)+'</td><td>'+NAKS[Math.floor(c.asc/(360/27))]+'</td><td>1</td></tr>';
-  c.planets.forEach(p=>{t+='<tr><td><span class="ti">'+miniSprite(p.k,24)+'</span>'+p.k+' ('+p.s+')'+(p.retro?' \u02B3':'')+'</td><td>'+SIGNS[p.sign][0]+'</td><td>'+dms(p.deg)+'</td><td>'+p.nak+' ('+p.pada+')</td><td>'+p.house+'</td></tr>';});
-  $('ptable').innerHTML=t;
-  $('ayan-note').textContent='Sidereal positions, Lahiri ayan\u0101\u1E41\u015Fa '+dms(c.ayan)+'. Rahu and Ketu are the mean lunar nodes.';
-  let dt2='<tr><th>Period</th><th>From</th><th>To</th></tr>';
-  ds.forEach(x=>{dt2+='<tr'+(x===cur?' class="now"':'')+'><td>'+x.lord+'</td><td>'+(x.first?'Birth':monYr(x.start))+'</td><td>'+monYr(x.end)+'</td></tr>';});
-  $('dtable').innerHTML=dt2;
+  const ds=dasha(moon.lon,c.utMs), now=Date.now(), cur=ds.find(x=>now>=x.start&&now<x.end), B=BLURB[LANG];
+  $('side').innerHTML=highlightsHtml()+
+    '<div class="card mini rv" style="animation-delay:.3s"><h3>'+esc(t('c_lagna'))+'</h3><p class="big">'+esc(signName(c.ascSign))+' '+dms(c.ascDeg)+'</p><p>'+esc(B[c.ascSign]+t('s_lagna'))+'</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.4s"><h3>'+esc(t('c_moon'))+'</h3><p class="big">'+esc(signName(moon.sign))+'</p><p>'+esc(B[moon.sign]+t('s_moon'))+'</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.5s"><h3>'+esc(t('c_nak'))+'</h3><p class="big">'+esc(nakName(moon.nIdx))+', '+esc(t('pada',{p:moon.pada}))+'</p><p>'+esc(t('s_nak',{l:plName(ds[0].lord)}))+'</p></div>'+
+    '<div class="card mini rv" style="animation-delay:.6s"><h3>'+esc(t('c_sun'))+'</h3><p class="big">'+esc(signName(sun.sign))+'</p><p>'+esc(B[sun.sign]+t('s_sun'))+'</p></div>'+
+    (cur?'<div class="card mini rv" style="animation-delay:.7s"><h3>'+esc(t('c_now'))+'</h3><p class="big">'+esc(t('c_dasha',{l:plName(cur.lord)}))+'</p><p>'+esc(t('from_to',{a:cur.first?t('birth'):monYr(cur.start),b:monYr(cur.end)}))+'</p></div>':'');
+  const d9=viewOf(c,'D9');
+  let tb='<tr><th>'+esc(t('th_planet'))+'</th><th>'+esc(t('th_sign'))+'</th><th>'+esc(t('th_deg'))+'</th><th>'+esc(t('th_nak'))+'</th><th>'+esc(t('th_house'))+'</th><th>'+esc(t('th_nav'))+'</th><th>'+esc(t('th_status'))+'</th></tr>';
+  tb+='<tr><td><span class="ti"></span>'+esc(t('lagna'))+'</td><td>'+esc(signShort(c.ascSign))+'</td><td class="deg">'+dms(c.ascDeg)+'</td><td>'+esc(nakName(Math.floor(c.asc/(360/27))))+'</td><td>1</td><td>'+esc(signShort(d9.asc))+'</td><td></td></tr>';
+  c.planets.forEach((p,n)=>{
+    const tags=statusTags(p,d9.planets[n].sign);
+    tb+='<tr class="clk" data-k="'+p.k+'"><td><span class="ti">'+miniSprite(p.k,24)+'</span>'+esc(plFull(p.k))+(p.retro?' \u02B3':'')+'</td><td>'+esc(signShort(p.sign))+'</td><td class="deg">'+dms(p.deg)+'</td><td>'+esc(nakName(p.nIdx))+' ('+p.pada+')</td><td>'+p.house+'</td><td>'+esc(signShort(d9.planets[n].sign))+'</td><td>'+esc(tags.join(', '))+'</td></tr>';
+  });
+  $('ptable').innerHTML=tb;
+  $('ayan-note').textContent=t('ayan',{a:dms(c.ayan)});
+  renderReads(); renderPanchang(); renderDoshas(); renderTimeline(ds);
+  updateSave();
 }
+
+/* ================= SAVE IMAGE / REPORT ================= */
+function updateSave(){const ok=!!(chart&&(DL_CAP||!window.claude));$('save-img').hidden=!ok;$('save-rep').hidden=!ok;}
+async function saveBlob(blob,fn){
+  if(DL_CAP){await DL_CAP.save({filename:fn,data:blob});return;}
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fn; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+const safeName=()=>chart.inp.name.replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'')||'chart';
+const EXPORT_CSS=".hl{fill:rgba(139,92,246,.10);stroke:#f2c66d;stroke-width:1.6;stroke-linejoin:round}.hl.asc-cell{fill:rgba(242,198,109,.14)}"+
+  ".pl{fill:#f4eeff;font:600 15px 'Noto Sans Devanagari','Inter',Arial,sans-serif}.pl .asc{fill:#f2c66d}.pl .dd{font-size:10px;fill:#cdbfee;font-weight:500}.dg{fill:#cdbfee;font:500 7.5px Arial,sans-serif}"+
+  ".sg{fill:#9d8fd0;font:500 12px 'Noto Sans Devanagari','Inter',Arial,sans-serif}"+
+  ".ctr{fill:#f2c66d;font:600 20px 'Tiro Devanagari Hindi',Georgia,serif}.ctr2{fill:#b9acdb;font:500 12px 'Noto Sans Devanagari','Inter',Arial,sans-serif}.rb{fill:#f2c66d;font:700 8px Arial,sans-serif}.selring{display:none}";
+function exportSvg(){
+  const v=viewOf(chart,chartMode), raw=chartStyle==='north'?northSVG(v,true):southSVG(v,true);
+  const inner=raw.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'');
+  const i=chart.inp, dt=new Date(Date.UTC(i.y,i.mo-1,i.d)).toLocaleDateString(LOC(),{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+  const line2=t('born',{d:dt,t:String(i.hh).padStart(2,'0')+':'+String(i.mm).padStart(2,'0'),z:fmtTz(i.tz)});
+  const line3=(i.place?i.place+' \u00B7 ':'')+Math.abs(i.lat).toFixed(2)+'\u00B0'+(i.lat>=0?'N':'S')+', '+Math.abs(i.lon).toFixed(2)+'\u00B0'+(i.lon>=0?'E':'W');
+  const fam="'Noto Sans Devanagari','Inter',Arial,sans-serif";
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1080" viewBox="0 0 1000 1080"><style>'+EXPORT_CSS+'</style>'+
+    '<defs><radialGradient id="bgx" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#1c1044"/><stop offset=".6" stop-color="#0b0720"/><stop offset="1" stop-color="#04020c"/></radialGradient></defs>'+
+    '<rect width="1000" height="1080" fill="url(#bgx)"/>'+
+    '<text x="500" y="66" text-anchor="middle" fill="#f2c66d" font-size="30" font-family="Georgia,serif" letter-spacing="3">'+esc(t('doc_title'))+'</text>'+
+    '<text x="500" y="112" text-anchor="middle" fill="#f4eeff" font-size="38" font-family="Georgia,serif">'+esc(i.name)+' \u00B7 '+esc(t(chartMode==='D1'?'d1':'d9'))+'</text>'+
+    '<text x="500" y="146" text-anchor="middle" fill="#b9acdb" font-size="18" font-family="'+fam+'">'+esc(line2)+'</text>'+
+    '<g transform="translate(100 178) scale(2)">'+inner+'</g>'+
+    '<text x="500" y="1034" text-anchor="middle" fill="#b9acdb" font-size="18" font-family="'+fam+'">'+esc(line3)+'</text></svg>';
+}
+$('save-img').addEventListener('click',async()=>{
+  const btn=$('save-img'); btn.disabled=true; btn.textContent=t('saving');
+  try{
+    const img=new Image();
+    await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(exportSvg());});
+    const cv2=document.createElement('canvas'); cv2.width=2000; cv2.height=2160;
+    cv2.getContext('2d').drawImage(img,0,0,2000,2160);
+    const blob=await new Promise(r=>cv2.toBlob(r,'image/png'));
+    await saveBlob(blob,'Kundali-'+safeName()+'-'+chartMode+'.png');
+  }catch(e){}
+  btn.disabled=false; btn.textContent=t('save_img');
+});
+function buildReport(){
+  const c = chart;
+  const i = c.inp;
+  const L = [];
+  const hr = new Array(65).join('=');
+
+  const moon = c.planets[1];
+  const sun = c.planets[0];
+
+  const dt = new Date(Date.UTC(i.y, i.mo - 1, i.d))
+    .toLocaleDateString(LOC(), {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC'
+    });
+
+  /* =====================================================
+     TITLE
+  ===================================================== */
+
+  L.push(
+    'KUNDALI — THE PATH OF LIFE',
+    hr,
+    '',
+    'PERSONAL BIRTH CHART REPORT',
+    '',
+    'Name: ' + i.name,
+    'Date of Birth: ' + dt,
+    'Time of Birth: ' +
+      String(i.hh).padStart(2,'0') + ':' +
+      String(i.mm).padStart(2,'0'),
+    'Place of Birth: ' + (i.place || 'Not specified'),
+    'Coordinates: ' +
+      i.lat.toFixed(4) + ', ' +
+      i.lon.toFixed(4),
+    '',
+    hr,
+    ''
+  );
+
+  /* =====================================================
+     QUICK SUMMARY
+  ===================================================== */
+
+  L.push(
+    '1. YOUR ASTROLOGICAL PROFILE',
+    hr,
+    '',
+    'Ascendant (Lagna): ' +
+      signName(c.ascSign) + ' ' +
+      dms(c.ascDeg),
+
+    'Moon Sign (Rashi): ' +
+      signName(moon.sign),
+
+    'Sun Sign: ' +
+      signName(sun.sign),
+
+    'Birth Nakshatra: ' +
+      nakName(moon.nIdx),
+
+    'Nakshatra Pada: ' +
+      moon.pada,
+
+    ''
+  );
+
+  L.push(
+    'PERSONALITY',
+    '',
+    'Your Ascendant represents the way you naturally approach life,',
+    'how others may perceive you and the way you respond to new situations.',
+    '',
+    'With ' + signName(c.ascSign) +
+      ' as your Ascendant, your personality is influenced by the qualities',
+    'associated with this sign. Your overall character should be understood',
+    'through the combined influence of the Ascendant, Moon and planetary positions.',
+    ''
+  );
+
+  /* =====================================================
+     MIND & EMOTIONS
+  ===================================================== */
+
+  L.push(
+    '2. MIND & EMOTIONAL NATURE',
+    hr,
+    '',
+    'Moon Sign: ' + signName(moon.sign),
+    'Nakshatra: ' + nakName(moon.nIdx),
+    'Pada: ' + moon.pada,
+    '',
+    'The Moon represents your emotional nature, mental patterns,',
+    'instinctive reactions and the way you process experiences.',
+    '',
+    'Your Moon in ' + signName(moon.sign) +
+      ' suggests that your emotional responses are strongly influenced',
+    'by the qualities of this sign. Your Nakshatra, ' +
+      nakName(moon.nIdx) +
+      ', adds another layer to your emotional and psychological pattern.',
+    '',
+    'You may understand yourself better by observing how you react',
+    'under pressure, how you communicate your feelings and what gives',
+    'you a sense of emotional security.',
+    ''
+  );
+
+  /* =====================================================
+     SUN
+  ===================================================== */
+
+  L.push(
+    '3. IDENTITY, CONFIDENCE & PURPOSE',
+    hr,
+    '',
+    'Sun Sign: ' + signName(sun.sign),
+    '',
+    'The Sun represents identity, confidence, individuality and the',
+    'desire to create a meaningful direction in life.',
+    '',
+    'With the Sun in ' + signName(sun.sign) +
+      ', qualities associated with this sign can influence your',
+    'confidence, ambitions and sense of individuality.',
+    '',
+    'Your long-term development comes from learning how to express',
+    'your strengths confidently while remaining open to growth and feedback.',
+    ''
+  );
+
+  /* =====================================================
+     PLANETS
+  ===================================================== */
+
+  L.push(
+    '4. PLANETARY POSITIONS & INTERPRETATION',
+    hr,
+    ''
+  );
+
+  c.planets.forEach(function(p){
+
+    L.push(
+      plFull(p.k),
+      'Sign: ' + signName(p.sign),
+      'Degree: ' + dms(p.deg),
+      'House: ' + p.house,
+      'Nakshatra: ' + nakName(p.nIdx),
+      'Pada: ' + p.pada +
+        (p.retro ? ' | Retrograde' : ''),
+      ''
+    );
+
+    L.push(
+      'Interpretation:',
+      plFull(p.k) +
+        ' expresses its influence through ' +
+        signName(p.sign) +
+        ' and the themes of House ' +
+        p.house + '.',
+      '',
+      'This placement can show how the qualities represented by ' +
+        plFull(p.k) +
+        ' may operate in this area of life.',
+      ''
+    );
+  });
+
+  /* =====================================================
+     LIFE AREAS
+  ===================================================== */
+
+  L.push(
+    '5. LIFE AREAS',
+    hr,
+    ''
+  );
+
+  const houseNames = {
+    1: 'Self, personality and overall direction',
+    2: 'Family, speech, values and accumulated wealth',
+    3: 'Communication, courage and personal skills',
+    4: 'Home, mother, education and emotional security',
+    5: 'Creativity, intelligence, learning and romance',
+    6: 'Work, discipline, competition and obstacles',
+    7: 'Marriage, partnerships and cooperation',
+    8: 'Transformation, research and hidden matters',
+    9: 'Higher learning, beliefs, mentors and fortune',
+    10: 'Career, achievement and public reputation',
+    11: 'Income, gains, friendships and ambitions',
+    12: 'Expenses, foreign connections, solitude and spirituality'
+  };
+
+  for(let n = 1; n <= 12; n++){
+
+    const sign =
+      signName((c.ascSign + n - 1) % 12);
+
+    L.push(
+      'House ' + n + ' — ' + houseNames[n],
+      'Sign: ' + sign,
+      '',
+      houseReading(n),
+      ''
+    );
+  }
+
+  /* =====================================================
+     PANCHANG
+  ===================================================== */
+
+  const pc = panchang(c);
+  const kr = karanaName(pc.kn);
+  const vr = VARA[pc.vara];
+
+  L.push(
+    '6. BIRTH PANCHANG',
+    hr,
+    '',
+    'Weekday: ' +
+      (LANG === 'hi' ? vr[1] : vr[0]),
+
+    'Tithi: ' +
+      tithiName(pc) +
+      ' (' +
+      t(pc.paksha === 0 ? 'pk_shukla' : 'pk_krishna') +
+      ')',
+
+    'Nakshatra: ' +
+      nakName(moon.nIdx),
+
+    'Yoga: ' +
+      YOGA[LANG][pc.yoga],
+
+    'Karana: ' +
+      kr.n,
+
+    '',
+    'The Panchang describes the astronomical and traditional',
+    'calendar factors present at the time of birth.',
+    ''
+  );
+
+  /* =====================================================
+     DOSHAS
+  ===================================================== */
+
+  const m = manglik(c);
+  const k = kaalsarp(c);
+
+  L.push(
+    '7. DOSHA ANALYSIS',
+    hr,
+    '',
+    'Manglik Dosha: ' +
+      t({
+        none:'m_none',
+        partial:'m_partial',
+        yes:'m_yes',
+        strong:'m_strong'
+      }[m.level]),
+
+    'Kaal Sarp Influence: ' +
+      t({
+        none:'ks_none',
+        full:'ks_full',
+        rev:'ks_rev',
+        part:'ks_part'
+      }[k.type]),
+
+    ''
+  );
+
+  if(m.level === 'none'){
+    L.push(
+      'The current calculation does not indicate a significant',
+      'Manglik Dosha according to the rules used by this application.',
+      ''
+    );
+  }else{
+    L.push(
+      'The chart indicates a Manglik influence according to the',
+      'calculation used by this application. Traditional astrology',
+      'usually evaluates this together with the complete horoscope',
+      'rather than considering it independently.',
+      ''
+    );
+  }
+
+  if(k.type === 'none'){
+    L.push(
+      'The current calculation does not indicate a Kaal Sarp configuration.',
+      ''
+    );
+  }else{
+    L.push(
+      'The chart indicates a Kaal Sarp-related configuration according',
+      'to the calculation used by this application. Its interpretation',
+      'should be considered together with the complete chart.',
+      ''
+    );
+  }
+
+  /* =====================================================
+     NAVAMSHA
+  ===================================================== */
+
+  const d9 = viewOf(c,'D9');
+
+  L.push(
+    '8. NAVAMSHA — D9',
+    hr,
+    '',
+    'The Navamsha chart is traditionally used for deeper analysis',
+    'of planetary strength, relationships, maturity and the way',
+    'planetary influences develop over time.',
+    ''
+  );
+
+  c.planets.forEach(function(p,n){
+
+    L.push(
+      plFull(p.k) +
+        ': ' +
+        signName(d9.planets[n].sign)
+    );
+  });
+
+  L.push('');
+
+  /* =====================================================
+     DASHA
+  ===================================================== */
+
+  L.push(
+    '9. VIMSHOTTARI DASHA',
+    hr,
+    '',
+    'Planetary periods are traditionally used to understand the',
+    'timing of different phases and themes in life.',
+    ''
+  );
+
+  dasha(moon.lon,c.utMs).forEach(function(x){
+
+    L.push(
+      plName(x.lord) +
+        ': ' +
+        (x.first ? t('birth') : monYr(x.start)) +
+        ' - ' +
+        monYr(x.end)
+    );
+  });
+
+  L.push('');
+
+  /* =====================================================
+     PLANET READINGS
+  ===================================================== */
+
+  L.push(
+    '10. DETAILED PLANETARY READINGS',
+    hr,
+    ''
+  );
+
+  c.planets.forEach(function(p){
+
+    L.push(
+      plFull(p.k) + ':',
+      '',
+      planetReading(p),
+      ''
+    );
+  });
+
+  /* =====================================================
+     OVERALL INTERPRETATION
+  ===================================================== */
+
+  L.push(
+    '11. OVERALL INTERPRETATION',
+    hr,
+    '',
+    'Your Kundali is a combination of several interacting influences.',
+    '',
+    'Your Ascendant describes your outward approach to life, while',
+    'the Moon describes your emotional and mental patterns and the',
+    'Sun represents identity, confidence and personal direction.',
+    '',
+    'The planetary placements add further detail to areas such as',
+    'relationships, learning, career, communication, responsibilities',
+    'and personal development.',
+    '',
+    'Rather than viewing any single placement as completely positive',
+    'or negative, the chart is best understood as a combination of',
+    'strengths, challenges and opportunities for growth.',
+    ''
+  );
+
+  /* =====================================================
+     GUIDANCE
+  ===================================================== */
+
+  L.push(
+    '12. PERSONAL GUIDANCE',
+    hr,
+    '',
+    'Use this report as a tool for reflection and self-understanding.',
+    '',
+    'Your strongest results in life are likely to come from combining',
+    'your natural abilities with discipline, continuous learning and',
+    'good decision-making.',
+    '',
+    'Astrological interpretations describe traditional patterns and',
+    'possibilities. They should not be treated as guaranteed predictions.',
+    'Important decisions involving health, finance, education or career',
+    'should also consider real-world information and qualified advice.',
+    ''
+  );
+
+  /* =====================================================
+     DISCLAIMER
+  ===================================================== */
+
+  L.push(
+    hr,
+    '',
+    'DISCLAIMER',
+    '',
+    'This report is generated from the birth information provided by',
+    'the user and is based on traditional astrological interpretation.',
+    'It is intended for personal reflection and entertainment and does',
+    'not constitute scientific, medical, financial or legal advice.',
+    ''
+  );
+
+  return L.join('\n');
+}
+
+
+/* ================= REAL PDF REPORT ================= */
+function pdfEscape(s){
+  return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+}
+
+function makeRealPdf(text){
+  const rawLines=String(text||'').replace(/\r/g,'').split('\n');
+  const lines=[];
+  const MAX=88;
+
+  rawLines.forEach(function(line){
+    line=line.replace(/\t/g,'    ');
+    if(!line){ lines.push(''); return; }
+    while(line.length>MAX){
+      let cut=line.lastIndexOf(' ',MAX);
+      if(cut<45) cut=MAX;
+      lines.push(line.slice(0,cut));
+      line=line.slice(cut).replace(/^\s+/,'');
+    }
+    lines.push(line);
+  });
+
+  const perPage=47;
+  const pages=[];
+  for(let i=0;i<lines.length;i+=perPage) pages.push(lines.slice(i,i+perPage));
+  if(!pages.length) pages.push(['Kundali Report']);
+
+  const objects=[];
+  objects.push('<< /Type /Catalog /Pages 2 0 R >>');
+  objects.push('<< /Type /Pages /Kids ['+pages.map((_,i)=>(6+i*2)+' 0 R').join(' ')+'] /Count '+pages.length+' >>');
+  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
+  objects.push('<< /Producer (Kundali - The Path of Life) /Title (Kundali Personal Report) >>');
+
+  pages.forEach(function(page,index){
+    const commands=[];
+    commands.push('q');
+    commands.push('0.04 0.02 0.12 rg');
+    commands.push('0 0 595 842 re f');
+    commands.push('Q');
+
+    let y=805;
+    page.forEach(function(line){
+      const isHeading=/^(KUNDALI|PERSONAL BIRTH|\d+\. |DISCLAIMER|PERSONALITY|INTERPRETATION|GUIDANCE)/i.test(line);
+      const isSmall=/^={10,}$/.test(line);
+      if(isHeading){
+        commands.push('BT /F2 11 Tf 0.95 0.80 0.40 rg 50 '+y+' Td ('+pdfEscape(line.slice(0,100))+') Tj ET');
+        y-=16;
+      }else if(isSmall){
+        commands.push('BT /F1 7 Tf 0.55 0.50 0.70 rg 50 '+y+' Td ('+pdfEscape(line.slice(0,100))+') Tj ET');
+        y-=10;
+      }else{
+        /* Standard PDF Helvetica is used here so the file is a genuine,
+           portable PDF. Non-Latin characters are replaced rather than
+           producing a corrupt PDF. The report itself is English-first. */
+        const safe=line.replace(/[^\x20-\x7E]/g,'?');
+        commands.push('BT /F1 9.5 Tf 0.92 0.90 0.96 rg 50 '+y+' Td ('+pdfEscape(safe)+') Tj ET');
+        y-=14;
+      }
+    });
+
+    commands.push('BT /F1 8 Tf 0.55 0.50 0.70 rg 50 25 Td (Kundali - The Path of Life  |  Page '+(index+1)+' of '+pages.length+') Tj ET');
+
+    const stream=commands.join('\n');
+    const pageObj=6+index*2;
+    const contentObj=pageObj+1;
+    objects[pageObj-1]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents '+contentObj+' 0 R >>';
+    objects[contentObj-1]='<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream';
+  });
+
+  let pdf='%PDF-1.4\n%\xE2\xE3\xCF\xD3\n';
+  const offsets=[0];
+  objects.forEach(function(obj,i){
+    offsets[i+1]=pdf.length;
+    pdf+=(i+1)+' 0 obj\n'+obj+'\nendobj\n';
+  });
+  const xref=pdf.length;
+  pdf+='xref\n0 '+(objects.length+1)+'\n';
+  pdf+='0000000000 65535 f \n';
+  for(let i=1;i<=objects.length;i++){
+    pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
+  }
+  pdf+='trailer\n<< /Size '+(objects.length+1)+' /Root 1 0 R /Info 5 0 R >>\n';
+  pdf+='startxref\n'+xref+'\n%%EOF';
+  return pdf;
+}
+
+$('save-rep').addEventListener('click',async function(){
+  const btn=$('save-rep');
+  const old=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='Generating PDF...';
+  try{
+    if(!chart){
+      alert('Please generate your Kundali first.');
+      return;
+    }
+    const report=buildReport();
+    const pdf=makeRealPdf(report);
+    const blob=new Blob([pdf],{type:'application/pdf'});
+    await saveBlob(blob,'Kundali-'+safeName()+'-report.pdf');
+  }catch(e){
+    console.error('Kundali PDF error:',e);
+    alert('Could not generate the PDF. Check the browser console for details.');
+  }finally{
+    btn.disabled=false;
+    btn.textContent=old || t('save_rep');
+  }
+});
 
 /* ================= COSMOS CANVAS ================= */
 const cv=$('cosmos'), ctx=cv.getContext('2d');
@@ -1268,19 +2876,19 @@ function capture(){
   S.st=P.map((_,i)=>{const o=orbitPos(i);return {r:Math.hypot(o.x-cx,o.y-cy),th:Math.atan2(o.y-cy,o.x-cx),s:o.s};});
   S.cap=true;
 }
+
 const CAST_END=6.2;
-const CAST_MSG=[
-  ['Reading the sky at your first breath','Calculating where every planet stood'],
-  ['The planets are taking their places','Aligning them to the zodiac'],
-  ['Drawing your Kundali','Placing each graha in its house']
-];
 let castIdx=-1;
+function castShow(idx,fade){
+  const title=$('cast-title');
+  const apply=()=>{title.textContent=t('cast'+idx+'a');$('cast-sub').textContent=t('cast'+idx+'b')+t('for',{n:S.chart?S.chart.inp.name:''});title.style.opacity=1;};
+  if(fade){title.style.opacity=0;setTimeout(apply,idx?280:0);}else apply();
+}
 function castText(tc){
   const idx=tc<1.9?0:(tc<4.0?1:2);
-  if(idx!==castIdx){castIdx=idx;
-    const t=$('cast-title'); t.style.opacity=0;
-    setTimeout(()=>{t.textContent=CAST_MSG[idx][0];$('cast-sub').textContent=CAST_MSG[idx][1]+' for '+S.chart.inp.name;t.style.opacity=1;},idx?280:0);
-  }
+  if(idx!==castIdx){castIdx=idx;castShow(idx,true);}
+  const cur=tc<1.6?0:(tc<3.4?1:(tc<5.0?2:3));
+  Array.prototype.forEach.call($('prog').children,(li,n)=>{li.classList.toggle('done',n<cur);li.classList.toggle('cur',n===cur);});
 }
 function startCast(ch){
   chart=ch; S.chart=ch; S.phase='cast'; S.castStart=performance.now()/1000; S.cap=false; S.tc=0; castIdx=-1;
@@ -1288,13 +2896,14 @@ function startCast(ch){
   ch.planets.forEach((p,i)=>{let c=0; placed.forEach(q=>{if(Math.abs(((p.lon-q.lon+540)%360)-180)<9)c++;}); S.lvl[i]=c%3; placed.push(p);});
   S.plT=1;S.plA=1;
   document.body.dataset.scene='cast'; window.scrollTo(0,0);
+  Array.prototype.forEach.call($('prog').children,li=>{li.classList.remove('done','cur');});
 }
 function showResult(){
   S.phase='result'; S.plT=0; S.wheelT=0; S.galT=.5; S.tiltT=.42; S.ringT=.25; S.mulT=1;
   document.body.dataset.scene='result';
   $('landing').style.display='none';
-  const r=$('result'); r.style.display='block';
-  renderResult(); window.scrollTo(0,0);
+  $('result').style.display='block';
+  showPane('overview'); renderResult(); window.scrollTo(0,0);
 }
 function reset(){
   S.phase='landing'; S.cap=false; S.plA=0; S.plT=1; S.wheelT=0; S.galT=1; S.tiltT=.42; S.ringT=1; S.mulT=1;
@@ -1303,13 +2912,9 @@ function reset(){
   window.scrollTo(0,0);
 }
 $('again').addEventListener('click',reset);
-$('kform').addEventListener('submit',e=>{
-  e.preventDefault();
-  const v=readForm(); if(!v)return;
-  let ch; try{ch=computeChart(v);}catch(err){$('ferr').textContent='Something went wrong while calculating. Check your details and try again.';return;}
-  if(RM){chart=ch;S.chart=ch;showResult();return;}
-  startCast(ch);
-});
+$('newk').addEventListener('click',reset);
+$('brand').addEventListener('click',()=>{if(document.body.dataset.scene==='result')reset();else window.scrollTo(0,0);});
+
 
 function update(dt,now){
   const k=1-Math.exp(-dt*2.2), ks=1-Math.exp(-dt*1.3);
@@ -1327,6 +2932,7 @@ function update(dt,now){
 }
 function glow(x,y,r,col){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();}
 function drawPlanet(d,x,y,s){
+  const im=PIMG[d.k]; if(im){const side=s*PIMG_K; ctx.drawImage(im,x-side/2,y-side/2,side,side); return;}
   glow(x,y,s*3.4,d.glow);
   const b=ctx.createRadialGradient(x-s*.35,y-s*.35,s*.1,x,y,s); b.addColorStop(0,d.hi); b.addColorStop(1,d.col);
   ctx.fillStyle=b; ctx.beginPath(); ctx.arc(x,y,s,0,TAU); ctx.fill();
@@ -1344,7 +2950,7 @@ function drawWheel(a,now){
     const rm=(Ri+Ro)/2; ctx.fillText(SIGNS[k][2],cx+rm*Math.cos(tm),cy+rm*Math.sin(tm));
   }
   ctx.strokeStyle='rgba(255,226,150,.9)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx-Ro,cy); ctx.stroke();
-  ctx.fillStyle='#ffe29a'; ctx.font='600 '+Math.max(11,Math.round(Rp*.1))+'px Inter,system-ui,sans-serif'; ctx.fillText('Lagna',cx-Ro*.62,cy-Rp*.1);
+  ctx.fillStyle='#ffe29a'; ctx.font='600 '+Math.max(11,Math.round(Rp*.1))+'px Inter,Noto Sans Devanagari,system-ui,sans-serif'; ctx.fillText(LANG==='hi'?'लग्न':'Lagna',cx-Ro*.62,cy-Rp*.1);
   ctx.restore();
 }
 function draw(now){
@@ -1378,8 +2984,8 @@ function draw(now){
       ctx.globalAlpha=S.plA; drawPlanet(it.d,it.st.o.x,it.st.o.y,it.st.o.s);
       if(it.st.p>.85){
         const la=clamp((it.st.p-.85)/.15,0,1)*S.plA, th=it.st.th!==undefined?it.st.th:0, dd=it.st.o.s+Math.max(10,msz()*.03);
-        ctx.globalAlpha=la; ctx.fillStyle='#fff3d6'; ctx.font='600 '+Math.max(10,Math.round(msz()*.026))+'px Inter,system-ui,sans-serif';
-        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(it.d.ab,it.st.o.x-dd*Math.cos(th),it.st.o.y-dd*Math.sin(th));
+        ctx.globalAlpha=la; ctx.fillStyle='#fff3d6'; ctx.font='600 '+Math.max(10,Math.round(msz()*.026))+'px Inter,Noto Sans Devanagari,system-ui,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(plAb(it.d.k),it.st.o.x-dd*Math.cos(th),it.st.o.y-dd*Math.sin(th));
       }
     }
   }
@@ -1391,7 +2997,8 @@ function frame(ts){
   update(dt,now); draw(now); requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-setHint(DEFAULT_HINT,false);
+
+buildPlanetImages(); renderPops(); applyLang(); renderRecent(); setStatus('');
 })();
 </script>
 </body>
